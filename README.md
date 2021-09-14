@@ -64,7 +64,7 @@
 - Git Bash
 
 ## Github Cheat Sheet
-(Thanks Emily ^-^ && Ryan)
+(Thanks Emily ^-^)
 
 General Use
 
@@ -81,6 +81,16 @@ General Use
 | git pull origin "branch" | Pull updates from a specific branch |
 
 ## Resources
-
+  - ___Tutorials___
+    - [Flutter](https://www.youtube.com/watch?v=pTJJsmejUOQ)
+    - [Firebase](https://www.youtube.com/watch?v=LnpGU8vj7TI)
+    - Feel free to find tutorials that work for you! This is just a starting list.
+   - ___General___
+      - [How to be successful in ACM Projects](https://docs.google.com/document/d/18Zi3DrKG5e6g5Bojr8iqxIu6VIGl86YBSFlsnJnlM88/edit?usp=sharing)
+      -	[How to WIN ACM Projects](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+      -	[Overview of making API calls](https://snipcart.com/blog/apis-integration-usage-benefits)
+      - [Professor Cole's How to Program (and the "yellow pad" technique)](https://personal.utdallas.edu/~jxc064000/HowToProgram.html)
+      - [GitHub Cheatsheet PDF](https://www.atlassian.com/dam/jcr:8132028b-024f-4b6b-953e-e68fcce0c5fa/atlassian-git-cheatsheet.pdf)
+      - [Common GitHub Commands](https://education.github.com/git-cheat-sheet-education.pdf)
 
 
