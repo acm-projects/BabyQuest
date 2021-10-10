@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "249327146774",
+    "firebase_url": "https://new-parent-f4f1e-default-rtdb.firebaseio.com",
     "project_id": "new-parent-f4f1e",
     "storage_bucket": "new-parent-f4f1e.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "249327146774-9ijdbk9oo89n9kcfl7368rlpinnbalp5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.acm_projects.new_parent",
+            "certificate_hash": "5ca205b53999af44b0dfb0de40232888f07e55f7"
+          }
+        },
         {
           "client_id": "249327146774-7412s2g4koj6l6vtdjtb3bbhp4d86m9g.apps.googleusercontent.com",
           "client_type": 3
