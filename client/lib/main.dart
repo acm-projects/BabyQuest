@@ -16,12 +16,13 @@ class MyApp extends StatelessWidget {
   static final String title = 'Google SignIn';
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+    create: (context) =>  GoogleSignInProvider(),
+    child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: title,
         theme: ThemeData(primarySwatch: Colors.deepOrange),
         home: HomePage(),
-      );
-  }
+      ),
+  );
 }

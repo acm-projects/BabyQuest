@@ -10,13 +10,20 @@ class GoogleSignupButtonWidget extends StatelessWidget {
       padding: EdgeInsets.all(4),
       child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(
-          primary: Colors.white,
+          primary: Colors.blue,
           onPrimary: Colors.black,
           minimumSize: Size(double.infinity, 50),
           shape: StadiumBorder(),
         ),
         icon: FaIcon(FontAwesomeIcons.google, color: Colors.red),
-        label: Text('Sign up with Google'),
+        label: Text(
+          'Sign up with Google',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
         onPressed: () {
           final provider =
           Provider.of<GoogleSignInProvider>(context, listen: false);
