@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
                     alignment: Alignment.center,
                     child: Image.network(
                       'https://www.muralswallpaper.co.uk/app/uploads/baby-clouds-and-moon-nursery-room-825x535.jpg',
-                      height: 250,
+                      height: 251,
                       width: double.infinity,
                       fit: BoxFit.cover,
 
