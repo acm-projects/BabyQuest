@@ -7,16 +7,16 @@ class GoogleSignupButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(4),
+      padding: const EdgeInsets.all(4),
       child: ElevatedButton.icon(
         style: ElevatedButton.styleFrom(
           primary: Colors.blue,
           onPrimary: Colors.black,
-          minimumSize: Size(double.infinity, 50),
-          shape: StadiumBorder(),
+          minimumSize: const Size(double.infinity, 50),
+          shape: const StadiumBorder(),
         ),
-        icon: FaIcon(FontAwesomeIcons.google, color: Colors.red),
-        label: Text(
+        icon: const FaIcon(FontAwesomeIcons.google, color: Colors.red),
+        label: const Text(
           'Sign up with Google',
           style: TextStyle(
             color: Colors.white,

@@ -9,11 +9,16 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
+  if (Firebase.apps.isEmpty) {
+    print('no apps running...');
+  } else {
+    print('app is running...');
+  }
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  static final String title = 'Google SignIn';
+  static const String title = 'Google SignIn';
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider(

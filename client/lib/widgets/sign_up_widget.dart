@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:client/provider/google_sign_in.dart';
-import 'package:provider/provider.dart';
 import 'package:client/widgets/google_signup_button_widget.dart';
 
 class SignUpWidget extends StatelessWidget {
@@ -14,13 +11,13 @@ class SignUpWidget extends StatelessWidget {
   Widget buildSignUp() {
     return Column(
       children: [
-        Spacer(),
+        const Spacer(),
         Align(
           alignment: Alignment.centerLeft,
           child: Container(
-            margin: EdgeInsets.symmetric(horizontal:20),
+            margin: const EdgeInsets.symmetric(horizontal:20),
             width: 175,
-            child: Text(
+            child: const Text(
               'Welcome to New Parent\'s Login Page!',
               style: TextStyle(
                 color: Colors.black,
@@ -30,14 +27,14 @@ class SignUpWidget extends StatelessWidget {
             ),
           ),
         ),
-        Spacer(),
+        const Spacer(),
         GoogleSignupButtonWidget(),
-        SizedBox(height: 12),
-        Text(
+        const SizedBox(height: 12),
+        const Text(
           'Login to continue',
           style: TextStyle(fontSize: 16),
         ),
-        Spacer(),
+        const Spacer(),
       ],
     );
   }
