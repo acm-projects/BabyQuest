@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:client/widgets/sign_up_widget.dart';
-import 'package:client/widgets/logged_in_widget.dart';
+import 'package:client/page/main_page.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasData) {
-            return LoggedInWidget(); //home page goes here!
+            return const MainPage(); //home page goes here!
           } else if (snapshot.hasError) {
             return const Center(child: Text('Something went wrong!'));
           } else {

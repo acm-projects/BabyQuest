@@ -1,19 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:client/page/home_page.dart';
 import 'package:client/provider/google_sign_in.dart';
-import 'package:provider/provider.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  if (Firebase.apps.isEmpty) {
-    print('no apps running...');
-  } else {
-    print('app is running...');
-  }
+    SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: Colors.white),
+  );
+
   runApp(MyApp());
 }
 
