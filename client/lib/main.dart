@@ -1,17 +1,17 @@
 import 'package:client/pages/home_page.dart';
+import 'package:client/pages/profile_page.dart';
 import 'package:client/pages/shopping_page.dart';
 import 'package:client/pages/statistics_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'pages/profile_page.dart';
-
 void main() {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        systemNavigationBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: Colors.white),
+      statusBarColor: Colors.transparent,
+      //systemNavigationBarIconBrightness: Brightness.dark,
+      //systemNavigationBarColor: Colors.white
+    ),
   );
   runApp(const MyApp());
   //SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      title: 'New Parent',
       home: MainPage(),
       debugShowCheckedModeBanner: false,
     );
@@ -37,7 +38,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  static const Color accentColor = Color(0xFF008080);
+  static const Color accentColor = Color(0xFF00B8B8);
 
   int currentIndex = 1;
   final screens = [
