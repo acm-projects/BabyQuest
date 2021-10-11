@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:client/widgets/google_signup_button_widget.dart';
 
-class SignUpWidget extends StatelessWidget {
+class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {

@@ -1,36 +1,37 @@
-import 'package:client/page/home_page.dart';
-import 'package:client/provider/google_sign_in.dart';
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import 'package:client/pages/wrapper.dart';
+import 'package:client/services/google_sign_in.dart';
+
 Future main() async {
+  // setup flutter and firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-    SystemChrome.setSystemUIOverlayStyle(
+  SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         systemNavigationBarIconBrightness: Brightness.dark,
         systemNavigationBarColor: Colors.white),
   );
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  static const String title = 'Google SignIn';
+  const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => ChangeNotifierProvider(
-    create: (context) =>  GoogleSignInProvider(),
-    child: MaterialApp(
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => GoogleSignInProvider(),
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: title,
-        theme: ThemeData(primarySwatch: Colors.deepOrange),
-        home: HomePage(),
+        home: Wrapper(),
       ),
-  );
+    );
+  }
 }

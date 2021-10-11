@@ -2,14 +2,30 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import 'package:client/models/app_user.dart';
+
 class GoogleSignInProvider extends ChangeNotifier {
+  final _auth = FirebaseAuth.instance;
   final googleSignIn = GoogleSignIn();
 
   GoogleSignInAccount? _user;
 
   GoogleSignInAccount get user => _user!;
 
-  Future googleLogin() async {
+  // create AppUser object from firebase user
+  AppUser? _appUserFromUser(User? user) {
+    return user != null ? AppUser(user.uid) : null;
+  }
+
+  // auth change user stream
+  Stream<AppUser?> get appUser => _auth.authStateChanges().map(_appUserFromUser);
+
+  // sign in with email and password (TO ADD)
+
+  // register with email and password (TO ADD)
+
+  // sign in using google authentication
+  Future signInWithGoogle() async {
     try {
       final googleUser = await googleSignIn.signIn();
       if (googleUser == null) return;
@@ -22,7 +38,7 @@ class GoogleSignInProvider extends ChangeNotifier {
         idToken: googleAuth.idToken,
       );
 
-      await FirebaseAuth.instance.signInWithCredential(credential);
+      await _auth.signInWithCredential(credential);
     } catch (error) {
       print(error.toString());
     }
@@ -30,8 +46,9 @@ class GoogleSignInProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future logout() async {
+  // sign out
+  Future signOut() async {
     await googleSignIn.disconnect();
-    FirebaseAuth.instance.signOut();
+    _auth.signOut();
   }
 }

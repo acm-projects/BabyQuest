@@ -1,18 +1,18 @@
-import 'package:client/pages/home_page.dart';
-import 'package:client/pages/profile_page.dart';
-import 'package:client/pages/shopping_page.dart';
-import 'package:client/pages/statistics_page.dart';
+import 'package:client/pages/main/home_page.dart';
+import 'package:client/pages/main/profile_page.dart';
+import 'package:client/pages/main/shopping_page.dart';
+import 'package:client/pages/main/statistics_page.dart';
 
 import 'package:flutter/material.dart';
 
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+class MainWrapper extends StatefulWidget {
+  const MainWrapper({Key? key}) : super(key: key);
 
   @override
-  _MainPageState createState() => _MainPageState();
+  _MainWrapperState createState() => _MainWrapperState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainWrapperState extends State<MainWrapper> {
   static const Color accentColor = Color(0xFF008080);
 
   int currentIndex = 1;

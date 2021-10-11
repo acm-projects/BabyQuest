@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:client/provider/google_sign_in.dart';
+import 'package:client/services/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 class GoogleSignupButtonWidget extends StatelessWidget {
@@ -27,7 +27,7 @@ class GoogleSignupButtonWidget extends StatelessWidget {
         onPressed: () {
           final provider =
           Provider.of<GoogleSignInProvider>(context, listen: false);
-          provider.googleLogin();
+          provider.signInWithGoogle();
         },
       ),
     );
