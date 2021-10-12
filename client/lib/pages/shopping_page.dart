@@ -8,11 +8,21 @@ class ShoppingPage extends StatefulWidget {
 }
 
 class _ShoppingPageState extends State<ShoppingPage> {
+  static const Color accentColor = Color(0xFF008080);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Shopping"),
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        centerTitle: true,
+        foregroundColor: accentColor,
+        backgroundColor: Colors.white,
+        title: const Text(
+          "Shopping",
+          style: TextStyle(fontWeight: FontWeight.w200, fontSize: 50),
+        ),
       ),
     );
   }
