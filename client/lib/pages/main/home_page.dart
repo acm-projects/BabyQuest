@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:client/services/google_sign_in.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,6 +24,18 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30),
             ),
           ),
+          actions: [
+          TextButton(
+            child: const Text(
+              'logout',
+              style: TextStyle(color: Colors.white),
+              ),
+            onPressed: () {
+              final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+              provider.signOut();
+            },
+          )
+        ],
           backgroundColor: Colors.green,
         ),
         body: Column(
@@ -44,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                   Container(
                       padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 60),
                       alignment: Alignment.center,
-                      child: Text(
+                      child: const Text(
                         '"Quote of the day" \n -Author name',
                         style: TextStyle(color: Colors.blueGrey, fontWeight: FontWeight.bold, fontSize: 22.0),
                       )),
@@ -58,7 +72,7 @@ class _HomePageState extends State<HomePage> {
 
                 },
 
-                child: Text(
+                child: const Text(
                   "Record Sleep",
                   style: TextStyle(color: Colors.white),
                 ),
@@ -67,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                     MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(color: Colors.green),
+                        side: const BorderSide(color: Colors.green),
                       ),
                     ),
                     backgroundColor: MaterialStateProperty.all<Color>(
@@ -80,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
 
                 },
-                child: Text(
+                child: const Text(
                   "Record Feeding",
                   style: TextStyle(color: Colors.white),
                 ),
@@ -89,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                     MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(color: Colors.green),
+                        side: const BorderSide(color: Colors.green),
                       ),
                     ),
                     backgroundColor: MaterialStateProperty.all<Color>(
@@ -102,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () {
 
                 },
-                child: Text(
+                child: const Text(
                   "Record Sleep",
                   style: TextStyle(color: Colors.white),
                 ),
@@ -111,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                     MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(color: Colors.green),
+                        side: const BorderSide(color: Colors.green),
                       ),
                     ),
                     backgroundColor: MaterialStateProperty.all<Color>(

@@ -1,11 +1,17 @@
-import 'package:client/pages/home_page.dart';
-import 'package:client/pages/profile_page.dart';
-import 'package:client/pages/shopping_page.dart';
-import 'package:client/pages/statistics_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
-void main() {
+import 'package:client/pages/wrapper.dart';
+import 'package:client/services/google_sign_in.dart';
+
+Future main() async {
+  // setup flutter and firebase
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -13,8 +19,8 @@ void main() {
       //systemNavigationBarColor: Colors.white
     ),
   );
+
   runApp(const MyApp());
-  //SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 }
 
 class MyApp extends StatelessWidget {
@@ -22,55 +28,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'New Parent',
-      home: MainPage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
-
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
-  static const Color accentColor = Color(0xFF00B8B8);
-
-  int currentIndex = 1;
-  final screens = [
-    const ProfilePage(),
-    const HomePage(),
-    const StatisticsPage(),
-    const ShoppingPage()
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(
-        index: currentIndex,
-        children: screens,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: currentIndex,
-        onTap: (index) => setState(() => currentIndex = index),
-        selectedItemColor: accentColor,
-        unselectedItemColor: Colors.grey[500],
-        backgroundColor: Colors.white,
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle), label: "Profile"),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart), label: "Statistics"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), label: "Shopping")
-        ],
+    return ChangeNotifierProvider(
+      create: (context) => GoogleSignInProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Wrapper(),
       ),
     );
   }
