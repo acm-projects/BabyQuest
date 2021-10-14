@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:client/pages/wrapper.dart';
-import 'package:client/services/google_sign_in.dart';
+import 'package:client/services/auth_service.dart';
 
 Future main() async {
   // setup flutter and firebase
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => GoogleSignInProvider(),
+      create: (context) => AuthService(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Wrapper(),

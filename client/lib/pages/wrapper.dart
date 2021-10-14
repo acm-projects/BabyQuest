@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:client/pages/authenticate/sign_in_page.dart';
+import 'package:client/pages/authenticate/authenticate.dart';
 import 'package:client/pages/main/main_wrapper.dart';
-import 'package:client/services/google_sign_in.dart';
+import 'package:client/services/auth_service.dart';
 
 class Wrapper extends StatelessWidget {
   Widget _builder(contest, snapshot) {
@@ -13,7 +13,7 @@ class Wrapper extends StatelessWidget {
     } else if (snapshot.hasError) {
       return const Center(child: Text('Something went wrong!'));
     } else {
-      return SignInPage(); // authentication pages
+      return const Authenticate(); // authentication pages
     }
   }
 
@@ -21,7 +21,7 @@ class Wrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
-        stream: GoogleSignInProvider().appUser,
+        stream: AuthService().appUser,
         builder: _builder,
       ),
     );

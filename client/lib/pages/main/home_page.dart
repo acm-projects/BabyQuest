@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:client/services/google_sign_in.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -24,18 +22,6 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30),
             ),
           ),
-          actions: [
-          TextButton(
-            child: const Text(
-              'logout',
-              style: TextStyle(color: Colors.white),
-              ),
-            onPressed: () {
-              final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
-              provider.signOut();
-            },
-          )
-        ],
           backgroundColor: Colors.green,
         ),
         body: Column(

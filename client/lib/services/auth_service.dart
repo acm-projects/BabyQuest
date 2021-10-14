@@ -4,13 +4,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:client/models/app_user.dart';
 
-class GoogleSignInProvider extends ChangeNotifier {
+class AuthService extends ChangeNotifier {
   final _auth = FirebaseAuth.instance;
   final googleSignIn = GoogleSignIn();
-
-  GoogleSignInAccount? _user;
-
-  GoogleSignInAccount get user => _user!;
 
   // create AppUser object from firebase user
   AppUser? _appUserFromUser(User? user) {
@@ -18,21 +14,35 @@ class GoogleSignInProvider extends ChangeNotifier {
   }
 
   // auth change user stream
-  Stream<AppUser?> get appUser => _auth.authStateChanges().map(_appUserFromUser);
+  Stream<AppUser?> get appUser =>
+      _auth.authStateChanges().map(_appUserFromUser);
 
-  // sign in with email and password (TO ADD)
+  // register with email and password
+  Future registerWithEmailAndPassword(String email, String password) async {
+    try {
+      await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
 
-  // register with email and password (TO ADD)
+  // sign in with email and password
+  Future signInWithEmailAndPassword(String email, String password) async {
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
 
   // sign in using google authentication
   Future signInWithGoogle() async {
     try {
       final googleUser = await googleSignIn.signIn();
       if (googleUser == null) return;
-      _user = googleUser;
 
       final googleAuth = await googleUser.authentication;
-
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
@@ -40,7 +50,7 @@ class GoogleSignInProvider extends ChangeNotifier {
 
       await _auth.signInWithCredential(credential);
     } catch (error) {
-      print(error.toString());
+      debugPrint(error.toString());
     }
 
     notifyListeners();
@@ -48,7 +58,10 @@ class GoogleSignInProvider extends ChangeNotifier {
 
   // sign out
   Future signOut() async {
-    await googleSignIn.disconnect();
+    if (await googleSignIn.isSignedIn()) {
+      await googleSignIn.disconnect();
+    }
+
     _auth.signOut();
   }
 }
