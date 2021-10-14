@@ -14,8 +14,9 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Color(0xFFDCF0E7),
-      backgroundColor: Colors.white,
+      //backgroundColor: Color(0xFFeaf8da),
+      backgroundColor: Color(0x1100FF00),
+      //backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(
@@ -366,8 +367,8 @@ class LabeledIconButton extends StatelessWidget {
             shape: const CircleBorder(),
           ),
           child: IconButton(
-            iconSize: 25,
-            padding: const EdgeInsets.all(15),
+            iconSize: 30,
+            padding: const EdgeInsets.all(10),
             color: iconColor,
             icon: icon,
             onPressed: onPressed,

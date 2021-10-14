@@ -61,7 +61,7 @@ class _MainPageState extends State<MainPage> {
         onTap: (index) => setState(() => currentIndex = index),
         selectedItemColor: accentColor,
         unselectedItemColor: Colors.grey[500],
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xFFFFFFFF),
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.account_circle), label: "Profile"),
