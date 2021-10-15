@@ -5,15 +5,17 @@ import 'package:client/pages/main/main_wrapper.dart';
 import 'package:client/services/auth_service.dart';
 
 class Wrapper extends StatelessWidget {
+  const Wrapper({Key? key}) : super(key: key);
+
   Widget _builder(contest, snapshot) {
     if (snapshot.connectionState == ConnectionState.waiting) {
       return const Center(child: CircularProgressIndicator());
     } else if (snapshot.hasData) {
-      return const MainWrapper(); // main pages
+      return const MainWrapper(); // main page
     } else if (snapshot.hasError) {
       return const Center(child: Text('Something went wrong!'));
     } else {
-      return const Authenticate(); // authentication pages
+      return const Authenticate(); // authentication
     }
   }
 
@@ -21,7 +23,7 @@ class Wrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
-        stream: AuthService().appUser,
+        stream: AuthService.appUserStream,
         builder: _builder,
       ),
     );

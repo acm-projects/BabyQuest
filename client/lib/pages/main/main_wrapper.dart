@@ -1,9 +1,9 @@
+import 'package:flutter/material.dart';
+
 import 'package:client/pages/main/home_page.dart';
 import 'package:client/pages/main/profile_page.dart';
 import 'package:client/pages/main/shopping_page.dart';
 import 'package:client/pages/main/statistics_page.dart';
-
-import 'package:flutter/material.dart';
 
 class MainWrapper extends StatefulWidget {
   const MainWrapper({Key? key}) : super(key: key);

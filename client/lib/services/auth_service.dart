@@ -3,19 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:client/models/app_user.dart';
+import 'package:client/models/baby_profile.dart';
 
 class AuthService extends ChangeNotifier {
-  final _auth = FirebaseAuth.instance;
-  final googleSignIn = GoogleSignIn();
-
-  // create AppUser object from firebase user
-  AppUser? _appUserFromUser(User? user) {
-    return user != null ? AppUser(user.uid) : null;
-  }
+  static final _auth = FirebaseAuth.instance;
+  static final _googleSignIn = GoogleSignIn();
 
   // auth change user stream
-  Stream<AppUser?> get appUser =>
+  static Stream<AppUser?> get appUserStream =>
       _auth.authStateChanges().map(_appUserFromUser);
+
+  // create AppUser object from firebase user
+  static AppUser? _appUserFromUser(User? user) {
+    AppUser.currentUser = user != null ? AppUser(user.uid) : null;
+
+    if (AppUser.currentUser == null) {
+      BabyProfile.currentProfile = null;
+    }
+
+    return AppUser.currentUser;
+  }
 
   // register with email and password
   Future registerWithEmailAndPassword(String email, String password) async {
@@ -39,7 +46,7 @@ class AuthService extends ChangeNotifier {
   // sign in using google authentication
   Future signInWithGoogle() async {
     try {
-      final googleUser = await googleSignIn.signIn();
+      final googleUser = await _googleSignIn.signIn();
       if (googleUser == null) return;
 
       final googleAuth = await googleUser.authentication;
@@ -58,8 +65,8 @@ class AuthService extends ChangeNotifier {
 
   // sign out
   Future signOut() async {
-    if (await googleSignIn.isSignedIn()) {
-      await googleSignIn.disconnect();
+    if (await _googleSignIn.isSignedIn()) {
+      await _googleSignIn.signOut();
     }
 
     _auth.signOut();

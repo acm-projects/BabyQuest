@@ -7,7 +7,7 @@ import 'package:client/services/auth_service.dart';
 class SignInForm extends StatefulWidget {
   final bool register;
 
-  const SignInForm(this.register);
+  const SignInForm(this.register, {Key? key}) : super(key: key);
 
   @override
   _SignInFormState createState() => _SignInFormState();
@@ -27,8 +27,6 @@ class _SignInFormState extends State<SignInForm> {
       key: _formKey,
       child: Column(
         children: [
-          _buildNameField(),
-          const SizedBox(height: 20.0),
           _buildEmailAdressField(),
           const SizedBox(height: 20.0),
           _buildPasswordField(),
@@ -38,27 +36,6 @@ class _SignInFormState extends State<SignInForm> {
         ],
       ),
     );
-  }
-
-  Widget _buildNameField() {
-    if (widget.register) {
-      return TextFormField(
-        decoration: const InputDecoration(
-          labelText: 'Name',
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(100))),
-          prefixIcon: Icon(Icons.person),
-        ),
-        validator: (value) {
-          return (value == null || value.isEmpty)
-              ? 'Enter your name'
-              : null;
-        },
-        onChanged: (value) => setState(() => name = value),
-      );
-    } else {
-      return Container();
-    }
   }
 
   Widget _buildEmailAdressField() {
@@ -135,14 +112,15 @@ class _SignInFormState extends State<SignInForm> {
 
   Widget _buildGoogleSignInButton() {
     if (widget.register) {
-      return Container();
+      return const SizedBox(height: 125.0);
     } else {
       return Column(
         children: [
           const SizedBox(height: 25.0),
           Row(children: [
             Expanded(child: Divider(color: Colors.black.withOpacity(0.5))),
-            Text('OR', style: TextStyle(color: Colors.black.withOpacity(0.5))),
+            Text('   or   ',
+                style: TextStyle(color: Colors.black.withOpacity(0.5))),
             Expanded(child: Divider(color: Colors.black.withOpacity(0.5))),
           ]),
           const SizedBox(height: 25.0),
