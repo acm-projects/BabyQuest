@@ -9,7 +9,7 @@ void main() {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
-      //systemNavigationBarIconBrightness: Brightness.dark,
+      systemNavigationBarIconBrightness: Brightness.dark,
       //systemNavigationBarColor: Colors.white
     ),
   );
@@ -22,9 +22,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'New Parent',
-      home: MainPage(),
+      theme: ThemeData(
+        brightness: Brightness.light,
+        //fontFamily: 'Sonorous',
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: Colors.green,
+          primaryVariant: const Color(0xFFE9FAE9),
+          secondary: Colors.black54,
+          secondaryVariant: Colors.black38,
+        ),
+      ),
+      home: const MainPage(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -38,8 +48,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  static const Color accentColor = Color(0xFF00B8B8);
-
   int currentIndex = 1;
   final screens = [
     const ProfilePage(),
@@ -59,9 +67,9 @@ class _MainPageState extends State<MainPage> {
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,
         onTap: (index) => setState(() => currentIndex = index),
-        selectedItemColor: accentColor,
-        unselectedItemColor: Colors.grey[500],
-        backgroundColor: Color(0xFFFFFFFF),
+        backgroundColor: Colors.white,
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: Theme.of(context).colorScheme.secondary,
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.account_circle), label: "Profile"),
