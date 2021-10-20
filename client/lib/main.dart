@@ -33,6 +33,16 @@ class MyApp extends StatelessWidget {
           secondary: Colors.grey.shade600,
           secondaryVariant: Colors.grey.shade500,
         ),
+        textTheme: TextTheme(
+          headline1: TextStyle(
+              color: Colors.grey.shade600,
+              fontWeight: FontWeight.w800,
+              fontSize: 20),
+          subtitle1: TextStyle(
+              color: Colors.grey.shade600,
+              fontWeight: FontWeight.w300,
+              fontSize: 15),
+        ),
       ),
       home: const MainPage(),
       debugShowCheckedModeBanner: false,
