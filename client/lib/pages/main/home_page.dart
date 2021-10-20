@@ -73,6 +73,7 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(30)),
                       padding: const EdgeInsets.all(
                           20) //content padding inside button
+
                       ),
                   onPressed: () {
                     //code to execute when this button is pressed.
@@ -104,6 +105,7 @@ class _HomePageState extends State<HomePage> {
                             borderRadius: BorderRadius.circular(30)),
                         padding: const EdgeInsets.all(
                             20) //content padding inside button
+
                         ),
                     onPressed: () {
                       buttonCase = 1;
@@ -134,6 +136,7 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(30)),
                       padding: const EdgeInsets.all(
                           20) //content padding inside button
+
                       ),
                   onPressed: () {
                     buttonCase = 2;
