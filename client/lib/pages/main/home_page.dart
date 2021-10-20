@@ -9,7 +9,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int buttonCase = 3;
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -71,8 +71,9 @@ class _HomePageState extends State<HomePage> {
                       shape: RoundedRectangleBorder(
                           //to set border radius to button
                           borderRadius: BorderRadius.circular(30)),
-                      padding:
-                          const EdgeInsets.all(20) //content padding inside button
+                      padding: const EdgeInsets.all(
+                          20) //content padding inside button
+
                       ),
                   onPressed: () {
                     //code to execute when this button is pressed.
@@ -102,8 +103,9 @@ class _HomePageState extends State<HomePage> {
                         shape: RoundedRectangleBorder(
                             //to set border radius to button
                             borderRadius: BorderRadius.circular(30)),
-                        padding:
-                            const EdgeInsets.all(20) //content padding inside button
+                        padding: const EdgeInsets.all(
+                            20) //content padding inside button
+
                         ),
                     onPressed: () {
                       buttonCase = 1;
@@ -132,8 +134,9 @@ class _HomePageState extends State<HomePage> {
                       shape: RoundedRectangleBorder(
                           //to set border radius to button
                           borderRadius: BorderRadius.circular(30)),
-                      padding:
-                          const EdgeInsets.all(20) //content padding inside button
+                      padding: const EdgeInsets.all(
+                          20) //content padding inside button
+
                       ),
                   onPressed: () {
                     buttonCase = 2;

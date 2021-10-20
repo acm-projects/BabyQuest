@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tinycolor2/src/color_extension.dart';
 
 class ShoppingPage extends StatefulWidget {
   const ShoppingPage({Key? key}) : super(key: key);
@@ -23,6 +25,10 @@ class _ShoppingPageState extends State<ShoppingPage> {
           "Shopping Cart",
           style: TextStyle(fontWeight: FontWeight.w200, fontSize: 50),
         ),
+      ),
+      body: SvgPicture.asset(
+        'images/undraw_baby.svg',
+        color: Colors.green.shade100,
       ),
     );
   }
