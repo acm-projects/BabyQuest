@@ -1,89 +1,16 @@
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DataService {
-  static Future getQOD() async {
-    final preferences = await SharedPreferences.getInstance();
-    
-    DateTime now = DateTime.now();
-    String today = DateTime(now.year, now.month, now.day).toString();
-
-    // [0] = date, [1] = message, [2] = author, [3] = imageUrl
-    List<String> qodData = preferences.getStringList('qod') ?? [];
-
-    if (qodData.isEmpty || qodData[0] != today) {
-      // fetch qod and save to qodData
-      preferences.setStringList('qod', qodData);
-    }
-
-    return qodData;
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  Future getQOD1() async {
-    final preferences = await SharedPreferences.getInstance();
-    final lastAccessedKey = 'last_accessed';
-    final qodMessageKey = 'qod_message';
-    final qodAuthorKey = 'qod_author';
-    final qodImageKey = 'qod_image';
-
-    final yesterday = DateTime.now().subtract(const Duration(days: 1));
-    final lastAccessed = DateTime.parse(preferences.getString(lastAccessedKey) ?? yesterday.toString());
-
-    String? message = null;
-    String? author = null;
-    String? image = null;
-
-    if (lastAccessed == DateTime.now()) {
-      message = preferences.getString(qodMessageKey);
-      author = preferences.getString(qodAuthorKey);
-      image = preferences.getString(qodImageKey);
-    }
-
-    message ??= '';
-    author ??= '';
-    image ??= '';
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   static final _database = FirebaseFirestore.instance;
   static final _userCollection = _database.collection('users');
   static final _profileCollection = _database.collection('profiles');
 
-  static final Map<String, dynamic> _userListeners = {};
-  static final Map<String, dynamic> _profileListeners = {};
-
+  static dynamic _userListener;
+  static dynamic _profileListener;
+  
   // default UserData
   static const _defaultUserData = {
     'profiles': [],
@@ -97,38 +24,32 @@ class DataService {
     'birthDate': '',
   };
 
-  // retrieves user data from the database, or creates it if not yet created
-  static Future<Map<String, dynamic>> getUserData(String uid) async {
-    Map<String, dynamic> userData = _defaultUserData;
-
+  // sets data sync for user data with database
+  static setUserDataSync(String uid, Function update) async{
     DocumentReference userDocument = _userCollection.doc(uid);
+
+    // If user data doesn't exist yet, create it
     await userDocument.get().then((document) {
       if (!document.exists) {
-        // userData doesn't yet exist, so create it here
         userDocument.set(_defaultUserData);
-      } else {
-        userData = document.data() as Map<String, dynamic>;
       }
     });
 
-    return userData;
-  }
-
-  // sets data sync for user data with database
-  static setUserDataSync(String uid, Function update) {
-    DocumentReference userDocument = _userCollection.doc(uid);
-
-    _userListeners[uid] = userDocument.snapshots().listen((document) {
+    _userListener = userDocument.snapshots().listen((document) {
       update(document.data() as Map<String, dynamic>);
     });
   }
 
   // removes data sync for user data with database
   static removeUserDataSync(String uid) {
-    if (_userListeners[uid] == null) return;
+    if (_userListener != null) {
+      _userListener.cancal();
+    }
 
-    _userListeners[uid].cancel();
-    _userListeners[uid] = null;
+    if (_userListener == null) return;
+
+    _userListener.cancel();
+    _userListener = null;
   }
 
   static Future<String> getProfileName(String uid) async {
@@ -170,18 +91,47 @@ class DataService {
 
   // sets data sync for profile data with database
   static setProfileDataSync(String uid, Function update) {
+    if (_profileListener != null) {
+      _profileListener.cancal();
+    }
+
     DocumentReference profileDocument = _profileCollection.doc(uid);
 
-    _profileListeners[uid] = profileDocument.snapshots().listen((document) {
+    _profileListener = profileDocument.snapshots().listen((document) {
       update(document.data() as Map<String, dynamic>);
     });
   }
 
   // removes data sync for profile data with database
   static removeProfileDataSync(String uid) {
-    if (_profileListeners[uid] == null) return;
+    if (_profileListener == null) return;
 
-    _profileListeners[uid].cancel();
-    _profileListeners[uid] = null;
+    _profileListener.cancel();
+    _profileListener = null;
+  }
+
+  // retrieves the current qod data from local storage or api
+  static Future getQOD() async {
+    final preferences = await SharedPreferences.getInstance();
+    
+    DateTime now = DateTime.now();
+    String today = DateTime(now.year, now.month, now.day).toString();
+
+    // [0] = date, [1] = message, [2] = author, [3] = imageUrl
+    List<String> qod = preferences.getStringList('qod') ?? [];
+
+    if (qod.isEmpty || qod[0] != today) {
+      // fetch qod from api
+      var response = await http.get(Uri.parse('http://quotes.rest/qod.json?category=inspire'));
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> qodData = jsonDecode(response.body)['contents']['quotes'][0];
+        qod = [today, qodData['quote'], qodData['author'], qodData['background']];
+      }
+
+      preferences.setStringList('qod', qod);
+    }
+
+    return qod;
   }
 }
