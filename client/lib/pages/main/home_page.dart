@@ -8,8 +8,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  @override
   int buttonCase = 3;
+  
+  @override
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(
                           vertical: 50, horizontal: 60),
                       alignment: Alignment.center,
-                      child: Text(
+                      child: const Text(
                         '"Quote of the day" \n -Author name',
                         style: TextStyle(
                             color: Colors.blueGrey,
@@ -63,7 +64,7 @@ class _HomePageState extends State<HomePage> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: Colors.green, //background color of button
-                      side: BorderSide(
+                      side: const BorderSide(
                           width: 3,
                           color: Colors.green), //border width and color
                       elevation: 3, //elevation of button
@@ -71,7 +72,7 @@ class _HomePageState extends State<HomePage> {
                           //to set border radius to button
                           borderRadius: BorderRadius.circular(30)),
                       padding:
-                          EdgeInsets.all(20) //content padding inside button
+                          const EdgeInsets.all(20) //content padding inside button
                       ),
                   onPressed: () {
                     //code to execute when this button is pressed.
@@ -82,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                           _buildPopupDialog(context),
                     );
                   },
-                  child: Text("Record Sleep"),
+                  child: const Text("Record Sleep"),
                 ),
               ),
             ),
@@ -94,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         primary: Colors.green, //background color of button
-                        side: BorderSide(
+                        side: const BorderSide(
                             width: 3,
                             color: Colors.green), //border width and color
                         elevation: 3, //elevation of button
@@ -102,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                             //to set border radius to button
                             borderRadius: BorderRadius.circular(30)),
                         padding:
-                            EdgeInsets.all(20) //content padding inside button
+                            const EdgeInsets.all(20) //content padding inside button
                         ),
                     onPressed: () {
                       buttonCase = 1;
@@ -113,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                             _buildPopupDialog(context),
                       );
                     },
-                    child: Text("Record Feedings")),
+                    child: const Text("Record Feedings")),
               ),
             ),
             Container(
@@ -124,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: Colors.green, //background color of button
-                      side: BorderSide(
+                      side: const BorderSide(
                           width: 3,
                           color: Colors.green), //border width and color
                       elevation: 3, //elevation of button
@@ -132,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                           //to set border radius to button
                           borderRadius: BorderRadius.circular(30)),
                       padding:
-                          EdgeInsets.all(20) //content padding inside button
+                          const EdgeInsets.all(20) //content padding inside button
                       ),
                   onPressed: () {
                     buttonCase = 2;
@@ -142,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                           _buildPopupDialog(context),
                     );
                   },
-                  child: Text("Record Diaper Changes"),
+                  child: const Text("Record Diaper Changes"),
                 ),
               ),
             ),
@@ -161,13 +162,13 @@ class _HomePageState extends State<HomePage> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Current Number of sleep: '),
+            const Text('Current Number of sleep: '),
             Text('$_feedingCounter'),
             ElevatedButton(
               onPressed: () {
                 _feedingCounter++;
               },
-              child: Text('Add sleep'),
+              child: const Text('Add sleep'),
             )
           ],
         ),
@@ -216,13 +217,13 @@ class _HomePageState extends State<HomePage> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Current Number of diaper changes: '),
+            const Text('Current Number of diaper changes: '),
             Text('$_feedingCounter'),
             ElevatedButton(
               onPressed: () {
                 _feedingCounter++;
               },
-              child: Text('Add diaper changes'),
+              child: const Text('Add diaper changes'),
             )
           ],
         ),
