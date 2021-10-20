@@ -30,8 +30,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSwatch().copyWith(
           primary: Colors.green,
           primaryVariant: const Color(0xFFE9FAE9),
-          secondary: Colors.black54,
-          secondaryVariant: Colors.black38,
+          secondary: Colors.grey.shade600,
+          secondaryVariant: Colors.grey.shade500,
         ),
       ),
       home: const MainPage(),

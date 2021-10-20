@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class StatisticsPage extends StatefulWidget {
   const StatisticsPage({Key? key}) : super(key: key);
@@ -22,6 +23,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
         elevation: 0,
       ),
       backgroundColor: Theme.of(context).colorScheme.primaryVariant,
+      extendBodyBehindAppBar: true,
       body: Ink(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -38,230 +40,249 @@ class _StatisticsPageState extends State<StatisticsPage> {
         child: ListView(
           physics: const ClampingScrollPhysics(),
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'Sunday',
-                        style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.w800,
-                            color: Theme.of(context).colorScheme.secondary),
-                      ),
-                      const TextSpan(
-                        text: ' ',
-                      ),
-                      TextSpan(
-                        text: '10 October',
-                        style: TextStyle(
-                            color:
-                                Theme.of(context).colorScheme.secondaryVariant,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Divider(
-              color: Theme.of(context).colorScheme.secondaryVariant,
-              thickness: 1,
-            ),
-            SizedBox(
-              height: 130,
-              child: PageView.builder(
-                itemCount: null,
-                controller: pageController,
-                onPageChanged: (int index) => setState(() => _index = index),
-                itemBuilder: (_, i) {
-                  return Transform.scale(
-                    scale: i == _index ? 1 : 0.9,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Row(
-                        //crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          DayCircle(
-                            fraction: .1,
-                            insideText: '${_index * 7 + 1}',
-                            topText: 'S',
-                            onTap: () {},
-                          ),
-                          const Spacer(),
-                          DayCircle(
-                            fraction: .2,
-                            insideText: '${_index * 7 + 2}',
-                            topText: 'M',
-                            onTap: () {},
-                          ),
-                          const Spacer(),
-                          DayCircle(
-                            fraction: .3,
-                            insideText: '${_index * 7 + 3}',
-                            topText: 'T',
-                            onTap: () {},
-                          ),
-                          const Spacer(),
-                          DayCircle(
-                            fraction: .4,
-                            insideText: '${_index * 7 + 4}',
-                            topText: 'W',
-                            onTap: () {},
-                          ),
-                          const Spacer(),
-                          DayCircle(
-                            fraction: .5,
-                            insideText: '${_index * 7 + 5}',
-                            topText: 'T',
-                            onTap: () {},
-                          ),
-                          const Spacer(),
-                          DayCircle(
-                            fraction: .6,
-                            insideText: '${_index * 7 + 6}',
-                            topText: 'F',
-                            onTap: () {},
-                          ),
-                          const Spacer(),
-                          DayCircle(
-                            fraction: .7,
-                            insideText: '${_index * 7 + 7}',
-                            topText: 'S',
-                            onTap: () {},
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            Divider(
-              color: Theme.of(context).colorScheme.secondaryVariant,
-              thickness: 1,
-            ),
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Row(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                    colorFilter:
+                        ColorFilter.mode(Color(0x25FFFFFF), BlendMode.dstATop),
+                    image: AssetImage('res/undraw_baby.png'),
+                    fit: BoxFit.cover),
+              ),
+              child: Column(
                 children: [
-                  Container(
-                    height: 150,
-                    width: 150,
-                    padding: const EdgeInsets.all(13),
-                    child: IncompleteCircle(
-                      backgroundColor: Colors.black12,
-                      fraction: .25,
-                      strokeWidth: 13,
-                      circleColor: Theme.of(context).colorScheme.primary,
-                      child: Text(
-                        '25%',
-                        style: TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.w900,
-                            color: Theme.of(context).colorScheme.secondary),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Sunday',
+                              style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.w800,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary),
+                            ),
+                            const TextSpan(
+                              text: ' ',
+                            ),
+                            TextSpan(
+                              text: '10 October',
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryVariant,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 30,
+                  Divider(
+                    color: Theme.of(context).colorScheme.secondaryVariant,
+                    thickness: 1,
                   ),
-                  RichText(
-                    text: TextSpan(
+                  SizedBox(
+                    height: 130,
+                    child: PageView.builder(
+                      itemCount: null,
+                      controller: pageController,
+                      onPageChanged: (int index) =>
+                          setState(() => _index = index),
+                      itemBuilder: (_, i) {
+                        return Transform.scale(
+                          scale: i == _index ? 1 : 0.9,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Row(
+                              //crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                DayCircle(
+                                  fraction: .1,
+                                  insideText: '${_index * 7 + 1}',
+                                  topText: 'S',
+                                  onTap: () {},
+                                ),
+                                const Spacer(),
+                                DayCircle(
+                                  fraction: .2,
+                                  insideText: '${_index * 7 + 2}',
+                                  topText: 'M',
+                                  onTap: () {},
+                                ),
+                                const Spacer(),
+                                DayCircle(
+                                  fraction: .3,
+                                  insideText: '${_index * 7 + 3}',
+                                  topText: 'T',
+                                  onTap: () {},
+                                ),
+                                const Spacer(),
+                                DayCircle(
+                                  fraction: .4,
+                                  insideText: '${_index * 7 + 4}',
+                                  topText: 'W',
+                                  onTap: () {},
+                                ),
+                                const Spacer(),
+                                DayCircle(
+                                  fraction: .5,
+                                  insideText: '${_index * 7 + 5}',
+                                  topText: 'T',
+                                  onTap: () {},
+                                ),
+                                const Spacer(),
+                                DayCircle(
+                                  fraction: .6,
+                                  insideText: '${_index * 7 + 6}',
+                                  topText: 'F',
+                                  onTap: () {},
+                                ),
+                                const Spacer(),
+                                DayCircle(
+                                  fraction: .7,
+                                  insideText: '${_index * 7 + 7}',
+                                  topText: 'S',
+                                  onTap: () {},
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Divider(
+                    color: Theme.of(context).colorScheme.secondaryVariant,
+                    thickness: 1,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Row(
                       children: [
-                        TextSpan(
-                          text: '8h 27m',
-                          style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.w800,
-                              color: Theme.of(context).colorScheme.secondary),
+                        Container(
+                          height: 150,
+                          width: 150,
+                          padding: const EdgeInsets.all(13),
+                          child: IncompleteCircle(
+                            backgroundColor: Colors.black12,
+                            fraction: .25,
+                            strokeWidth: 13,
+                            circleColor: Theme.of(context).colorScheme.primary,
+                            child: Text(
+                              '25%',
+                              style: TextStyle(
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.w900,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary),
+                            ),
+                          ),
                         ),
-                        const TextSpan(
-                          text: '\n',
+                        const SizedBox(
+                          width: 30,
                         ),
-                        TextSpan(
-                          text: 'of sleep',
-                          style: TextStyle(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondaryVariant,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 15),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: '8h 27m',
+                                style: TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w800,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondary),
+                              ),
+                              const TextSpan(
+                                text: '\n',
+                              ),
+                              TextSpan(
+                                text: 'of sleep',
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondaryVariant,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 15),
+                              )
+                            ],
+                          ),
                         )
                       ],
                     ),
-                  )
+                  ),
+                  Divider(
+                    color: Theme.of(context).colorScheme.secondaryVariant,
+                    thickness: 1,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            IconStatistics(
+                              iconData: Icons.nightlight_round_outlined,
+                              text: '1:50 AM',
+                              label: 'Slept at',
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            IconStatistics(
+                              iconData: Icons.restaurant_outlined,
+                              text: '3',
+                              label: 'Feedings',
+                            ),
+                          ],
+                        ),
+                        const Spacer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            IconStatistics(
+                              iconData: Icons.wb_sunny_rounded,
+                              text: '10:18 AM',
+                              label: 'Woke up at',
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            IconStatistics(
+                              iconData: Icons.delete,
+                              text: '2',
+                              label: 'Diaper changes',
+                            ),
+                          ],
+                        ),
+                        const Spacer()
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    color: Theme.of(context).colorScheme.secondaryVariant,
+                    thickness: 1,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Add Notes',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-            Divider(
-              color: Theme.of(context).colorScheme.secondaryVariant,
-              thickness: 1,
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Row(
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      IconStatistics(
-                        iconData: Icons.nightlight_round_outlined,
-                        text: '1:50 AM',
-                        label: 'Slept at',
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      IconStatistics(
-                        iconData: Icons.restaurant_outlined,
-                        text: '3',
-                        label: 'Feedings',
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      IconStatistics(
-                        iconData: Icons.wb_sunny_rounded,
-                        text: '10:18 AM',
-                        label: 'Woke up at',
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      IconStatistics(
-                        iconData: Icons.delete,
-                        text: '2',
-                        label: 'Diaper changes',
-                      ),
-                    ],
-                  ),
-                  const Spacer()
-                ],
-              ),
-            ),
-            Divider(
-              color: Theme.of(context).colorScheme.secondaryVariant,
-              thickness: 1,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: TextButton(
-                onPressed: () {},
-                child: Text(
-                  'Add Notes',
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.secondary),
-                ),
-              ),
-            )
           ],
         ),
       ),
@@ -308,6 +329,7 @@ class DayCircle extends StatelessWidget {
             child: IncompleteCircle(
               fraction: fraction,
               circleColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: Colors.black12,
               child: Text(
                 insideText,
                 style: TextStyle(

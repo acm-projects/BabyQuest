@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tinycolor2/src/color_extension.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -85,69 +86,146 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   Container(
-                    padding:
-                        const EdgeInsets.only(left: 20, right: 20, top: 10),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Column(
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        alignment: Alignment.bottomCenter,
+                        colorFilter: ColorFilter.mode(
+                            Color(0x25FFFFFF), BlendMode.dstATop),
+                        image: AssetImage('res/undraw_toy_car.png'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 10),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Center(
-                                  child: RichText(
-                                    text: TextSpan(
-                                      text: 'General Information',
-                                      style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                          fontWeight: FontWeight.w900,
-                                          fontSize: 15),
-                                    ),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Center(
+                                        child: RichText(
+                                          text: TextSpan(
+                                            text: 'General Information',
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                                fontWeight: FontWeight.w900,
+                                                fontSize: 15),
+                                          ),
+                                        ),
+                                      ),
+                                      Divider(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                      ),
+                                      const GeneralInfo(
+                                        iconData: Icons.male,
+                                        text: 'Male',
+                                      ),
+                                      const GeneralInfo(
+                                        iconData: Icons.calendar_today,
+                                        text: '14 months old',
+                                      ),
+                                      const GeneralInfo(
+                                        iconData: Icons.monitor_weight_outlined,
+                                        text: '20 pounds',
+                                      ),
+                                      const GeneralInfo(
+                                        iconData: Icons.straighten,
+                                        text: '2\'5"',
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                Divider(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
+                                const SizedBox(
+                                  width: 40,
                                 ),
-                                const GeneralInfo(
-                                  iconData: Icons.male,
-                                  text: 'Male',
-                                ),
-                                const GeneralInfo(
-                                  iconData: Icons.calendar_today,
-                                  text: '14 months old',
-                                ),
-                                const GeneralInfo(
-                                  iconData: Icons.monitor_weight_outlined,
-                                  text: '20 pounds',
-                                ),
-                                const GeneralInfo(
-                                  iconData: Icons.straighten,
-                                  text: '2\'5"',
+                                Expanded(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    //crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Allergies',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              fontWeight: FontWeight.w900,
+                                              fontSize: 15),
+                                        ),
+                                      ),
+                                      Divider(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                      ),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Strawberries',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 15),
+                                        ),
+                                      ),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Latex',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 15),
+                                        ),
+                                      ),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Eggs',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 15),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-                          const SizedBox(
-                            width: 40,
-                          ),
-                          Expanded(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              //crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                RichText(
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: RichText(
                                   text: TextSpan(
-                                    text: 'Allergies',
+                                    text: 'Pediatric Information',
                                     style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
@@ -156,87 +234,33 @@ class _ProfilePageState extends State<ProfilePage> {
                                         fontSize: 15),
                                   ),
                                 ),
-                                Divider(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                ),
-                                RichText(
-                                  text: TextSpan(
-                                    text: 'Strawberries',
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15),
-                                  ),
-                                ),
-                                RichText(
-                                  text: TextSpan(
-                                    text: 'Latex',
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15),
-                                  ),
-                                ),
-                                RichText(
-                                  text: TextSpan(
-                                    text: 'Eggs',
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(
-                          child: RichText(
-                            text: TextSpan(
-                              text: 'Pediatric Information',
-                              style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 15),
-                            ),
-                          ),
-                        ),
-                        Divider(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            text: 'Doctor Name: Al Zeimers',
-                            style: TextStyle(
+                              ),
+                              Divider(
                                 color: Theme.of(context).colorScheme.secondary,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 15),
-                          ),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            text: 'Phone: (555)-555-5555',
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 15),
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  text: 'Doctor Name: Al Zeimers',
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 15),
+                                ),
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  text: 'Phone: (555)-555-5555',
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 15),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -254,9 +278,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   LabeledIconButton(
                     icon: const Icon(Icons.logout),
-                    textColor: Colors.redAccent,
-                    backgroundColor1: Colors.redAccent,
-                    backgroundColor2: const Color(0xFFff51a5),
+                    textColor: Colors.red,
+                    backgroundColor1: Colors.red,
+                    backgroundColor2: Colors.red.brighten(35),
                     label: 'Sign Out',
                     onPressed: () {},
                   ),
@@ -265,7 +289,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     icon: const Icon(Icons.phone),
                     textColor: Colors.orange,
                     backgroundColor1: Colors.orange,
-                    backgroundColor2: const Color(0xFFffd900),
+                    backgroundColor2: Colors.orange.brighten(35),
                     label: 'Pediatrician',
                     onPressed: () {},
                   ),
@@ -274,16 +298,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     icon: const Icon(Icons.edit),
                     textColor: Colors.lightGreen,
                     backgroundColor1: Colors.lightGreen,
-                    backgroundColor2: const Color(0xFF63f05b),
+                    backgroundColor2: Colors.lightGreen.brighten(25),
                     label: 'Edit Info',
                     onPressed: () {},
                   ),
                   const Spacer(),
                   LabeledIconButton(
                     icon: const Icon(Icons.share),
-                    textColor: Colors.blue,
-                    backgroundColor1: Colors.blue,
-                    backgroundColor2: const Color(0xff9cc7ff),
+                    textColor: Colors.lightBlueAccent,
+                    backgroundColor1: Colors.lightBlueAccent,
+                    backgroundColor2: Colors.lightBlueAccent.brighten(20),
                     label: 'Share Info',
                     onPressed: () {},
                   ),
@@ -293,6 +317,61 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class IconInfo extends StatelessWidget {
+  final IconData iconData;
+  final String text;
+  final String label;
+
+  const IconInfo({
+    Key? key,
+    required this.iconData,
+    this.text = '',
+    this.label = '',
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        RichText(
+          text: TextSpan(
+            children: [
+              WidgetSpan(
+                  child: Icon(iconData,
+                      size: 45, color: Theme.of(context).colorScheme.primary),
+                  alignment: PlaceholderAlignment.middle),
+            ],
+          ),
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: text,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 20),
+              ),
+              const TextSpan(text: '\n'),
+              TextSpan(
+                text: label,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontWeight: FontWeight.w300,
+                    fontSize: 15),
+              )
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
