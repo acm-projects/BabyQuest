@@ -20,7 +20,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
         foregroundColor: accentColor,
         backgroundColor: Colors.white,
         title: const Text(
-          "Shopping",
+          "Shopping Cart",
           style: TextStyle(fontWeight: FontWeight.w200, fontSize: 50),
         ),
       ),
