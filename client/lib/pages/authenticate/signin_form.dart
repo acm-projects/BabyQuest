@@ -27,7 +27,7 @@ class _SignInFormState extends State<SignInForm> {
       key: _formKey,
       child: Column(
         children: [
-          _buildEmailAdressField(),
+          _buildEmailAddressField(),
           const SizedBox(height: 20.0),
           _buildPasswordField(),
           const SizedBox(height: 40.0),
@@ -38,7 +38,7 @@ class _SignInFormState extends State<SignInForm> {
     );
   }
 
-  Widget _buildEmailAdressField() {
+  Widget _buildEmailAddressField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
       decoration: const InputDecoration(
@@ -98,14 +98,15 @@ class _SignInFormState extends State<SignInForm> {
             }
           }
         },
-        color: Colors.blue,
+        color: Colors.green.shade200,
         child: Text(
           label,
           style: const TextStyle(
             fontSize: 20,
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
+
       ),
     );
   }
@@ -127,26 +128,26 @@ class _SignInFormState extends State<SignInForm> {
           Container(
             padding: const EdgeInsets.all(4),
             child: ElevatedButton.icon(
+              onPressed: () {
+                final provider =
+                Provider.of<AuthService>(context, listen: false);
+                provider.signInWithGoogle();
+              },
               style: ElevatedButton.styleFrom(
-                primary: Colors.blue,
+                primary: Colors.green.shade200,
                 onPrimary: Colors.black,
-                minimumSize: const Size(double.infinity, 50),
+                minimumSize: const Size(double.infinity, 60),
                 shape: const StadiumBorder(),
               ),
-              icon: const FaIcon(FontAwesomeIcons.google, color: Colors.red),
+              icon: FaIcon(FontAwesomeIcons.google, color: Colors.deepPurple.shade400),
               label: const Text(
                 'Login with Google',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Colors.black,
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: 20,
                 ),
               ),
-              onPressed: () {
-                final provider =
-                    Provider.of<AuthService>(context, listen: false);
-                provider.signInWithGoogle();
-              },
             ),
           ),
         ],

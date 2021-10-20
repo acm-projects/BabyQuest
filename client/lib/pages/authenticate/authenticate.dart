@@ -34,9 +34,9 @@ class _AuthenticateState extends State<Authenticate> {
   }
 
   Widget _buildTitle() {
-    String title = register ? 'Create Account,' : 'Welcome,';
+    String title = register ? 'Create a new account' : 'Welcome to New Parent';
     String subtitle =
-        register ? 'Sign up to get started!' : 'Sign in to continue!';
+        register ? 'Sign up to get started:' : 'Sign in to continue:';
 
     return Column(
       children: [
@@ -55,8 +55,8 @@ class _AuthenticateState extends State<Authenticate> {
           alignment: Alignment.centerLeft,
           child: Text(
             subtitle,
-            style: TextStyle(
-              color: Colors.black.withOpacity(0.5),
+            style: const TextStyle(
+              color: Colors.black,
               fontSize: 20,
             ),
           ),
@@ -75,14 +75,22 @@ class _AuthenticateState extends State<Authenticate> {
       children: [
         Text(
           label,
-          style: TextStyle(
-            color: Colors.black.withOpacity(0.5),
+          style: const TextStyle(
+            color: Colors.black,
             fontSize: 16.0,
           ),
         ),
         TextButton(
+          style: TextButton.styleFrom(
+            primary: Colors.deepPurple.shade400,
+          ),
           onPressed: () => setState(() => register = !register),
-          child: Text(buttonLabel),
+          child: Text(
+              buttonLabel,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold
+              )
+          ),
         ),
       ],
     );

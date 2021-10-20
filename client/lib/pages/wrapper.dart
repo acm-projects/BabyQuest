@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/pages/authenticate/authenticate.dart';
@@ -22,6 +23,7 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.amber.shade100,
       body: StreamBuilder(
         stream: AuthService.appUserStream,
         builder: _builder,
@@ -29,3 +31,4 @@ class Wrapper extends StatelessWidget {
     );
   }
 }
+
