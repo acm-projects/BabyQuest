@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:client/services/data_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -8,10 +9,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String qodMessage = '';
+  String qodAuthor = '';
+  String qodImage =
+      'https://www.muralswallpaper.co.uk/app/uploads/baby-clouds-and-moon-nursery-room-825x535.jpg';
+
   int buttonCase = 3;
 
   @override
+  void initState() {
+    _setup();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    String quoteOfTheDay = '"' + qodMessage + '" \n -' + qodAuthor;
+
     return Container(
       decoration: const BoxDecoration(
         color: Colors.grey,
@@ -36,7 +50,7 @@ class _HomePageState extends State<HomePage> {
                         vertical: 20, horizontal: 60),
                     alignment: Alignment.center,
                     child: Image.network(
-                      'https://www.muralswallpaper.co.uk/app/uploads/baby-clouds-and-moon-nursery-room-825x535.jpg',
+                      qodImage,
                       height: 251,
                       width: double.infinity,
                       fit: BoxFit.cover,
@@ -46,9 +60,9 @@ class _HomePageState extends State<HomePage> {
                       padding: const EdgeInsets.symmetric(
                           vertical: 50, horizontal: 60),
                       alignment: Alignment.center,
-                      child: const Text(
-                        '"Quote of the day" \n -Author name',
-                        style: TextStyle(
+                      child: Text(
+                        quoteOfTheDay,
+                        style: const TextStyle(
                             color: Colors.blueGrey,
                             fontWeight: FontWeight.bold,
                             fontSize: 22.0),
@@ -241,5 +255,15 @@ class _HomePageState extends State<HomePage> {
         ],
       );
     }
+  }
+
+  Future _setup() async {
+    List<String> qodData = await DataService.getQOD();
+
+    setState(() {
+      qodMessage = qodData[1];
+      qodAuthor = qodData[2];
+      qodImage = qodData[3];
+    });
   }
 }

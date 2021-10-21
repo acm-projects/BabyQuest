@@ -1,4 +1,7 @@
+import 'package:client/services/auth_service.dart';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tinycolor2/src/color_extension.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -285,7 +288,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                   backgroundColor1: Colors.red,
                                   backgroundColor2: Colors.red.brighten(35),
                                   label: 'Sign Out',
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    final provider = Provider.of<AuthService>(
+                                        context,
+                                        listen: false);
+                                    provider.signOut();
+                                  },
                                 ),
                                 const Spacer(),
                                 LabeledIconButton(
