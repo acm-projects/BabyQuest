@@ -1,4 +1,7 @@
+import 'package:client/services/auth_service.dart';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tinycolor2/src/color_extension.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -95,119 +98,118 @@ class _ProfilePageState extends State<ProfilePage> {
                         fit: BoxFit.cover,
                       ),
                     ),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.only(
-                              left: 20, right: 20, top: 10),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            child: Row(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 40),
+                            child: Column(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                RichText(
+                                  text: TextSpan(
+                                      text: 'General Information',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline1),
+                                ),
+                                Divider(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryVariant,
+                                  thickness: 1,
+                                ),
+                                Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 20),
+                                  child: Row(
                                     children: [
-                                      Center(
-                                        child: RichText(
-                                          text: TextSpan(
-                                            text: 'General Information',
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .secondary,
-                                                fontWeight: FontWeight.w900,
-                                                fontSize: 15),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: const [
+                                          IconInfo(
+                                            iconData: Icons.male,
+                                            text: 'Male',
+                                            label: 'Gender',
                                           ),
-                                        ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          IconInfo(
+                                            iconData:
+                                                Icons.monitor_weight_outlined,
+                                            text: '20 pounds',
+                                            label: 'Weight',
+                                          ),
+                                        ],
                                       ),
-                                      Divider(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
+                                      const Spacer(),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: const [
+                                          IconInfo(
+                                            iconData: Icons.calendar_today,
+                                            text: '14 months old',
+                                            label: 'Age',
+                                          ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          IconInfo(
+                                            iconData: Icons.straighten,
+                                            text: '2\'5"',
+                                            label: 'Height',
+                                          )
+                                        ],
                                       ),
-                                      const GeneralInfo(
-                                        iconData: Icons.male,
-                                        text: 'Male',
-                                      ),
-                                      const GeneralInfo(
-                                        iconData: Icons.calendar_today,
-                                        text: '14 months old',
-                                      ),
-                                      const GeneralInfo(
-                                        iconData: Icons.monitor_weight_outlined,
-                                        text: '20 pounds',
-                                      ),
-                                      const GeneralInfo(
-                                        iconData: Icons.straighten,
-                                        text: '2\'5"',
-                                      ),
+                                      const Spacer()
                                     ],
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 40,
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RichText(
+                                  text: TextSpan(
+                                    text: 'Pediatric Information',
+                                    style:
+                                        Theme.of(context).textTheme.headline1,
+                                  ),
                                 ),
-                                Expanded(
+                                Divider(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryVariant,
+                                  thickness: 1,
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 20),
                                   child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    //crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      RichText(
-                                        text: TextSpan(
-                                          text: 'Allergies',
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary,
-                                              fontWeight: FontWeight.w900,
-                                              fontSize: 15),
-                                        ),
+                                    children: const [
+                                      IconInfo(
+                                        iconData:
+                                            Icons.medical_services_outlined,
+                                        text: 'Al Zeimers',
+                                        label: 'Doctor',
                                       ),
-                                      Divider(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
+                                      SizedBox(
+                                        height: 20,
                                       ),
-                                      RichText(
-                                        text: TextSpan(
-                                          text: 'Strawberries',
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                      RichText(
-                                        text: TextSpan(
-                                          text: 'Latex',
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 15),
-                                        ),
-                                      ),
-                                      RichText(
-                                        text: TextSpan(
-                                          text: 'Eggs',
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .secondary,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 15),
-                                        ),
+                                      IconInfo(
+                                        iconData: Icons.contacts_outlined,
+                                        text: '(555)-555-5555',
+                                        label: 'Phone',
                                       ),
                                     ],
                                   ),
@@ -215,105 +217,123 @@ class _ProfilePageState extends State<ProfilePage> {
                               ],
                             ),
                           ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Center(
-                                child: RichText(
+                          Padding(
+                            padding: const EdgeInsets.only(top: 20),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RichText(
                                   text: TextSpan(
-                                    text: 'Pediatric Information',
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        fontWeight: FontWeight.w900,
-                                        fontSize: 15),
+                                    text: 'Allergies',
+                                    style:
+                                        Theme.of(context).textTheme.headline1,
                                   ),
                                 ),
-                              ),
-                              Divider(
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  text: 'Doctor Name: Al Zeimers',
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 15),
+                                Divider(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .secondaryVariant,
+                                  thickness: 1,
                                 ),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  text: 'Phone: (555)-555-5555',
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 15),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 20),
+                                  child: Column(
+                                    children: const [
+                                      IconInfo(
+                                        iconData: Icons.warning_amber_outlined,
+                                        text: 'Latex',
+                                        label: 'Extreme',
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      IconInfo(
+                                        iconData: Icons.warning_amber_outlined,
+                                        text: 'Strawberries',
+                                        label: 'Mild',
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      IconInfo(
+                                        iconData: Icons.warning_amber_outlined,
+                                        text: 'Eggs',
+                                        label: 'Mild',
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                          Divider(
+                            color:
+                                Theme.of(context).colorScheme.secondaryVariant,
+                            thickness: 1,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 30, right: 30, top: 20, bottom: 20),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                LabeledIconButton(
+                                  icon: const Icon(Icons.logout),
+                                  textColor: Colors.red,
+                                  backgroundColor1: Colors.red,
+                                  backgroundColor2: Colors.red.brighten(35),
+                                  label: 'Sign Out',
+                                  onPressed: () {
+                                    final provider = Provider.of<AuthService>(
+                                        context,
+                                        listen: false);
+                                    provider.signOut();
+                                  },
+                                ),
+                                const Spacer(),
+                                LabeledIconButton(
+                                  icon: const Icon(Icons.phone),
+                                  textColor: Colors.orange,
+                                  backgroundColor1: Colors.orange,
+                                  backgroundColor2: Colors.orange.brighten(35),
+                                  label: 'Pediatrician',
+                                  onPressed: () {},
+                                ),
+                                const Spacer(),
+                                LabeledIconButton(
+                                  icon: const Icon(Icons.edit),
+                                  textColor: Colors.lightGreen,
+                                  backgroundColor1: Colors.lightGreen,
+                                  backgroundColor2:
+                                      Colors.lightGreen.brighten(25),
+                                  label: 'Edit Info',
+                                  onPressed: () {},
+                                ),
+                                const Spacer(),
+                                LabeledIconButton(
+                                  icon: const Icon(Icons.share),
+                                  textColor: Colors.lightBlueAccent,
+                                  backgroundColor1: Colors.lightBlueAccent,
+                                  backgroundColor2:
+                                      Colors.lightBlueAccent.brighten(20),
+                                  label: 'Share Info',
+                                  onPressed: () {},
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  LabeledIconButton(
-                    icon: const Icon(Icons.logout),
-                    textColor: Colors.red,
-                    backgroundColor1: Colors.red,
-                    backgroundColor2: Colors.red.brighten(35),
-                    label: 'Sign Out',
-                    onPressed: () {},
-                  ),
-                  const Spacer(),
-                  LabeledIconButton(
-                    icon: const Icon(Icons.phone),
-                    textColor: Colors.orange,
-                    backgroundColor1: Colors.orange,
-                    backgroundColor2: Colors.orange.brighten(35),
-                    label: 'Pediatrician',
-                    onPressed: () {},
-                  ),
-                  const Spacer(),
-                  LabeledIconButton(
-                    icon: const Icon(Icons.edit),
-                    textColor: Colors.lightGreen,
-                    backgroundColor1: Colors.lightGreen,
-                    backgroundColor2: Colors.lightGreen.brighten(25),
-                    label: 'Edit Info',
-                    onPressed: () {},
-                  ),
-                  const Spacer(),
-                  LabeledIconButton(
-                    icon: const Icon(Icons.share),
-                    textColor: Colors.lightBlueAccent,
-                    backgroundColor1: Colors.lightBlueAccent,
-                    backgroundColor2: Colors.lightBlueAccent.brighten(20),
-                    label: 'Share Info',
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-            )
           ],
         ),
       ),
@@ -355,19 +375,11 @@ class IconInfo extends StatelessWidget {
             children: [
               TextSpan(
                 text: text,
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 20),
+                style: Theme.of(context).textTheme.headline1,
               ),
               const TextSpan(text: '\n'),
               TextSpan(
-                text: label,
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontWeight: FontWeight.w300,
-                    fontSize: 15),
-              )
+                  text: label, style: Theme.of(context).textTheme.subtitle1)
             ],
           ),
         ),

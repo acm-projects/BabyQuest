@@ -1,7 +1,5 @@
 import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class StatisticsPage extends StatefulWidget {
   const StatisticsPage({Key? key}) : super(key: key);
@@ -379,20 +377,10 @@ class IconStatistics extends StatelessWidget {
           text: TextSpan(
             children: [
               TextSpan(
-                text: text,
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontWeight: FontWeight.w800,
-                    fontSize: 20),
-              ),
+                  text: text, style: Theme.of(context).textTheme.headline1),
               const TextSpan(text: '\n'),
               TextSpan(
-                text: label,
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontWeight: FontWeight.w300,
-                    fontSize: 15),
-              )
+                  text: label, style: Theme.of(context).textTheme.subtitle1)
             ],
           ),
         ),
