@@ -13,7 +13,7 @@ class Wrapper extends StatelessWidget {
     } else if (snapshot.hasError) {
       return const Center(child: Text('Something went wrong!'));
     } else {
-      return SignInPage(); // authentication pages
+      return MainWrapper(); // authentication pages
     }
   }
 
