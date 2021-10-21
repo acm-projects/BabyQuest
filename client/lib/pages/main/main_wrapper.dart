@@ -13,8 +13,6 @@ class MainWrapper extends StatefulWidget {
 }
 
 class _MainWrapperState extends State<MainWrapper> {
-  static const Color accentColor = Color(0xFF008080);
-
   int currentIndex = 1;
   final screens = [
     const ProfilePage(),
@@ -34,8 +32,8 @@ class _MainWrapperState extends State<MainWrapper> {
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,
         onTap: (index) => setState(() => currentIndex = index),
-        selectedItemColor: accentColor,
-        unselectedItemColor: Colors.grey[500],
+        selectedItemColor: Theme.of(context).colorScheme.primary,
+        unselectedItemColor: Theme.of(context).colorScheme.secondary,
         backgroundColor: Colors.white,
         items: const [
           BottomNavigationBarItem(

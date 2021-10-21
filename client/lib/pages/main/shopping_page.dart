@@ -25,10 +25,6 @@ class _ShoppingPageState extends State<ShoppingPage> {
           style: TextStyle(fontWeight: FontWeight.w200, fontSize: 50),
         ),
       ),
-      body: SvgPicture.asset(
-        'images/undraw_baby.svg',
-        color: Colors.green.shade100,
-      ),
     );
   }
 }

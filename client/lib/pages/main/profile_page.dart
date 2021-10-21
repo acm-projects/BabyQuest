@@ -53,7 +53,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               image: DecorationImage(
                                 fit: BoxFit.cover,
                                 alignment: Alignment.topCenter,
-                                image: AssetImage('images/Osbaldo.jpg'),
+                                image: AssetImage('res/Osbaldo.jpg'),
                               ),
                             ),
                           ),
