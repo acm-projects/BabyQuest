@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:client/services/data_service.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,6 +14,8 @@ class _HomePageState extends State<HomePage> {
   String qodImage =
       'https://www.muralswallpaper.co.uk/app/uploads/baby-clouds-and-moon-nursery-room-825x535.jpg';
 
+  int buttonCase = 3;
+
   @override
   void initState() {
     _setup();
@@ -27,111 +28,233 @@ class _HomePageState extends State<HomePage> {
 
     return Container(
       decoration: const BoxDecoration(
-        color: Colors.greenAccent,
+        color: Colors.grey,
       ),
       child: Scaffold(
-          appBar: AppBar(
-            title: const Center(
-              child: Text(
-                'Welcome <Baby Name>!',
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30),
+        appBar: AppBar(
+          title: const Center(
+            child: Text(
+              'Welcome <Baby Name>!',
+              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30),
+            ),
+          ),
+          backgroundColor: Colors.green,
+        ),
+        body: Column(
+          children: [
+            Center(
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 60),
+                    alignment: Alignment.center,
+                    child: Image.network(
+                      qodImage,
+                      height: 251,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 50, horizontal: 60),
+                      alignment: Alignment.center,
+                      child: Text(
+                        quoteOfTheDay,
+                        style: const TextStyle(
+                            color: Colors.blueGrey,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22.0),
+                      )),
+                ],
               ),
             ),
-            backgroundColor: Colors.green,
-          ),
-          body: Column(
-            children: [
-              Center(
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 60),
-                      alignment: Alignment.center,
-                      child: Image.network(
-                        qodImage,
-                        height: 251,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
+              child: SizedBox(
+                height: 80, //height of button
+                width: 200, //width of button
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.green, //background color of button
+                      side: const BorderSide(
+                          width: 3,
+                          color: Colors.green), //border width and color
+                      elevation: 3, //elevation of button
+                      shape: RoundedRectangleBorder(
+                          //to set border radius to button
+                          borderRadius: BorderRadius.circular(30)),
+                      padding: const EdgeInsets.all(
+                          20) //content padding inside button
+
                       ),
-                    ),
-                    Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 50, horizontal: 60),
-                        alignment: Alignment.center,
-                        child: Text(
-                          quoteOfTheDay,
-                          style: const TextStyle(
-                              color: Colors.blueGrey,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 22.0),
-                        )),
-                  ],
+                  onPressed: () {
+                    //code to execute when this button is pressed.
+                    buttonCase = 0;
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) =>
+                          _buildPopupDialog(context),
+                    );
+                  },
+                  child: const Text("Record Sleep"),
                 ),
               ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
+              child: SizedBox(
+                height: 80, //height of button
+                width: 200, //width of button
                 child: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "Record Sleep",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          side: const BorderSide(color: Colors.green),
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.green, //background color of button
+                        side: const BorderSide(
+                            width: 3,
+                            color: Colors.green), //border width and color
+                        elevation: 3, //elevation of button
+                        shape: RoundedRectangleBorder(
+                            //to set border radius to button
+                            borderRadius: BorderRadius.circular(30)),
+                        padding: const EdgeInsets.all(
+                            20) //content padding inside button
+
                         ),
+                    onPressed: () {
+                      buttonCase = 1;
+                      //code to execute when this button is pressed.
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            _buildPopupDialog(context),
+                      );
+                    },
+                    child: const Text("Record Feedings")),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
+              child: SizedBox(
+                height: 80, //height of button
+                width: 200, //width of button
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.green, //background color of button
+                      side: const BorderSide(
+                          width: 3,
+                          color: Colors.green), //border width and color
+                      elevation: 3, //elevation of button
+                      shape: RoundedRectangleBorder(
+                          //to set border radius to button
+                          borderRadius: BorderRadius.circular(30)),
+                      padding: const EdgeInsets.all(
+                          20) //content padding inside button
+
                       ),
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.green)),
+                  onPressed: () {
+                    buttonCase = 2;
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) =>
+                          _buildPopupDialog(context),
+                    );
+                  },
+                  child: const Text("Record Diaper Changes"),
                 ),
               ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "Record Feeding",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          side: const BorderSide(color: Colors.green),
-                        ),
-                      ),
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.green)),
-                ),
-              ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "Record Sleep",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          side: const BorderSide(color: Colors.green),
-                        ),
-                      ),
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.green)),
-                ),
-              )
-            ],
-          )),
+            ),
+          ],
+        ),
+      ),
     );
+  }
+
+  Widget _buildPopupDialog(BuildContext context) {
+    int _feedingCounter = 0;
+    if (buttonCase == 0) {
+      return AlertDialog(
+        title: const Text('Record Sleep'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const Text('Current Number of sleep: '),
+            Text('$_feedingCounter'),
+            ElevatedButton(
+              onPressed: () {
+                _feedingCounter++;
+              },
+              child: const Text('Add sleep'),
+            )
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            //textColor: Theme.of(context).primaryColor,
+            child: const Text('Close'),
+          ),
+        ],
+      );
+    }
+    if (buttonCase == 1) {
+      return AlertDialog(
+        title: const Text('Record Feedings'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const Text('Current Number of feedings: '),
+            Text('$_feedingCounter'),
+            ElevatedButton(
+              onPressed: () {
+                _feedingCounter++;
+              },
+              child: const Text('Add feedings'),
+            )
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            //textColor: Theme.of(context).primaryColor,
+            child: const Text('Close'),
+          ),
+        ],
+      );
+    } else {
+      return AlertDialog(
+        title: const Text('Record Diaper Changes'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const Text('Current Number of diaper changes: '),
+            Text('$_feedingCounter'),
+            ElevatedButton(
+              onPressed: () {
+                _feedingCounter++;
+              },
+              child: const Text('Add diaper changes'),
+            )
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            //textColor: Theme.of(context).primaryColor,
+            child: const Text('Close'),
+          ),
+        ],
+      );
+    }
   }
 
   Future _setup() async {

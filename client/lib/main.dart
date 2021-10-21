@@ -15,7 +15,7 @@ Future main() async {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
-      //systemNavigationBarIconBrightness: Brightness.dark,
+      systemNavigationBarIconBrightness: Brightness.dark,
       //systemNavigationBarColor: Colors.white
     ),
   );
@@ -30,9 +30,29 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => AuthService(),
-      child: const MaterialApp(
+      child: MaterialApp(
+        theme: ThemeData(
+          brightness: Brightness.light,
+          //fontFamily: 'Sonorous',
+          colorScheme: ColorScheme.fromSwatch().copyWith(
+            primary: Colors.green,
+            primaryVariant: const Color(0xFFE9FAE9),
+            secondary: Colors.grey.shade600,
+            secondaryVariant: Colors.grey.shade500,
+          ),
+          textTheme: TextTheme(
+            headline1: TextStyle(
+                color: Colors.grey.shade600,
+                fontWeight: FontWeight.w800,
+                fontSize: 20),
+            subtitle1: TextStyle(
+                color: Colors.grey.shade600,
+                fontWeight: FontWeight.w300,
+                fontSize: 15),
+          ),
+        ),
         debugShowCheckedModeBanner: false,
-        home: SplashPage(),
+        home: const SplashPage(),
       ),
     );
   }
