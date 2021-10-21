@@ -42,6 +42,8 @@ class _SignInFormState extends State<SignInForm> {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
       decoration: const InputDecoration(
+        fillColor: Colors.white,
+        filled: true,
         labelText: 'Email Address',
         border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(100))),
@@ -61,6 +63,8 @@ class _SignInFormState extends State<SignInForm> {
       keyboardType: TextInputType.visiblePassword,
       obscureText: true,
       decoration: const InputDecoration(
+        fillColor: Colors.white,
+        filled: true,
         labelText: 'Password',
         border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(100))),
@@ -98,7 +102,7 @@ class _SignInFormState extends State<SignInForm> {
             }
           }
         },
-        color: Colors.green.shade200,
+        color: Colors.deepPurple.shade200,
         child: Text(
           label,
           style: const TextStyle(
@@ -134,12 +138,12 @@ class _SignInFormState extends State<SignInForm> {
                 provider.signInWithGoogle();
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.green.shade200,
+                primary: Colors.deepPurple.shade200,
                 onPrimary: Colors.black,
                 minimumSize: const Size(double.infinity, 60),
                 shape: const StadiumBorder(),
               ),
-              icon: FaIcon(FontAwesomeIcons.google, color: Colors.deepPurple.shade400),
+              icon: FaIcon(FontAwesomeIcons.google, color: Colors.green.shade200, size: 30),
               label: const Text(
                 'Login with Google',
                 style: TextStyle(
