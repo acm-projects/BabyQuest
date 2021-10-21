@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'package:client/services/auth_service.dart';
+import 'package:tinycolor2/src/color_extension.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -11,326 +9,403 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  static const Color detailsIconsColor = Color(0xFF9E9E9E);
-  static const Color detailsTextColor = Color(0x8A000000);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Color(0xFFDCF0E7),
-      backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                AspectRatio(
-                  aspectRatio: 39 / 30,
-                  child: Stack(
-                    children: [
-                      ShaderMask(
-                        blendMode: BlendMode.darken,
-                        shaderCallback: (Rect bounds) => const LinearGradient(
-                          colors: [Colors.transparent, Colors.black45],
-                          begin: Alignment.center,
-                          end: Alignment.bottomCenter,
-                        ).createShader(bounds),
-                        child: Container(
-                          child: null,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              alignment: Alignment.topCenter,
-                              image: AssetImage('images/Osbaldo.jpg'),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Align(
-                            alignment: Alignment.bottomLeft,
-                            child: Container(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: const Text(
-                                'Osbaldo Waldo',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 40,
-                                    color: Colors.white),
+      backgroundColor: Theme.of(context).colorScheme.primaryVariant,
+      //backgroundColor: Colors.white,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Theme.of(context).colorScheme.primaryVariant,
+              Colors.white,
+            ],
+            stops: const [.7, 1],
+          ),
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                physics: const ClampingScrollPhysics(),
+                padding: EdgeInsets.zero,
+                children: [
+                  AspectRatio(
+                    aspectRatio: 39 / 30,
+                    child: Stack(
+                      children: [
+                        ShaderMask(
+                          blendMode: BlendMode.darken,
+                          shaderCallback: (Rect bounds) => const LinearGradient(
+                            colors: [Colors.transparent, Colors.black45],
+                            begin: Alignment.center,
+                            end: Alignment.bottomCenter,
+                          ).createShader(bounds),
+                          child: Container(
+                            child: null,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                alignment: Alignment.topCenter,
+                                image: AssetImage('images/Osbaldo.jpg'),
                               ),
                             ),
                           ),
-                          const Spacer(),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: IconButton(
-                              onPressed: () {},
-                              color: Colors.white,
-                              icon: const Icon(Icons.edit),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Column(
+                        ),
+                        Row(
                           mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Center(
-                              child: RichText(
-                                text: const TextSpan(
-                                  text: 'General Information',
+                            Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Container(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: const Text(
+                                  'Osbaldo Waldo',
                                   style: TextStyle(
-                                      color: detailsTextColor,
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 15),
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 40,
+                                      color: Colors.white),
                                 ),
                               ),
                             ),
-                            const Divider(
-                              color: detailsTextColor,
-                            ),
-                            RichText(
-                              text: const TextSpan(
-                                children: [
-                                  WidgetSpan(
-                                      child: Icon(Icons.male,
-                                          color: detailsIconsColor),
-                                      alignment: PlaceholderAlignment.middle),
-                                  TextSpan(
-                                    text: ' ',
-                                  ),
-                                  TextSpan(
-                                    text: 'Male',
-                                    style: TextStyle(
-                                        color: detailsTextColor,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15),
-                                  )
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: const TextSpan(
-                                children: [
-                                  WidgetSpan(
-                                      child: Icon(Icons.calendar_today,
-                                          color: detailsIconsColor),
-                                      alignment: PlaceholderAlignment.middle),
-                                  TextSpan(
-                                    text: ' ',
-                                  ),
-                                  TextSpan(
-                                    text: '14 months old',
-                                    style: TextStyle(
-                                        color: detailsTextColor,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15),
-                                  )
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: const TextSpan(
-                                children: [
-                                  WidgetSpan(
-                                      child: Icon(Icons.monitor_weight_outlined,
-                                          color: detailsIconsColor),
-                                      alignment: PlaceholderAlignment.middle),
-                                  TextSpan(
-                                    text: ' ',
-                                  ),
-                                  TextSpan(
-                                    text: '20 pounds',
-                                    style: TextStyle(
-                                        color: detailsTextColor,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15),
-                                  )
-                                ],
-                              ),
-                            ),
-                            RichText(
-                              text: const TextSpan(
-                                children: [
-                                  WidgetSpan(
-                                      child: Icon(Icons.straighten,
-                                          color: detailsIconsColor),
-                                      alignment: PlaceholderAlignment.middle),
-                                  TextSpan(
-                                    text: ' ',
-                                  ),
-                                  TextSpan(
-                                    text: '2\'5"',
-                                    style: TextStyle(
-                                        color: detailsTextColor,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15),
-                                  )
-                                ],
+                            const Spacer(),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: IconButton(
+                                onPressed: () {},
+                                color: Colors.white,
+                                icon: const Icon(Icons.edit),
                               ),
                             ),
                           ],
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 40,
-                      ),
-                      Expanded(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          //crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            RichText(
-                              text: const TextSpan(
-                                text: 'Allergies',
-                                style: TextStyle(
-                                    color: detailsTextColor,
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 15),
-                              ),
-                            ),
-                            const Divider(
-                              color: detailsTextColor,
-                            ),
-                            RichText(
-                              text: const TextSpan(
-                                text: 'Strawberries',
-                                style: TextStyle(
-                                    color: detailsTextColor,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 15),
-                              ),
-                            ),
-                            RichText(
-                              text: const TextSpan(
-                                text: 'Latex',
-                                style: TextStyle(
-                                    color: detailsTextColor,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 15),
-                              ),
-                            ),
-                            RichText(
-                              text: const TextSpan(
-                                text: 'Eggs',
-                                style: TextStyle(
-                                    color: detailsTextColor,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 15),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: RichText(
-                          text: const TextSpan(
-                            text: 'Pediatric Information',
-                            style: TextStyle(
-                                color: detailsTextColor,
-                                fontWeight: FontWeight.w900,
-                                fontSize: 15),
+                  Container(
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        alignment: Alignment.bottomCenter,
+                        colorFilter: ColorFilter.mode(
+                            Color(0x25FFFFFF), BlendMode.dstATop),
+                        image: AssetImage('res/undraw_toy_car.png'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 10),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Center(
+                                        child: RichText(
+                                          text: TextSpan(
+                                            text: 'General Information',
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                                fontWeight: FontWeight.w900,
+                                                fontSize: 15),
+                                          ),
+                                        ),
+                                      ),
+                                      Divider(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                      ),
+                                      const GeneralInfo(
+                                        iconData: Icons.male,
+                                        text: 'Male',
+                                      ),
+                                      const GeneralInfo(
+                                        iconData: Icons.calendar_today,
+                                        text: '14 months old',
+                                      ),
+                                      const GeneralInfo(
+                                        iconData: Icons.monitor_weight_outlined,
+                                        text: '20 pounds',
+                                      ),
+                                      const GeneralInfo(
+                                        iconData: Icons.straighten,
+                                        text: '2\'5"',
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 40,
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    //crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Allergies',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              fontWeight: FontWeight.w900,
+                                              fontSize: 15),
+                                        ),
+                                      ),
+                                      Divider(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                      ),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Strawberries',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 15),
+                                        ),
+                                      ),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Latex',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 15),
+                                        ),
+                                      ),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Eggs',
+                                          style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 15),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      const Divider(
-                        color: detailsTextColor,
-                      ),
-                      RichText(
-                        text: const TextSpan(
-                          text: 'Doctor Name: Al Zeimers',
-                          style: TextStyle(
-                              color: detailsTextColor,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 15),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: 'Pediatric Information',
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                        fontWeight: FontWeight.w900,
+                                        fontSize: 15),
+                                  ),
+                                ),
+                              ),
+                              Divider(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  text: 'Doctor Name: Al Zeimers',
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 15),
+                                ),
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  text: 'Phone: (555)-555-5555',
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 15),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      RichText(
-                        text: const TextSpan(
-                          text: 'Phone: (555)-555-5555',
-                          style: TextStyle(
-                              color: detailsTextColor,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 15),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  LabeledIconButton(
+                    icon: const Icon(Icons.logout),
+                    textColor: Colors.red,
+                    backgroundColor1: Colors.red,
+                    backgroundColor2: Colors.red.brighten(35),
+                    label: 'Sign Out',
+                    onPressed: () {
+                      
+                    },
+                  ),
+                  const Spacer(),
+                  LabeledIconButton(
+                    icon: const Icon(Icons.phone),
+                    textColor: Colors.orange,
+                    backgroundColor1: Colors.orange,
+                    backgroundColor2: Colors.orange.brighten(35),
+                    label: 'Pediatrician',
+                    onPressed: () {},
+                  ),
+                  const Spacer(),
+                  LabeledIconButton(
+                    icon: const Icon(Icons.edit),
+                    textColor: Colors.lightGreen,
+                    backgroundColor1: Colors.lightGreen,
+                    backgroundColor2: Colors.lightGreen.brighten(25),
+                    label: 'Edit Info',
+                    onPressed: () {},
+                  ),
+                  const Spacer(),
+                  LabeledIconButton(
+                    icon: const Icon(Icons.share),
+                    textColor: Colors.lightBlueAccent,
+                    backgroundColor1: Colors.lightBlueAccent,
+                    backgroundColor2: Colors.lightBlueAccent.brighten(20),
+                    label: 'Share Info',
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class IconInfo extends StatelessWidget {
+  final IconData iconData;
+  final String text;
+  final String label;
+
+  const IconInfo({
+    Key? key,
+    required this.iconData,
+    this.text = '',
+    this.label = '',
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        RichText(
+          text: TextSpan(
+            children: [
+              WidgetSpan(
+                  child: Icon(iconData,
+                      size: 45, color: Theme.of(context).colorScheme.primary),
+                  alignment: PlaceholderAlignment.middle),
+            ],
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                LabeledIconButton(
-                  icon: const Icon(Icons.phone),
-                  textColor: Colors.redAccent,
-                  backgroundColor1: Colors.redAccent,
-                  backgroundColor2: const Color(0xFFff51a5),
-                  label: 'Pediatrician',
-                  onPressed: () {},
-                ),
-                const Spacer(),
-                LabeledIconButton(
-                  icon: const Icon(Icons.logout),
-                  textColor: Colors.orange,
-                  backgroundColor1: Colors.orange,
-                  backgroundColor2: const Color(0xFFffd900),
-                  label: 'Sign Out',
-                  onPressed: () {
-                    final provider = Provider.of<AuthService>(context, listen: false);
-                    provider.signOut();
-                  },
-                ),
-                const Spacer(),
-                LabeledIconButton(
-                  icon: const Icon(Icons.edit),
-                  textColor: Colors.lightGreen,
-                  backgroundColor1: Colors.lightGreen,
-                  backgroundColor2: const Color(0xFF63f05b),
-                  label: 'Edit Info',
-                  onPressed: () {},
-                ),
-                const Spacer(),
-                LabeledIconButton(
-                  icon: const Icon(Icons.share),
-                  textColor: Colors.blue,
-                  backgroundColor1: Colors.blue,
-                  backgroundColor2: const Color(0xff9cc7ff),
-                  label: 'Share Info',
-                  onPressed: () {},
-                ),
-              ],
-            ),
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: text,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 20),
+              ),
+              const TextSpan(text: '\n'),
+              TextSpan(
+                text: label,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontWeight: FontWeight.w300,
+                    fontSize: 15),
+              )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class GeneralInfo extends StatelessWidget {
+  const GeneralInfo({
+    Key? key,
+    required this.iconData,
+    this.text = '',
+  }) : super(key: key);
+
+  final IconData iconData;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      text: TextSpan(
+        children: [
+          WidgetSpan(
+              child:
+                  Icon(iconData, color: Theme.of(context).colorScheme.primary),
+              alignment: PlaceholderAlignment.middle),
+          const TextSpan(
+            text: ' ',
+          ),
+          TextSpan(
+            text: text,
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontWeight: FontWeight.w400,
+                fontSize: 15),
           )
         ],
       ),
@@ -362,21 +437,23 @@ class LabeledIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Ink(
-          decoration: ShapeDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              colors: [backgroundColor1, backgroundColor2],
+        Center(
+          child: Container(
+            decoration: ShapeDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [backgroundColor1, backgroundColor2],
+              ),
+              shape: const CircleBorder(),
             ),
-            shape: const CircleBorder(),
-          ),
-          child: IconButton(
-            iconSize: 25,
-            padding: const EdgeInsets.all(15),
-            color: iconColor,
-            icon: icon,
-            onPressed: onPressed,
+            child: IconButton(
+              iconSize: 30,
+              padding: const EdgeInsets.all(10),
+              color: iconColor,
+              icon: icon,
+              onPressed: onPressed,
+            ),
           ),
         ),
         const SizedBox(
