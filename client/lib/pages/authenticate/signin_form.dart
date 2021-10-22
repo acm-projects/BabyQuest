@@ -42,6 +42,8 @@ class _SignInFormState extends State<SignInForm> {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
       decoration: const InputDecoration(
+        fillColor: Colors.white,
+        filled: true,
         labelText: 'Email Address',
         border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(100))),
@@ -61,6 +63,8 @@ class _SignInFormState extends State<SignInForm> {
       keyboardType: TextInputType.visiblePassword,
       obscureText: true,
       decoration: const InputDecoration(
+        fillColor: Colors.white,
+        filled: true,
         labelText: 'Password',
         border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(100))),
