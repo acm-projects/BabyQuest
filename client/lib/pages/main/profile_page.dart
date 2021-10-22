@@ -1,17 +1,13 @@
 import 'package:client/services/auth_service.dart';
+import 'package:client/widgets/icon_information.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tinycolor2/src/color_extension.dart';
+import 'package:tinycolor2/tinycolor2.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
-  @override
-  _ProfilePageState createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               image: DecorationImage(
                                 fit: BoxFit.cover,
                                 alignment: Alignment.topCenter,
-                                image: AssetImage('res/Osbaldo.jpg'),
+                                image: AssetImage('assets/images/Osbaldo.jpg'),
                               ),
                             ),
                           ),
@@ -94,7 +90,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         alignment: Alignment.bottomCenter,
                         colorFilter: ColorFilter.mode(
                             Color(0x25FFFFFF), BlendMode.dstATop),
-                        image: AssetImage('res/undraw_toy_car.png'),
+                        image: AssetImage('assets/images/undraw_toy_car.png'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -131,19 +127,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: const [
-                                          IconInfo(
+                                          IconInformation(
                                             iconData: Icons.male,
-                                            text: 'Male',
-                                            label: 'Gender',
+                                            topText: 'Male',
+                                            bottomText: 'Gender',
                                           ),
                                           SizedBox(
                                             height: 20,
                                           ),
-                                          IconInfo(
+                                          IconInformation(
                                             iconData:
                                                 Icons.monitor_weight_outlined,
-                                            text: '20 pounds',
-                                            label: 'Weight',
+                                            topText: '20 pounds',
+                                            bottomText: 'Weight',
                                           ),
                                         ],
                                       ),
@@ -152,18 +148,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: const [
-                                          IconInfo(
+                                          IconInformation(
                                             iconData: Icons.calendar_today,
-                                            text: '14 months old',
-                                            label: 'Age',
+                                            topText: '14 months old',
+                                            bottomText: 'Age',
                                           ),
                                           SizedBox(
                                             height: 20,
                                           ),
-                                          IconInfo(
+                                          IconInformation(
                                             iconData: Icons.straighten,
-                                            text: '2\'5"',
-                                            label: 'Height',
+                                            topText: '2\'5"',
+                                            bottomText: 'Height',
                                           )
                                         ],
                                       ),
@@ -197,19 +193,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                       const EdgeInsets.symmetric(vertical: 20),
                                   child: Column(
                                     children: const [
-                                      IconInfo(
+                                      IconInformation(
                                         iconData:
                                             Icons.medical_services_outlined,
-                                        text: 'Al Zeimers',
-                                        label: 'Doctor',
+                                        topText: 'Al Zeimers',
+                                        bottomText: 'Doctor',
                                       ),
                                       SizedBox(
                                         height: 20,
                                       ),
-                                      IconInfo(
+                                      IconInformation(
                                         iconData: Icons.contacts_outlined,
-                                        text: '(555)-555-5555',
-                                        label: 'Phone',
+                                        topText: '(555)-555-5555',
+                                        bottomText: 'Phone',
                                       ),
                                     ],
                                   ),
@@ -242,26 +238,26 @@ class _ProfilePageState extends State<ProfilePage> {
                                       const EdgeInsets.symmetric(vertical: 20),
                                   child: Column(
                                     children: const [
-                                      IconInfo(
+                                      IconInformation(
                                         iconData: Icons.warning_amber_outlined,
-                                        text: 'Latex',
-                                        label: 'Extreme',
+                                        topText: 'Latex',
+                                        bottomText: 'Extreme',
                                       ),
                                       SizedBox(
                                         height: 20,
                                       ),
-                                      IconInfo(
+                                      IconInformation(
                                         iconData: Icons.warning_amber_outlined,
-                                        text: 'Strawberries',
-                                        label: 'Mild',
+                                        topText: 'Strawberries',
+                                        bottomText: 'Mild',
                                       ),
                                       SizedBox(
                                         height: 20,
                                       ),
-                                      IconInfo(
+                                      IconInformation(
                                         iconData: Icons.warning_amber_outlined,
-                                        text: 'Eggs',
-                                        label: 'Mild',
+                                        topText: 'Eggs',
+                                        bottomText: 'Mild',
                                       ),
                                     ],
                                   ),
@@ -336,88 +332,6 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class IconInfo extends StatelessWidget {
-  final IconData iconData;
-  final String text;
-  final String label;
-
-  const IconInfo({
-    Key? key,
-    required this.iconData,
-    this.text = '',
-    this.label = '',
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        RichText(
-          text: TextSpan(
-            children: [
-              WidgetSpan(
-                  child: Icon(iconData,
-                      size: 45, color: Theme.of(context).colorScheme.primary),
-                  alignment: PlaceholderAlignment.middle),
-            ],
-          ),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: text,
-                style: Theme.of(context).textTheme.headline1,
-              ),
-              const TextSpan(text: '\n'),
-              TextSpan(
-                  text: label, style: Theme.of(context).textTheme.subtitle1)
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class GeneralInfo extends StatelessWidget {
-  const GeneralInfo({
-    Key? key,
-    required this.iconData,
-    this.text = '',
-  }) : super(key: key);
-
-  final IconData iconData;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-        children: [
-          WidgetSpan(
-              child:
-                  Icon(iconData, color: Theme.of(context).colorScheme.primary),
-              alignment: PlaceholderAlignment.middle),
-          const TextSpan(
-            text: ' ',
-          ),
-          TextSpan(
-            text: text,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-                fontWeight: FontWeight.w400,
-                fontSize: 15),
-          )
-        ],
       ),
     );
   }

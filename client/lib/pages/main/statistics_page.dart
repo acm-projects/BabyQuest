@@ -1,4 +1,5 @@
-import 'dart:math' as math;
+import 'package:client/widgets/fraction_circle.dart';
+import 'package:client/widgets/icon_information.dart';
 import 'package:flutter/material.dart';
 
 class StatisticsPage extends StatefulWidget {
@@ -43,7 +44,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 image: DecorationImage(
                     colorFilter:
                         ColorFilter.mode(Color(0x25FFFFFF), BlendMode.dstATop),
-                    image: AssetImage('res/undraw_baby.png'),
+                    image: AssetImage('assets/images/undraw_baby.png'),
                     fit: BoxFit.cover),
               ),
               child: Column(
@@ -101,50 +102,50 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               children: [
                                 DayCircle(
                                   fraction: .1,
-                                  insideText: '${_index * 7 + 1}',
-                                  topText: 'S',
+                                  date: '${_index * 7 + 1}',
+                                  day: 'S',
                                   onTap: () {},
                                 ),
                                 const Spacer(),
                                 DayCircle(
                                   fraction: .2,
-                                  insideText: '${_index * 7 + 2}',
-                                  topText: 'M',
+                                  date: '${_index * 7 + 2}',
+                                  day: 'M',
                                   onTap: () {},
                                 ),
                                 const Spacer(),
                                 DayCircle(
                                   fraction: .3,
-                                  insideText: '${_index * 7 + 3}',
-                                  topText: 'T',
+                                  date: '${_index * 7 + 3}',
+                                  day: 'T',
                                   onTap: () {},
                                 ),
                                 const Spacer(),
                                 DayCircle(
                                   fraction: .4,
-                                  insideText: '${_index * 7 + 4}',
-                                  topText: 'W',
+                                  date: '${_index * 7 + 4}',
+                                  day: 'W',
                                   onTap: () {},
                                 ),
                                 const Spacer(),
                                 DayCircle(
                                   fraction: .5,
-                                  insideText: '${_index * 7 + 5}',
-                                  topText: 'T',
+                                  date: '${_index * 7 + 5}',
+                                  day: 'T',
                                   onTap: () {},
                                 ),
                                 const Spacer(),
                                 DayCircle(
                                   fraction: .6,
-                                  insideText: '${_index * 7 + 6}',
-                                  topText: 'F',
+                                  date: '${_index * 7 + 6}',
+                                  day: 'F',
                                   onTap: () {},
                                 ),
                                 const Spacer(),
                                 DayCircle(
                                   fraction: .7,
-                                  insideText: '${_index * 7 + 7}',
-                                  topText: 'S',
+                                  date: '${_index * 7 + 7}',
+                                  day: 'S',
                                   onTap: () {},
                                 ),
                               ],
@@ -166,11 +167,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
                           height: 150,
                           width: 150,
                           padding: const EdgeInsets.all(13),
-                          child: IncompleteCircle(
-                            backgroundColor: Colors.black12,
+                          child: FractionCircle(
+                            primaryCircleColor:
+                                Theme.of(context).colorScheme.primary,
+                            backgroundCircleColor: Colors.black12,
                             fraction: .25,
                             strokeWidth: 13,
-                            circleColor: Theme.of(context).colorScheme.primary,
                             child: Text(
                               '25%',
                               style: TextStyle(
@@ -225,18 +227,18 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
-                            IconStatistics(
+                            IconInformation(
                               iconData: Icons.nightlight_round_outlined,
-                              text: '1:50 AM',
-                              label: 'Slept at',
+                              topText: '1:50 AM',
+                              bottomText: 'Slept at',
                             ),
                             SizedBox(
                               height: 20,
                             ),
-                            IconStatistics(
+                            IconInformation(
                               iconData: Icons.restaurant_outlined,
-                              text: '3',
-                              label: 'Feedings',
+                              topText: '3',
+                              bottomText: 'Feedings',
                             ),
                           ],
                         ),
@@ -244,18 +246,18 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
-                            IconStatistics(
+                            IconInformation(
                               iconData: Icons.wb_sunny_rounded,
-                              text: '10:18 AM',
-                              label: 'Woke up at',
+                              topText: '10:18 AM',
+                              bottomText: 'Woke up at',
                             ),
                             SizedBox(
                               height: 20,
                             ),
-                            IconStatistics(
+                            IconInformation(
                               iconData: Icons.delete,
-                              text: '2',
-                              label: 'Diaper changes',
+                              topText: '2',
+                              bottomText: 'Diaper changes',
                             ),
                           ],
                         ),
@@ -293,15 +295,15 @@ class DayCircle extends StatelessWidget {
     Key? key,
     this.smallCircleDiameter = 50,
     this.fraction = 0,
-    this.insideText = '',
-    this.topText = '',
+    this.date = '',
+    this.day = '',
     required this.onTap,
   }) : super(key: key);
 
   final double smallCircleDiameter;
   final double fraction;
-  final String insideText;
-  final String topText;
+  final String date;
+  final String day;
   final VoidCallback? onTap;
 
   @override
@@ -311,7 +313,7 @@ class DayCircle extends StatelessWidget {
         Container(
           padding: const EdgeInsets.only(bottom: 5),
           child: Text(
-            topText,
+            day,
             style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w400,
@@ -324,12 +326,12 @@ class DayCircle extends StatelessWidget {
             width: smallCircleDiameter,
             height: smallCircleDiameter,
             padding: const EdgeInsets.all(3),
-            child: IncompleteCircle(
+            child: FractionCircle(
               fraction: fraction,
-              circleColor: Theme.of(context).colorScheme.primary,
-              backgroundColor: Colors.black12,
+              primaryCircleColor: Theme.of(context).colorScheme.primary,
+              backgroundCircleColor: Colors.black12,
               child: Text(
-                insideText,
+                date,
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
@@ -341,167 +343,5 @@ class DayCircle extends StatelessWidget {
         ),
       ],
     );
-  }
-}
-
-class IconStatistics extends StatelessWidget {
-  final IconData iconData;
-  final String text;
-  final String label;
-
-  const IconStatistics({
-    Key? key,
-    required this.iconData,
-    this.text = '',
-    this.label = '',
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        RichText(
-          text: TextSpan(
-            children: [
-              WidgetSpan(
-                  child: Icon(iconData,
-                      size: 45, color: Theme.of(context).colorScheme.primary),
-                  alignment: PlaceholderAlignment.middle),
-            ],
-          ),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                  text: text, style: Theme.of(context).textTheme.headline1),
-              const TextSpan(text: '\n'),
-              TextSpan(
-                  text: label, style: Theme.of(context).textTheme.subtitle1)
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class IncompleteCircle extends StatelessWidget {
-  final Color circleColor;
-  final Color backgroundColor;
-  final String text;
-  final Widget? child;
-  final double strokeWidth;
-  final double fraction;
-
-  const IncompleteCircle(
-      {Key? key,
-      this.circleColor = Colors.red,
-      this.text = '',
-      this.child,
-      this.strokeWidth = 5,
-      this.fraction = 1,
-      this.backgroundColor = Colors.black12})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: ArcPainter(
-          circleColor: circleColor,
-          backgroundColor: backgroundColor,
-          strokeWidth: strokeWidth,
-          fraction: fraction),
-      child: Center(
-        child: child,
-      ),
-    );
-  }
-}
-
-class ArcPainter extends CustomPainter {
-  final Color circleColor;
-  final Color backgroundColor;
-  final double strokeWidth;
-  final double fraction;
-
-  ArcPainter(
-      {Key? key,
-      this.circleColor = Colors.red,
-      this.backgroundColor = Colors.black12,
-      this.strokeWidth = 5,
-      this.fraction = 1});
-
-  /*@override
-  void paint(Canvas canvas, Size size) {
-    final fillPaint = Paint()
-      ..color = circleColor
-      ..strokeWidth = strokeWidth
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
-    final backgroundPaint = Paint()
-      ..color = backgroundColor
-      ..strokeWidth = strokeWidth
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
-
-    final backgroundArc = Path();
-    backgroundArc.moveTo(size.width * .5, 0);
-    backgroundArc.arcToPoint(
-      Offset(size.width * .5, size.height),
-      radius: const Radius.circular(1),
-    );
-    backgroundArc.arcToPoint(
-      Offset(size.width * .5, 0),
-      radius: const Radius.circular(1),
-    );
-
-    final fillArc = Path();
-
-    fillArc.moveTo(size.width * .5, 0);
-    fillArc.arcToPoint(
-      Offset(
-        size.width * (.5 * math.sin(2 * math.pi * fraction) + .5),
-        size.height * (.5 * math.sin(2 * math.pi * (fraction - .25)) + .5),
-      ),
-      radius: Radius.circular(size.width),
-    );
-    if (fraction > 0.5) {
-      fillArc.arcToPoint(
-        Offset(size.width * .5, 0),
-        radius: const Radius.circular(1),
-      );
-    }
-
-    canvas.drawPath(backgroundArc, backgroundPaint);
-    canvas.drawPath(fillArc, fillPaint);
-  }*/
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final rect = Rect.fromLTRB(0, 0, size.width, size.height);
-    final startAngle = -math.pi / 2;
-    final sweepAngle = (2 * math.pi) * fraction;
-    const useCenter = false;
-    final paint = Paint()
-      ..color = circleColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round;
-    final backgroundPaint = Paint()
-      ..color = backgroundColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth * 1.5;
-
-    canvas.drawArc(rect, startAngle, 2 * math.pi, useCenter, backgroundPaint);
-    canvas.drawArc(rect, startAngle, sweepAngle, useCenter, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
   }
 }
