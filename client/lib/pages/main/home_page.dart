@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
           ),
           backgroundColor: Colors.green,
         ),
-        body: Column(
+        body: ListView(
           children: [
             Center(
               child: Stack(

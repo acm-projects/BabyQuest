@@ -35,7 +35,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
             stops: const [.7, 1],
           ),
         ),
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(16),
         child: ListView(
           physics: const ClampingScrollPhysics(),
           children: [
@@ -50,7 +50,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 20),
+                    padding: const EdgeInsets.only(top: 16),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: RichText(
@@ -96,7 +96,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         return Transform.scale(
                           scale: i == _index ? 1 : 0.9,
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
                             child: Row(
                               //crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -160,13 +160,16 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     thickness: 1,
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     child: Row(
                       children: [
+                        const SizedBox(
+                          width: 16,
+                        ),
                         Container(
                           height: 150,
                           width: 150,
-                          padding: const EdgeInsets.all(13),
+                          padding: const EdgeInsets.all(16),
                           child: FractionCircle(
                             primaryCircleColor:
                                 Theme.of(context).colorScheme.primary,
@@ -184,7 +187,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                           ),
                         ),
                         const SizedBox(
-                          width: 30,
+                          width: 32,
                         ),
                         RichText(
                           text: TextSpan(
@@ -221,7 +224,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     thickness: 1,
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     child: Row(
                       children: [
                         Column(
@@ -233,7 +236,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               bottomText: 'Slept at',
                             ),
                             SizedBox(
-                              height: 20,
+                              height: 32,
                             ),
                             IconInformation(
                               iconData: Icons.restaurant_outlined,
@@ -252,7 +255,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               bottomText: 'Woke up at',
                             ),
                             SizedBox(
-                              height: 20,
+                              height: 32,
                             ),
                             IconInformation(
                               iconData: Icons.delete,
@@ -270,7 +273,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     thickness: 1,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     child: TextButton(
                       onPressed: () {},
                       child: Text(

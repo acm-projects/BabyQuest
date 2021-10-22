@@ -63,6 +63,7 @@ class ArcPainter extends CustomPainter {
     final startAngle = -math.pi / 2;
     final sweepAngle = (2 * math.pi) * fraction;
     const useCenter = false;
+
     final paint = Paint()
       ..color = primaryArcColor
       ..style = PaintingStyle.stroke

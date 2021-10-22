@@ -11,8 +11,6 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primaryVariant,
-      //backgroundColor: Colors.white,
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -60,7 +58,7 @@ class ProfilePage extends StatelessWidget {
                             Align(
                               alignment: Alignment.bottomLeft,
                               child: Container(
-                                padding: const EdgeInsets.only(left: 10),
+                                padding: const EdgeInsets.only(left: 16),
                                 child: const Text(
                                   'Osbaldo Waldo',
                                   style: TextStyle(
@@ -95,11 +93,11 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 40),
+                            padding: const EdgeInsets.only(top: 32),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -120,7 +118,7 @@ class ProfilePage extends StatelessWidget {
                                 ),
                                 Container(
                                   padding:
-                                      const EdgeInsets.symmetric(vertical: 20),
+                                      const EdgeInsets.symmetric(vertical: 16),
                                   child: Row(
                                     children: [
                                       Column(
@@ -133,7 +131,7 @@ class ProfilePage extends StatelessWidget {
                                             bottomText: 'Gender',
                                           ),
                                           SizedBox(
-                                            height: 20,
+                                            height: 32,
                                           ),
                                           IconInformation(
                                             iconData:
@@ -154,7 +152,7 @@ class ProfilePage extends StatelessWidget {
                                             bottomText: 'Age',
                                           ),
                                           SizedBox(
-                                            height: 20,
+                                            height: 32,
                                           ),
                                           IconInformation(
                                             iconData: Icons.straighten,
@@ -171,7 +169,7 @@ class ProfilePage extends StatelessWidget {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 20),
+                            padding: const EdgeInsets.only(top: 16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -190,7 +188,7 @@ class ProfilePage extends StatelessWidget {
                                 ),
                                 Padding(
                                   padding:
-                                      const EdgeInsets.symmetric(vertical: 20),
+                                      const EdgeInsets.symmetric(vertical: 16),
                                   child: Column(
                                     children: const [
                                       IconInformation(
@@ -200,7 +198,7 @@ class ProfilePage extends StatelessWidget {
                                         bottomText: 'Doctor',
                                       ),
                                       SizedBox(
-                                        height: 20,
+                                        height: 32,
                                       ),
                                       IconInformation(
                                         iconData: Icons.contacts_outlined,
@@ -214,7 +212,7 @@ class ProfilePage extends StatelessWidget {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(top: 20),
+                            padding: const EdgeInsets.only(top: 16),
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -235,7 +233,7 @@ class ProfilePage extends StatelessWidget {
                                 ),
                                 Padding(
                                   padding:
-                                      const EdgeInsets.symmetric(vertical: 20),
+                                      const EdgeInsets.symmetric(vertical: 16),
                                   child: Column(
                                     children: const [
                                       IconInformation(
@@ -244,7 +242,7 @@ class ProfilePage extends StatelessWidget {
                                         bottomText: 'Extreme',
                                       ),
                                       SizedBox(
-                                        height: 20,
+                                        height: 32,
                                       ),
                                       IconInformation(
                                         iconData: Icons.warning_amber_outlined,
@@ -252,7 +250,7 @@ class ProfilePage extends StatelessWidget {
                                         bottomText: 'Mild',
                                       ),
                                       SizedBox(
-                                        height: 20,
+                                        height: 32,
                                       ),
                                       IconInformation(
                                         iconData: Icons.warning_amber_outlined,
@@ -272,7 +270,7 @@ class ProfilePage extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                                left: 30, right: 30, top: 20, bottom: 20),
+                                left: 32, right: 32, top: 16, bottom: 16),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
