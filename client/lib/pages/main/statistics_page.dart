@@ -16,41 +16,24 @@ class _StatisticsPageState extends State<StatisticsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primaryVariant,
-        toolbarHeight: 0,
-        elevation: 0,
-      ),
-      backgroundColor: Theme.of(context).colorScheme.primaryVariant,
-      extendBodyBehindAppBar: true,
-      body: Ink(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Theme.of(context).colorScheme.primaryVariant,
-              Colors.white,
-            ],
-            stops: const [.7, 1],
-          ),
-        ),
-        padding: const EdgeInsets.all(16),
-        child: ListView(
-          physics: const ClampingScrollPhysics(),
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                    colorFilter:
-                        ColorFilter.mode(Color(0x25FFFFFF), BlendMode.dstATop),
-                    image: AssetImage('assets/images/undraw_baby.png'),
-                    fit: BoxFit.cover),
-              ),
+      body: ListView(
+        physics: const ClampingScrollPhysics(),
+        padding: EdgeInsets.zero,
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                  colorFilter:
+                      ColorFilter.mode(Color(0x25FFFFFF), BlendMode.dstATop),
+                  image: AssetImage('assets/images/undraw_baby.png'),
+                  fit: BoxFit.cover),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 16),
+                    padding: const EdgeInsets.only(top: 48),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: RichText(
@@ -61,8 +44,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               style: TextStyle(
                                   fontSize: 30,
                                   fontWeight: FontWeight.w800,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground),
                             ),
                             const TextSpan(
                               text: ' ',
@@ -72,7 +56,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               style: TextStyle(
                                   color: Theme.of(context)
                                       .colorScheme
-                                      .secondaryVariant,
+                                      .onBackground,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 15),
                             )
@@ -82,7 +66,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     ),
                   ),
                   Divider(
-                    color: Theme.of(context).colorScheme.secondaryVariant,
+                    color: Theme.of(context).colorScheme.onBackground,
                     thickness: 1,
                   ),
                   SizedBox(
@@ -92,59 +76,58 @@ class _StatisticsPageState extends State<StatisticsPage> {
                       controller: pageController,
                       onPageChanged: (int index) =>
                           setState(() => _index = index),
-                      itemBuilder: (_, i) {
+                      itemBuilder: (context, index) {
                         return Transform.scale(
-                          scale: i == _index ? 1 : 0.9,
+                          scale: index == _index ? 1 : .97,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             child: Row(
-                              //crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 DayCircle(
-                                  fraction: .1,
-                                  date: '${_index * 7 + 1}',
+                                  fraction: ((index * 7 + 1) % 10) / 10,
+                                  date: '${index * 7 + 1}',
                                   day: 'S',
                                   onTap: () {},
                                 ),
                                 const Spacer(),
                                 DayCircle(
-                                  fraction: .2,
-                                  date: '${_index * 7 + 2}',
+                                  fraction: ((index * 7 + 2) % 10) / 10,
+                                  date: '${index * 7 + 2}',
                                   day: 'M',
                                   onTap: () {},
                                 ),
                                 const Spacer(),
                                 DayCircle(
-                                  fraction: .3,
-                                  date: '${_index * 7 + 3}',
+                                  fraction: ((index * 7 + 3) % 10) / 10,
+                                  date: '${index * 7 + 3}',
                                   day: 'T',
                                   onTap: () {},
                                 ),
                                 const Spacer(),
                                 DayCircle(
-                                  fraction: .4,
-                                  date: '${_index * 7 + 4}',
+                                  fraction: ((index * 7 + 4) % 10) / 10,
+                                  date: '${index * 7 + 4}',
                                   day: 'W',
                                   onTap: () {},
                                 ),
                                 const Spacer(),
                                 DayCircle(
-                                  fraction: .5,
-                                  date: '${_index * 7 + 5}',
+                                  fraction: ((index * 7 + 5) % 10) / 10,
+                                  date: '${index * 7 + 5}',
                                   day: 'T',
                                   onTap: () {},
                                 ),
                                 const Spacer(),
                                 DayCircle(
-                                  fraction: .6,
-                                  date: '${_index * 7 + 6}',
+                                  fraction: ((index * 7 + 6) % 10) / 10,
+                                  date: '${index * 7 + 6}',
                                   day: 'F',
                                   onTap: () {},
                                 ),
                                 const Spacer(),
                                 DayCircle(
-                                  fraction: .7,
-                                  date: '${_index * 7 + 7}',
+                                  fraction: ((index * 7 + 7) % 10) / 10,
+                                  date: '${index * 7 + 7}',
                                   day: 'S',
                                   onTap: () {},
                                 ),
@@ -156,7 +139,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     ),
                   ),
                   Divider(
-                    color: Theme.of(context).colorScheme.secondaryVariant,
+                    color: Theme.of(context).colorScheme.onBackground,
                     thickness: 1,
                   ),
                   Container(
@@ -171,8 +154,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
                           width: 150,
                           padding: const EdgeInsets.all(16),
                           child: FractionCircle(
-                            primaryCircleColor:
-                                Theme.of(context).colorScheme.primary,
                             backgroundCircleColor: Colors.black12,
                             fraction: .25,
                             strokeWidth: 13,
@@ -181,8 +162,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               style: TextStyle(
                                   fontSize: 40,
                                   fontWeight: FontWeight.w900,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground),
                             ),
                           ),
                         ),
@@ -199,7 +181,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                     fontWeight: FontWeight.w800,
                                     color: Theme.of(context)
                                         .colorScheme
-                                        .secondary),
+                                        .onSurface),
                               ),
                               const TextSpan(
                                 text: '\n',
@@ -207,9 +189,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               TextSpan(
                                 text: 'of sleep',
                                 style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .secondaryVariant,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
                                     fontWeight: FontWeight.w400,
                                     fontSize: 15),
                               )
@@ -220,7 +201,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     ),
                   ),
                   Divider(
-                    color: Theme.of(context).colorScheme.secondaryVariant,
+                    color: Theme.of(context).colorScheme.onBackground,
                     thickness: 1,
                   ),
                   Container(
@@ -269,7 +250,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     ),
                   ),
                   Divider(
-                    color: Theme.of(context).colorScheme.secondaryVariant,
+                    color: Theme.of(context).colorScheme.onBackground,
                     thickness: 1,
                   ),
                   Padding(
@@ -279,15 +260,15 @@ class _StatisticsPageState extends State<StatisticsPage> {
                       child: Text(
                         'Add Notes',
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary),
+                            color: Theme.of(context).colorScheme.primary),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -320,7 +301,7 @@ class DayCircle extends StatelessWidget {
             style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w400,
-                color: Theme.of(context).colorScheme.secondaryVariant),
+                color: Theme.of(context).colorScheme.onBackground),
           ),
         ),
         InkWell(
@@ -338,7 +319,7 @@ class DayCircle extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
-                    color: Theme.of(context).colorScheme.secondaryVariant),
+                    color: Theme.of(context).colorScheme.onBackground),
                 softWrap: false,
               ),
             ),

@@ -29,12 +29,11 @@ class _MainWrapperState extends State<MainWrapper> {
         children: screens,
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        unselectedItemColor: Theme.of(context).colorScheme.onSecondary,
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,
         onTap: (index) => setState(() => currentIndex = index),
-        selectedItemColor: Theme.of(context).colorScheme.primary,
-        unselectedItemColor: Theme.of(context).colorScheme.secondary,
-        backgroundColor: Colors.white,
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.account_circle), label: "Profile"),

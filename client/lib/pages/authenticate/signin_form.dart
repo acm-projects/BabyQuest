@@ -98,15 +98,14 @@ class _SignInFormState extends State<SignInForm> {
             }
           }
         },
-        color: Colors.green.shade200,
+        color: Theme.of(context).colorScheme.secondary,
         child: Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 20,
-            color: Colors.black,
+            color: Theme.of(context).colorScheme.onBackground,
           ),
         ),
-
       ),
     );
   }
@@ -130,20 +129,21 @@ class _SignInFormState extends State<SignInForm> {
             child: ElevatedButton.icon(
               onPressed: () {
                 final provider =
-                Provider.of<AuthService>(context, listen: false);
+                    Provider.of<AuthService>(context, listen: false);
                 provider.signInWithGoogle();
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.green.shade200,
-                onPrimary: Colors.black,
+                primary: Theme.of(context).colorScheme.secondary,
+                onPrimary: Theme.of(context).colorScheme.onSecondary,
                 minimumSize: const Size(double.infinity, 60),
                 shape: const StadiumBorder(),
               ),
-              icon: FaIcon(FontAwesomeIcons.google, color: Colors.deepPurple.shade400),
-              label: const Text(
+              icon: FaIcon(FontAwesomeIcons.google,
+                  color: Theme.of(context).colorScheme.primary),
+              label: Text(
                 'Login with Google',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Theme.of(context).colorScheme.onBackground,
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),

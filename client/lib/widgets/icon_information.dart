@@ -21,8 +21,11 @@ class IconInformation extends StatelessWidget {
           text: TextSpan(
             children: [
               WidgetSpan(
-                  child: Icon(iconData,
-                      size: 45, color: Theme.of(context).colorScheme.primary),
+                  child: Icon(
+                    iconData,
+                    size: 45,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                   alignment: PlaceholderAlignment.middle),
             ],
           ),
@@ -34,7 +37,7 @@ class IconInformation extends StatelessWidget {
           text: TextSpan(
             children: [
               TextSpan(
-                  text: topText, style: Theme.of(context).textTheme.headline1),
+                  text: topText, style: Theme.of(context).textTheme.headline2),
               const TextSpan(text: '\n'),
               TextSpan(
                   text: bottomText,

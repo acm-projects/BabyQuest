@@ -38,7 +38,6 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30),
             ),
           ),
-          backgroundColor: Colors.green,
         ),
         body: ListView(
           children: [
@@ -63,9 +62,7 @@ class _HomePageState extends State<HomePage> {
                       child: Text(
                         quoteOfTheDay,
                         style: const TextStyle(
-                            color: Colors.blueGrey,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22.0),
+                            fontWeight: FontWeight.bold, fontSize: 22.0),
                       )),
                 ],
               ),
@@ -77,10 +74,6 @@ class _HomePageState extends State<HomePage> {
                 width: 200, //width of button
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.green, //background color of button
-                      side: const BorderSide(
-                          width: 3,
-                          color: Colors.green), //border width and color
                       elevation: 3, //elevation of button
                       shape: RoundedRectangleBorder(
                           //to set border radius to button
@@ -109,10 +102,6 @@ class _HomePageState extends State<HomePage> {
                 width: 200, //width of button
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        primary: Colors.green, //background color of button
-                        side: const BorderSide(
-                            width: 3,
-                            color: Colors.green), //border width and color
                         elevation: 3, //elevation of button
                         shape: RoundedRectangleBorder(
                             //to set border radius to button
@@ -140,10 +129,6 @@ class _HomePageState extends State<HomePage> {
                 width: 200, //width of button
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.green, //background color of button
-                      side: const BorderSide(
-                          width: 3,
-                          color: Colors.green), //border width and color
                       elevation: 3, //elevation of button
                       shape: RoundedRectangleBorder(
                           //to set border radius to button
