@@ -254,7 +254,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     thickness: 1,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.only(top: 16, bottom: 32),
                     child: TextButton(
                       onPressed: () {},
                       child: Text(

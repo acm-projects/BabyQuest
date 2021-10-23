@@ -208,9 +208,8 @@ class ProfilePage extends StatelessWidget {
                                 ),
                               ),
                               Divider(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondaryVariant,
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
                                 thickness: 1,
                               ),
                               Padding(
@@ -251,7 +250,7 @@ class ProfilePage extends StatelessWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(
-                              left: 32, right: 32, top: 16, bottom: 16),
+                              left: 32, right: 32, top: 16, bottom: 32),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,

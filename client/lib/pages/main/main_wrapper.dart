@@ -1,3 +1,4 @@
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/pages/main/home_page.dart';
@@ -28,20 +29,16 @@ class _MainWrapperState extends State<MainWrapper> {
         index: currentIndex,
         children: screens,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        unselectedItemColor: Theme.of(context).colorScheme.onSecondary,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: currentIndex,
+      bottomNavigationBar: ConvexAppBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        style: TabStyle.react,
+        initialActiveIndex: currentIndex,
         onTap: (index) => setState(() => currentIndex = index),
         items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle), label: "Profile"),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart), label: "Statistics"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), label: "Shopping")
+          TabItem(icon: Icons.account_circle, title: 'Profile'),
+          TabItem(icon: Icons.home, title: 'Home'),
+          TabItem(icon: Icons.bar_chart, title: 'Statistics'),
+          TabItem(icon: Icons.shopping_cart, title: 'Shopping'),
         ],
       ),
     );
