@@ -4,6 +4,7 @@ import 'package:client/pages/main/home_page.dart';
 import 'package:client/pages/main/profile_page.dart';
 import 'package:client/pages/main/shopping_page.dart';
 import 'package:client/pages/main/statistics_page.dart';
+import 'package:client/pages/main/user_input_page.dart';
 
 class MainWrapper extends StatefulWidget {
   const MainWrapper({Key? key}) : super(key: key);
@@ -20,7 +21,8 @@ class _MainWrapperState extends State<MainWrapper> {
     const ProfilePage(),
     const HomePage(),
     const StatisticsPage(),
-    const ShoppingPage()
+    const ShoppingPage(),
+    const DataInput()
   ];
 
   @override
