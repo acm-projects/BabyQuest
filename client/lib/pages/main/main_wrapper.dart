@@ -14,8 +14,9 @@ class MainWrapper extends StatefulWidget {
 }
 
 class _MainWrapperState extends State<MainWrapper> {
-  int currentIndex = 1;
-  final screens = [
+  PageController pageController = PageController(initialPage: 1);
+
+  final pages = [
     const ProfilePage(),
     const HomePage(),
     const StatisticsPage(),
@@ -25,21 +26,23 @@ class _MainWrapperState extends State<MainWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: currentIndex,
-        children: screens,
+      body: PageView(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: pageController,
+        children: pages,
       ),
       bottomNavigationBar: ConvexAppBar(
+        initialActiveIndex: 1,
+        elevation: 0,
         backgroundColor: Theme.of(context).colorScheme.primary,
         style: TabStyle.react,
-        initialActiveIndex: currentIndex,
-        onTap: (index) => setState(() => currentIndex = index),
         items: const [
           TabItem(icon: Icons.account_circle, title: 'Profile'),
           TabItem(icon: Icons.home, title: 'Home'),
           TabItem(icon: Icons.bar_chart, title: 'Statistics'),
           TabItem(icon: Icons.shopping_cart, title: 'Shopping'),
         ],
+        onTap: (index) => pageController.jumpToPage(index),
       ),
     );
   }

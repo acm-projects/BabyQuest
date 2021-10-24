@@ -15,7 +15,6 @@ class ProfilePage extends StatelessWidget {
         children: [
           Expanded(
             child: ListView(
-              physics: const ClampingScrollPhysics(),
               padding: EdgeInsets.zero,
               children: [
                 AspectRatio(

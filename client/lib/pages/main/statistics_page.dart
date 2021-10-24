@@ -10,14 +10,13 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
-  int _index = 0;
+  final ValueNotifier<int> _index = ValueNotifier<int>(0);
   PageController pageController = PageController(viewportFraction: 1);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
-        physics: const ClampingScrollPhysics(),
         padding: EdgeInsets.zero,
         children: [
           Container(
@@ -74,11 +73,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     child: PageView.builder(
                       itemCount: null,
                       controller: pageController,
-                      onPageChanged: (int index) =>
-                          setState(() => _index = index),
+                      onPageChanged: (int index) => _index.value = index,
                       itemBuilder: (context, index) {
                         return Transform.scale(
-                          scale: index == _index ? 1 : .97,
+                          scale: index == _index.value ? 1 : .97,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             child: Row(
@@ -153,19 +151,25 @@ class _StatisticsPageState extends State<StatisticsPage> {
                           height: 150,
                           width: 150,
                           padding: const EdgeInsets.all(16),
-                          child: FractionCircle(
-                            backgroundCircleColor: Colors.black12,
-                            fraction: .25,
-                            strokeWidth: 13,
-                            child: Text(
-                              '25%',
-                              style: TextStyle(
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.w900,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground),
-                            ),
+                          child: ValueListenableBuilder(
+                            valueListenable: _index,
+                            builder:
+                                (BuildContext context, value, Widget? child) {
+                              return FractionCircle(
+                                backgroundCircleColor: Colors.black12,
+                                fraction: (_index.value % 10) / 10,
+                                strokeWidth: 13,
+                                child: Text(
+                                  '${(_index.value % 10) * 10}%',
+                                  style: TextStyle(
+                                      fontSize: 40,
+                                      fontWeight: FontWeight.w900,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground),
+                                ),
+                              );
+                            },
                           ),
                         ),
                         const SizedBox(
@@ -254,7 +258,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     thickness: 1,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 16, bottom: 32),
+                    padding: const EdgeInsets.only(top: 16, bottom: 48),
                     child: TextButton(
                       onPressed: () {},
                       child: Text(
@@ -304,23 +308,29 @@ class DayCircle extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onBackground),
           ),
         ),
-        InkWell(
-          onTap: onTap,
-          child: Ink(
-            width: smallCircleDiameter,
-            height: smallCircleDiameter,
-            padding: const EdgeInsets.all(3),
-            child: FractionCircle(
-              fraction: fraction,
-              primaryCircleColor: Theme.of(context).colorScheme.primary,
-              backgroundCircleColor: Colors.black12,
-              child: Text(
-                date,
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: Theme.of(context).colorScheme.onBackground),
-                softWrap: false,
+        ClipOval(
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: onTap,
+              child: Ink(
+                decoration: const ShapeDecoration(shape: CircleBorder()),
+                width: smallCircleDiameter,
+                height: smallCircleDiameter,
+                padding: const EdgeInsets.all(3),
+                child: FractionCircle(
+                  fraction: fraction,
+                  primaryCircleColor: Theme.of(context).colorScheme.primary,
+                  backgroundCircleColor: Colors.black12,
+                  child: Text(
+                    date,
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: Theme.of(context).colorScheme.onBackground),
+                    softWrap: false,
+                  ),
+                ),
               ),
             ),
           ),
