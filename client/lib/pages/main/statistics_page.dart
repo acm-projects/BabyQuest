@@ -34,35 +34,55 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 48),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Sunday',
-                              style: TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.w800,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground),
-                            ),
-                            const TextSpan(
-                              text: ' ',
-                            ),
-                            TextSpan(
-                              text: '10 October',
-                              style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15),
-                            )
-                          ],
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ValueListenableBuilder<int>(
+                          valueListenable: _selectedIndex,
+                          builder:
+                              (BuildContext context, value, Widget? child) {
+                            return RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'Sunday',
+                                    style: TextStyle(
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.w800,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onBackground),
+                                  ),
+                                  const TextSpan(
+                                    text: '  ',
+                                  ),
+                                  TextSpan(
+                                    text: '${_selectedIndex.value} October',
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onBackground,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 15),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
-                      ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.calendar_today,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                          onPressed: () {
+                            pageController.animateToPage(10,
+                                duration: const Duration(milliseconds: 1000),
+                                curve: Curves.ease);
+                            _selectedIndex.value = 75;
+                          },
+                        ),
+                      ],
                     ),
                   ),
                   Divider(

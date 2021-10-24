@@ -17,7 +17,7 @@ Future main() async {
     SystemUiOverlayStyle(
       statusBarColor: Colors.deepPurple.shade300,
       systemNavigationBarIconBrightness: Brightness.light,
-      statusBarIconBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.light,
     ),
   );
 
@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
             elevation: 0,
             backgroundColor: Colors.green.shade200,
             contentTextStyle: TextStyle(
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               fontSize: 20,
               color: Colors.green.shade200.darken(40).desaturate(25),
             ),

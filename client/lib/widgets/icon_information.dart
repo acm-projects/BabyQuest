@@ -33,16 +33,21 @@ class IconInformation extends StatelessWidget {
         const SizedBox(
           width: 8,
         ),
-        RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                  text: topText, style: Theme.of(context).textTheme.headline2),
-              const TextSpan(text: '\n'),
-              TextSpan(
-                  text: bottomText,
-                  style: Theme.of(context).textTheme.subtitle1)
-            ],
+        InkWell(
+          splashColor: Theme.of(context).colorScheme.primary,
+          onTap: () {},
+          child: RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                    text: topText,
+                    style: Theme.of(context).textTheme.headline2),
+                const TextSpan(text: '\n'),
+                TextSpan(
+                    text: bottomText,
+                    style: Theme.of(context).textTheme.subtitle1)
+              ],
+            ),
           ),
         ),
       ],

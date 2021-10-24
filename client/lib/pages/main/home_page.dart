@@ -16,6 +16,8 @@ class _HomePageState extends State<HomePage> {
       'https://www.muralswallpaper.co.uk/app/uploads/baby-clouds-and-moon-nursery-room-825x535.jpg';
 
   bool sleeping = false;
+  int feedingCount = 0;
+  int diaperCount = 0;
 
   @override
   void initState() {
@@ -25,7 +27,7 @@ class _HomePageState extends State<HomePage> {
 
   SnackBar getSnackBar(String text, VoidCallback onPressed) {
     return SnackBar(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       behavior: SnackBarBehavior.floating,
       duration: const Duration(milliseconds: 1250),
       content: Text(text),
@@ -42,7 +44,7 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.symmetric(horizontal: 24),
         behavior: SnackBarBehavior.floating,
         duration: const Duration(milliseconds: 1250),
-        content: Text(sleeping ? 'Starting Sleep!' : 'Sleep Recorded!'),
+        content: Text(sleeping ? 'Starting Sleep...' : 'Sleep Recorded'),
         action: SnackBarAction(
           label: '',
           onPressed: () {},
@@ -52,19 +54,25 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _recordFeeding() {
+    feedingCount++;
     ScaffoldMessenger.of(context).showSnackBar(
       getSnackBar(
-        'Feeding Recorded!',
-        () {},
+        feedingCount > 1
+            ? '$feedingCount Feedings Recorded'
+            : '$feedingCount Feeding Recorded',
+        () => feedingCount--,
       ),
     );
   }
 
   void _recordDiaper() {
+    diaperCount++;
     ScaffoldMessenger.of(context).showSnackBar(
       getSnackBar(
-        'Diaper Change Recorded!',
-        () {},
+        diaperCount > 1
+            ? '$diaperCount Diaper Changes Recorded'
+            : '$diaperCount Diaper Change Recorded',
+        () => diaperCount--,
       ),
     );
   }
@@ -72,104 +80,109 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        physics: const NeverScrollableScrollPhysics(),
-        padding: EdgeInsets.zero,
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-                colorFilter:
-                    ColorFilter.mode(Color(0x25FFFFFF), BlendMode.dstATop),
-                image: AssetImage('assets/images/undraw_baby.png'),
-                fit: BoxFit.cover),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 48, bottom: 16),
-                  child: Text(
-                    'Welcome Back Oscar!',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline1!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
-                  ),
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+              colorFilter:
+                  ColorFilter.mode(Color(0x25FFFFFF), BlendMode.dstATop),
+              image: AssetImage('assets/images/undraw_baby.png'),
+              fit: BoxFit.cover),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 48, bottom: 16),
+                child: Text(
+                  'Welcome Back Oscar!',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1!
+                      .copyWith(color: Theme.of(context).colorScheme.primary),
                 ),
-                Divider(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  thickness: 1,
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  child: Column(
-                    children: [
-                      Text(
+              ),
+              Divider(
+                color: Theme.of(context).colorScheme.onBackground,
+                thickness: 1,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                child: Column(
+                  children: [
+                    InkWell(
+                      child: Text(
                         qodMessage,
                         style: Theme.of(context).textTheme.headline2,
                       ),
-                      const SizedBox(
-                        height: 8,
+                      splashColor: Theme.of(context).colorScheme.primary,
+                      onTap: () {},
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '- ' + qodAuthor,
+                        style: Theme.of(context).textTheme.headline2!.copyWith(
+                            color: Theme.of(context).colorScheme.primary),
                       ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          '- ' + qodAuthor,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline2!
-                              .copyWith(
-                                  color: Theme.of(context).colorScheme.primary),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Divider(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  thickness: 1,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 32, right: 32, bottom: 48, top: 16),
-                  child: Column(
-                    children: [
-                      RoundButton(
-                        backgroundColor: sleeping
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.secondary,
-                        textColor: sleeping
-                            ? Theme.of(context).colorScheme.onPrimary
-                            : Theme.of(context).colorScheme.onSecondary,
-                        text: sleeping ? 'Stop Sleep' : 'Start Sleep',
-                        onPressed: () {
+              ),
+              Divider(
+                color: Theme.of(context).colorScheme.onBackground,
+                thickness: 1,
+              ),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 32, right: 32, bottom: 48, top: 16),
+                child: Column(
+                  children: [
+                    RoundButton(
+                      backgroundColor: sleeping
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.secondary,
+                      textColor: sleeping
+                          ? Theme.of(context).colorScheme.onPrimary
+                          : Theme.of(context).colorScheme.onSecondary,
+                      text: sleeping ? 'Stop Sleep' : 'Start Sleep',
+                      onPressed: () {
+                        Future.delayed(
+                            ButtonTheme.of(context)
+                                .getAnimationDuration(MaterialButton(
+                              onPressed: () {},
+                            )), () {
                           setState(() {
                             sleeping = !sleeping;
                           });
                           _showSleepStatus();
-                        },
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      RoundButton(
-                        text: 'Record Feeding',
-                        onPressed: _recordFeeding,
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      RoundButton(
-                        text: 'Record Diaper Change',
-                        onPressed: _recordDiaper,
-                      ),
-                    ],
-                  ),
+                        });
+                      },
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    RoundButton(
+                      text: 'Record Feeding',
+                      onPressed: _recordFeeding,
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    RoundButton(
+                      text: 'Record Diaper Change',
+                      onPressed: _recordDiaper,
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
