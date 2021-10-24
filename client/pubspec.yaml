@@ -46,6 +46,7 @@ dependencies:
   tinycolor2:
     git:
       url: https://github.com/TinyCommunity/tinycolor2.git
+  convex_bottom_bar: ^3.0.0
 
 dev_dependencies:
   flutter_test:

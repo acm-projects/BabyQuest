@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class FractionCircle extends StatelessWidget {
+class FractionCircle extends StatefulWidget {
   const FractionCircle(
       {Key? key,
       this.primaryCircleColor,
@@ -22,20 +22,25 @@ class FractionCircle extends StatelessWidget {
   final double fraction;
 
   @override
+  _FractionCircleState createState() => _FractionCircleState();
+}
+
+class _FractionCircleState extends State<FractionCircle> {
+  @override
   Widget build(BuildContext context) {
     final Color primaryCircleColor =
-        this.primaryCircleColor ?? Theme.of(context).colorScheme.primary;
-    final Color backgroundCircleColor = this.backgroundCircleColor ??
+        widget.primaryCircleColor ?? Theme.of(context).colorScheme.primary;
+    final Color backgroundCircleColor = widget.backgroundCircleColor ??
         Theme.of(context).colorScheme.onBackground;
 
     return CustomPaint(
       painter: ArcPainter(
           primaryArcColor: primaryCircleColor,
           backgroundArcColor: backgroundCircleColor,
-          strokeWidth: strokeWidth,
-          fraction: fraction),
+          strokeWidth: widget.strokeWidth,
+          fraction: widget.fraction),
       child: Center(
-        child: child,
+        child: widget.child,
       ),
     );
   }
