@@ -7,6 +7,16 @@ class BabyProfile {
   String? _firstName;
   String? _lastName;
   DateTime? _birthDate;
+  int? gender;
+  double? height;
+  double? weight;
+  Map<String, int>? allergies;
+  String? pediatrician;
+  String? pediatricianPhone;
+  String? profilePic;
+  Map<String, int> diaperChanges;
+  List<Map<DateTime, DateTime>>? sleep;
+  Map<String, int>? feedings;
 
   // public properties
   final String uid;

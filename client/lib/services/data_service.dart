@@ -15,6 +15,7 @@ class DataService {
   static const _defaultUserData = {
     'profiles': [],
     'sharedProfiles': [],
+    'toDoList': [],
   };
 
   // default ProfileData
@@ -22,6 +23,7 @@ class DataService {
     'firstName': '',
     'lastName': '',
     'birthDate': '',
+    //***
   };
 
   // sets data sync for user data with database

@@ -7,6 +7,7 @@ class AppUser {
   // private properties
   Map<String, String>? _profiles;
   Map<String, String>? _sharedProfiles;
+  List<String> _toDoList;
 
   // public properties
   final String uid;
