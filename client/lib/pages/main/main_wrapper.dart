@@ -4,6 +4,7 @@ import 'package:client/pages/main/home_page.dart';
 import 'package:client/pages/main/profile_page.dart';
 import 'package:client/pages/main/shopping_page.dart';
 import 'package:client/pages/main/statistics_page.dart';
+import 'package:client/pages/main/user_input_page.dart';
 
 class MainWrapper extends StatefulWidget {
   const MainWrapper({Key? key}) : super(key: key);
@@ -15,12 +16,13 @@ class MainWrapper extends StatefulWidget {
 class _MainWrapperState extends State<MainWrapper> {
   static const Color accentColor = Color(0xFF008080);
 
-  int currentIndex = 1;
+  int currentIndex = 4;
   final screens = [
     const ProfilePage(),
     const HomePage(),
     const StatisticsPage(),
-    const ShoppingPage()
+    const ShoppingPage(),
+    const DataInput()
   ];
 
   @override
@@ -31,9 +33,9 @@ class _MainWrapperState extends State<MainWrapper> {
         children: screens,
       ),
       bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: currentIndex,
-        onTap: (index) => setState(() => currentIndex = index),
+        //type: BottomNavigationBarType.fixed,
+        //currentIndex: currentIndex,
+        //onTap: (index) => setState(() => currentIndex = index),
         selectedItemColor: accentColor,
         unselectedItemColor: Colors.grey[500],
         backgroundColor: Colors.white,
