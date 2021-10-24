@@ -18,13 +18,10 @@ class DataService {
     'to_do_list': [],
   };
 
-  // default ProfileData
-  static const _defaultProfileData = {
-    'firstName': '',
-    'lastName': '',
-    'birthDate': '',
-    //***
-  };
+  static updateUserData(String uid, Map<String, dynamic> fields) async {
+    DocumentReference userDocument = _userCollection.doc(uid);
+    await userDocument.update(fields);
+  }
 
   // sets data sync for user data with database
   static setUserDataSync(String uid, Function update) async {
@@ -65,20 +62,28 @@ class DataService {
     required String pediatricianNumber,
     required Map<String, int> allergies,
   }) async {
-    // TODO: create profile and get uid to return
-    return '';
+    _profileCollection.add({
+      'first_name': firstName,
+      'last_name': lastName,
+      'birth_date': birthDate.toString(),
+      'gender': gender,
+      'height': height,
+      'weight': weight,
+      'pediatrician': pediatrician,
+      'pediatricianNumber': pediatricianNumber,
+      'allergies': allergies,
+    }).then((document) {
+      return document.id;
+    });
   }
 
   // retrieves profile data from the database, or creates it if not yet created
   static Future<Map<String, dynamic>> getProfileData(String uid) async {
-    Map<String, dynamic> profileData = _defaultProfileData;
+    Map<String, dynamic> profileData = {};
 
     DocumentReference profileDocument = _profileCollection.doc(uid);
     await profileDocument.get().then((document) {
-      if (!document.exists) {
-        // profileData doesn't yet exist, so create i here
-        profileDocument.set(_defaultProfileData);
-      } else {
+      if (document.exists) {
         profileData = document.data() as Map<String, dynamic>;
       }
     });

@@ -90,5 +90,8 @@ class AppUser {
       allergies: allergies,
     );
 
+    _profiles?.add(profileId);
+    await DataService.updateUserData(uid, {'profiles': _profiles});
+    setCurrentProfile(profileId);
   }
 }
