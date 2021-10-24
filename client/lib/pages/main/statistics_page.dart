@@ -10,7 +10,8 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
-  final ValueNotifier<int> _index = ValueNotifier<int>(0);
+  final ValueNotifier<int> _pageIndex = ValueNotifier<int>(0);
+  final ValueNotifier<int> _selectedIndex = ValueNotifier<int>(0);
   PageController pageController = PageController(viewportFraction: 1);
 
   @override
@@ -24,7 +25,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
               image: DecorationImage(
                   colorFilter:
                       ColorFilter.mode(Color(0x25FFFFFF), BlendMode.dstATop),
-                  image: AssetImage('assets/images/undraw_baby.png'),
+                  image: AssetImage('assets/images/undraw_play.png'),
                   fit: BoxFit.cover),
             ),
             child: Padding(
@@ -73,61 +74,75 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     child: PageView.builder(
                       itemCount: null,
                       controller: pageController,
-                      onPageChanged: (int index) => _index.value = index,
+                      onPageChanged: (int index) => _pageIndex.value = index,
                       itemBuilder: (context, index) {
                         return Transform.scale(
-                          scale: index == _index.value ? 1 : .97,
+                          scale: index == _pageIndex.value ? 1 : .97,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             child: Row(
                               children: [
                                 DayCircle(
+                                  fraction: ((index * 7 + 0) % 10) / 10,
+                                  date: '${index * 7 + 0}',
+                                  day: 'S',
+                                  onTap: () {
+                                    _selectedIndex.value = index * 7 + 0;
+                                  },
+                                ),
+                                const Spacer(),
+                                DayCircle(
                                   fraction: ((index * 7 + 1) % 10) / 10,
                                   date: '${index * 7 + 1}',
-                                  day: 'S',
-                                  onTap: () {},
+                                  day: 'M',
+                                  onTap: () {
+                                    _selectedIndex.value = index * 7 + 1;
+                                  },
                                 ),
                                 const Spacer(),
                                 DayCircle(
                                   fraction: ((index * 7 + 2) % 10) / 10,
                                   date: '${index * 7 + 2}',
-                                  day: 'M',
-                                  onTap: () {},
+                                  day: 'T',
+                                  onTap: () {
+                                    _selectedIndex.value = index * 7 + 2;
+                                  },
                                 ),
                                 const Spacer(),
                                 DayCircle(
                                   fraction: ((index * 7 + 3) % 10) / 10,
                                   date: '${index * 7 + 3}',
-                                  day: 'T',
-                                  onTap: () {},
+                                  day: 'W',
+                                  onTap: () {
+                                    _selectedIndex.value = index * 7 + 3;
+                                  },
                                 ),
                                 const Spacer(),
                                 DayCircle(
                                   fraction: ((index * 7 + 4) % 10) / 10,
                                   date: '${index * 7 + 4}',
-                                  day: 'W',
-                                  onTap: () {},
+                                  day: 'T',
+                                  onTap: () {
+                                    _selectedIndex.value = index * 7 + 4;
+                                  },
                                 ),
                                 const Spacer(),
                                 DayCircle(
                                   fraction: ((index * 7 + 5) % 10) / 10,
                                   date: '${index * 7 + 5}',
-                                  day: 'T',
-                                  onTap: () {},
+                                  day: 'F',
+                                  onTap: () {
+                                    _selectedIndex.value = index * 7 + 5;
+                                  },
                                 ),
                                 const Spacer(),
                                 DayCircle(
                                   fraction: ((index * 7 + 6) % 10) / 10,
                                   date: '${index * 7 + 6}',
-                                  day: 'F',
-                                  onTap: () {},
-                                ),
-                                const Spacer(),
-                                DayCircle(
-                                  fraction: ((index * 7 + 7) % 10) / 10,
-                                  date: '${index * 7 + 7}',
                                   day: 'S',
-                                  onTap: () {},
+                                  onTap: () {
+                                    _selectedIndex.value = index * 7 + 6;
+                                  },
                                 ),
                               ],
                             ),
@@ -151,16 +166,16 @@ class _StatisticsPageState extends State<StatisticsPage> {
                           height: 150,
                           width: 150,
                           padding: const EdgeInsets.all(16),
-                          child: ValueListenableBuilder(
-                            valueListenable: _index,
+                          child: ValueListenableBuilder<int>(
+                            valueListenable: _selectedIndex,
                             builder:
                                 (BuildContext context, value, Widget? child) {
                               return FractionCircle(
                                 backgroundCircleColor: Colors.black12,
-                                fraction: (_index.value % 10) / 10,
+                                fraction: (value % 10) / 10,
                                 strokeWidth: 13,
                                 child: Text(
-                                  '${(_index.value % 10) * 10}%',
+                                  '${(value % 10) * 10}%',
                                   style: TextStyle(
                                       fontSize: 40,
                                       fontWeight: FontWeight.w900,
@@ -211,6 +226,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -221,12 +237,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               bottomText: 'Slept at',
                             ),
                             SizedBox(
-                              height: 32,
+                              height: 16,
                             ),
                             IconInformation(
-                              iconData: Icons.restaurant_outlined,
-                              topText: '3',
-                              bottomText: 'Feedings',
+                              topText: '3:03 PM',
+                              bottomText: 'Slept at',
                             ),
                           ],
                         ),
@@ -240,16 +255,40 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               bottomText: 'Woke up at',
                             ),
                             SizedBox(
-                              height: 32,
+                              height: 16,
                             ),
                             IconInformation(
-                              iconData: Icons.delete,
-                              topText: '2',
-                              bottomText: 'Diaper changes',
+                              topText: '5:26 PM',
+                              bottomText: 'Woke up at',
                             ),
                           ],
                         ),
-                        const Spacer()
+                        const Spacer(),
+                      ],
+                    ),
+                  ),
+                  Divider(
+                    color: Theme.of(context).colorScheme.onBackground,
+                    thickness: 1,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: const [
+                        IconInformation(
+                          iconData: Icons.restaurant_outlined,
+                          topText: '3',
+                          bottomText: 'Feedings',
+                        ),
+                        SizedBox(
+                          height: 32,
+                        ),
+                        IconInformation(
+                          iconData: Icons.delete,
+                          topText: '2',
+                          bottomText: 'Diaper changes',
+                        ),
                       ],
                     ),
                   ),
@@ -312,6 +351,7 @@ class DayCircle extends StatelessWidget {
           child: Material(
             color: Colors.transparent,
             child: InkWell(
+              splashColor: Theme.of(context).colorScheme.primary,
               onTap: onTap,
               child: Ink(
                 decoration: const ShapeDecoration(shape: CircleBorder()),

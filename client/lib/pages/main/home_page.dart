@@ -1,3 +1,4 @@
+import 'package:client/widgets/round_button.dart';
 import 'package:flutter/material.dart';
 import 'package:client/services/data_service.dart';
 
@@ -14,7 +15,7 @@ class _HomePageState extends State<HomePage> {
   String qodImage =
       'https://www.muralswallpaper.co.uk/app/uploads/baby-clouds-and-moon-nursery-room-825x535.jpg';
 
-  int buttonCase = 3;
+  bool sleeping = false;
 
   @override
   void initState() {
@@ -22,224 +23,157 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    String quoteOfTheDay = '"' + qodMessage + '" \n -' + qodAuthor;
-
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.grey,
+  SnackBar getSnackBar(String text, VoidCallback onPressed) {
+    return SnackBar(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(milliseconds: 1250),
+      content: Text(text),
+      action: SnackBarAction(
+        label: 'Undo',
+        onPressed: onPressed,
       ),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Center(
-            child: Text(
-              'Welcome <Baby Name>!',
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30),
-            ),
-          ),
-        ),
-        body: ListView(
-          children: [
-            Center(
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 60),
-                    alignment: Alignment.center,
-                    child: Image.network(
-                      qodImage,
-                      height: 251,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 50, horizontal: 60),
-                      alignment: Alignment.center,
-                      child: Text(
-                        quoteOfTheDay,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 22.0),
-                      )),
-                ],
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
-              child: SizedBox(
-                height: 80, //height of button
-                width: 200, //width of button
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      elevation: 3, //elevation of button
-                      shape: RoundedRectangleBorder(
-                          //to set border radius to button
-                          borderRadius: BorderRadius.circular(30)),
-                      padding: const EdgeInsets.all(
-                          20) //content padding inside button
+    );
+  }
 
-                      ),
-                  onPressed: () {
-                    //code to execute when this button is pressed.
-                    buttonCase = 0;
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) =>
-                          _buildPopupDialog(context),
-                    );
-                  },
-                  child: const Text("Record Sleep"),
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
-              child: SizedBox(
-                height: 80, //height of button
-                width: 200, //width of button
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        elevation: 3, //elevation of button
-                        shape: RoundedRectangleBorder(
-                            //to set border radius to button
-                            borderRadius: BorderRadius.circular(30)),
-                        padding: const EdgeInsets.all(
-                            20) //content padding inside button
-
-                        ),
-                    onPressed: () {
-                      buttonCase = 1;
-                      //code to execute when this button is pressed.
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) =>
-                            _buildPopupDialog(context),
-                      );
-                    },
-                    child: const Text("Record Feedings")),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
-              child: SizedBox(
-                height: 80, //height of button
-                width: 200, //width of button
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      elevation: 3, //elevation of button
-                      shape: RoundedRectangleBorder(
-                          //to set border radius to button
-                          borderRadius: BorderRadius.circular(30)),
-                      padding: const EdgeInsets.all(
-                          20) //content padding inside button
-
-                      ),
-                  onPressed: () {
-                    buttonCase = 2;
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) =>
-                          _buildPopupDialog(context),
-                    );
-                  },
-                  child: const Text("Record Diaper Changes"),
-                ),
-              ),
-            ),
-          ],
+  void _showSleepStatus() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(milliseconds: 1250),
+        content: Text(sleeping ? 'Starting Sleep!' : 'Sleep Recorded!'),
+        action: SnackBarAction(
+          label: '',
+          onPressed: () {},
         ),
       ),
     );
   }
 
-  Widget _buildPopupDialog(BuildContext context) {
-    int _feedingCounter = 0;
-    if (buttonCase == 0) {
-      return AlertDialog(
-        title: const Text('Record Sleep'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Text('Current Number of sleep: '),
-            Text('$_feedingCounter'),
-            ElevatedButton(
-              onPressed: () {
-                _feedingCounter++;
-              },
-              child: const Text('Add sleep'),
-            )
-          ],
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            //textColor: Theme.of(context).primaryColor,
-            child: const Text('Close'),
+  void _recordFeeding() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      getSnackBar(
+        'Feeding Recorded!',
+        () {},
+      ),
+    );
+  }
+
+  void _recordDiaper() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      getSnackBar(
+        'Diaper Change Recorded!',
+        () {},
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.zero,
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+                colorFilter:
+                    ColorFilter.mode(Color(0x25FFFFFF), BlendMode.dstATop),
+                image: AssetImage('assets/images/undraw_baby.png'),
+                fit: BoxFit.cover),
           ),
-        ],
-      );
-    }
-    if (buttonCase == 1) {
-      return AlertDialog(
-        title: const Text('Record Feedings'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Text('Current Number of feedings: '),
-            Text('$_feedingCounter'),
-            ElevatedButton(
-              onPressed: () {
-                _feedingCounter++;
-              },
-              child: const Text('Add feedings'),
-            )
-          ],
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            //textColor: Theme.of(context).primaryColor,
-            child: const Text('Close'),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 48, bottom: 16),
+                  child: Text(
+                    'Welcome Back Oscar!',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline1!
+                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                  ),
+                ),
+                Divider(
+                  color: Theme.of(context).colorScheme.onBackground,
+                  thickness: 1,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  child: Column(
+                    children: [
+                      Text(
+                        qodMessage,
+                        style: Theme.of(context).textTheme.headline2,
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '- ' + qodAuthor,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline2!
+                              .copyWith(
+                                  color: Theme.of(context).colorScheme.primary),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Divider(
+                  color: Theme.of(context).colorScheme.onBackground,
+                  thickness: 1,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 32, right: 32, bottom: 48, top: 16),
+                  child: Column(
+                    children: [
+                      RoundButton(
+                        backgroundColor: sleeping
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.secondary,
+                        textColor: sleeping
+                            ? Theme.of(context).colorScheme.onPrimary
+                            : Theme.of(context).colorScheme.onSecondary,
+                        text: sleeping ? 'Stop Sleep' : 'Start Sleep',
+                        onPressed: () {
+                          setState(() {
+                            sleeping = !sleeping;
+                          });
+                          _showSleepStatus();
+                        },
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      RoundButton(
+                        text: 'Record Feeding',
+                        onPressed: _recordFeeding,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      RoundButton(
+                        text: 'Record Diaper Change',
+                        onPressed: _recordDiaper,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ],
-      );
-    } else {
-      return AlertDialog(
-        title: const Text('Record Diaper Changes'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Text('Current Number of diaper changes: '),
-            Text('$_feedingCounter'),
-            ElevatedButton(
-              onPressed: () {
-                _feedingCounter++;
-              },
-              child: const Text('Add diaper changes'),
-            )
-          ],
         ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            //textColor: Theme.of(context).primaryColor,
-            child: const Text('Close'),
-          ),
-        ],
-      );
-    }
+      ),
+    );
   }
 
   Future _setup() async {

@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class IconInformation extends StatelessWidget {
-  final IconData iconData;
-  final String topText;
-  final String bottomText;
+  final IconData? iconData;
+  final String? topText;
+  final String? bottomText;
 
   const IconInformation({
     Key? key,
-    required this.iconData,
+    this.iconData,
     this.topText = '',
     this.bottomText = '',
   }) : super(key: key);
@@ -31,7 +31,7 @@ class IconInformation extends StatelessWidget {
           ),
         ),
         const SizedBox(
-          width: 10,
+          width: 8,
         ),
         RichText(
           text: TextSpan(

@@ -335,6 +335,7 @@ class LabeledIconButton extends StatelessWidget {
               shape: const CircleBorder(),
             ),
             child: IconButton(
+              splashColor: Theme.of(context).colorScheme.primary,
               iconSize: 30,
               padding: const EdgeInsets.all(12),
               color: iconColor,
