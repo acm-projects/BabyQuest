@@ -7,16 +7,18 @@ class BabyProfile {
   String? _firstName;
   String? _lastName;
   DateTime? _birthDate;
-  int? gender;
-  double? height;
-  double? weight;
-  Map<String, int>? allergies;
-  String? pediatrician;
-  String? pediatricianPhone;
-  String? profilePic;
-  Map<String, int> diaperChanges;
-  List<Map<DateTime, DateTime>>? sleep;
-  Map<String, int>? feedings;
+  int? _gender;
+  double? _height;
+  double? _weight;
+
+  String? _pediatrician;
+  String? _pediatricianPhone;
+  String? _profilePic;
+    
+  Map<String, int>? _allergies;
+  Map<String, int>? _diaperChanges;
+  List<Map<DateTime, DateTime>>? _sleep;
+  Map<String, int>? _feedings;
 
   // public properties
   final String uid;
@@ -46,6 +48,7 @@ class BabyProfile {
 
   BabyProfile(this.uid);
 
+  // private methods
   void _setDataSync() async {
     DataService.setProfileDataSync(uid, _setData);
   }
@@ -55,8 +58,8 @@ class BabyProfile {
   }
 
   Future _setData(Map<String, dynamic> profileData) async {
-    _firstName = profileData['firstName'] as String;
-    _lastName = profileData['lastName'] as String;
-    _birthDate = DateTime.parse(profileData['birthData'] as String);
+    _firstName = profileData['first_name'] as String;
+    _lastName = profileData['last_name'] as String;
+    _birthDate = DateTime.parse(profileData['birth_date'] as String);
   }
 }

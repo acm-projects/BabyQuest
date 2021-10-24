@@ -5,9 +5,9 @@ class AppUser {
   static AppUser? _currentUser;
 
   // private properties
-  Map<String, String>? _profiles;
-  Map<String, String>? _sharedProfiles;
-  List<String> _toDoList;
+  List<String>? _profiles;
+  List<String>? _sharedProfiles;
+  List<String>? _toDoList;
 
   // public properties
   final String uid;
@@ -24,16 +24,17 @@ class AppUser {
   }
 
   // public accessors
-  Map<String, String> get ownedProfiles {
-    return _profiles ?? {};
+  List<String> get ownedProfiles {
+    return _profiles ?? [];
   }
 
-  Map<String, String> get sharedProfiles {
-    return _sharedProfiles ?? {};
+  List<String> get sharedProfiles {
+    return _sharedProfiles ?? [];
   }
 
   AppUser(this.uid);
 
+  // private methods
   void _setDataSync() async {
     DataService.setUserDataSync(uid, _updateData);
   }
@@ -43,17 +44,51 @@ class AppUser {
   }
 
   Future _updateData(Map<String, dynamic> userData) async {
-    List<String> profiles = (userData['profiles'] as List).map((item) => item as String).toList();
-    List<String> sharedProfiles = (userData['sharedProfiles'] as List).map((item) => item as String).toList();
+    _profiles =
+        (userData['profiles'] as List).map((item) => item as String).toList();
+    _sharedProfiles = (userData['shared_profiles'] as List)
+        .map((item) => item as String)
+        .toList();
+    _toDoList =
+        (userData['to_do_list'] as List).map((item) => item as String).toList();
 
-    _profiles = await DataService.getProfileNames(profiles);
-    _sharedProfiles = await DataService.getProfileNames(sharedProfiles);
+    // TEMPORARY: assumes every user has only 1 profile
+    if (ownedProfiles.length == 1) {
+      setCurrentProfile(ownedProfiles[0]);
+    }
   }
+
+  // public methods
 
   // Switches the currently displayed BabyProfile based on the provided uid
   void setCurrentProfile(String uid) {
     if (this != _currentUser) return;
-    
+
     BabyProfile.currentProfile = BabyProfile(uid);
+  }
+
+  void createNewProfile({
+    required String firstName,
+    required String lastName,
+    required DateTime birthDate,
+    required int gender,
+    required double height,
+    required double weight,
+    required String pediatrician,
+    required String pediatricianNumber,
+    required Map<String, int> allergies,
+  }) async {
+    String profileId = await DataService.createProfile(
+      firstName: firstName,
+      lastName: lastName,
+      birthDate: birthDate,
+      gender: gender,
+      height: height,
+      weight: weight,
+      pediatrician: pediatrician,
+      pediatricianNumber: pediatricianNumber,
+      allergies: allergies,
+    );
+
   }
 }

@@ -10,12 +10,12 @@ class DataService {
 
   static dynamic _userListener;
   static dynamic _profileListener;
-  
+
   // default UserData
   static const _defaultUserData = {
     'profiles': [],
-    'sharedProfiles': [],
-    'toDoList': [],
+    'shared_profiles': [],
+    'to_do_list': [],
   };
 
   // default ProfileData
@@ -27,7 +27,7 @@ class DataService {
   };
 
   // sets data sync for user data with database
-  static setUserDataSync(String uid, Function update) async{
+  static setUserDataSync(String uid, Function update) async {
     DocumentReference userDocument = _userCollection.doc(uid);
 
     // If user data doesn't exist yet, create it
@@ -54,24 +54,19 @@ class DataService {
     _userListener = null;
   }
 
-  static Future<String> getProfileName(String uid) async {
-    Map<String, dynamic> profileData = await getProfileData(uid);
-    String firstName = profileData['firstName'] as String;
-    String lastName = profileData['lastName'] as String;
-
-    return firstName + ' ' + lastName;
-  }
-
-  // retrieves profile names and returns them as a map
-  static Future<Map<String, String>> getProfileNames(List<String>? profiles) async {
-    List<String> uids = profiles ?? [];
-    Map<String, String> profileNames = {};
-
-    for (String uid in uids) {
-      profileNames[uid] = await getProfileName(uid);
-    }
-
-    return profileNames;
+  static createProfile({
+    required String firstName,
+    required String lastName,
+    required DateTime birthDate,
+    required int gender,
+    required double height,
+    required double weight,
+    required String pediatrician,
+    required String pediatricianNumber,
+    required Map<String, int> allergies,
+  }) async {
+    // TODO: create profile and get uid to return
+    return '';
   }
 
   // retrieves profile data from the database, or creates it if not yet created
@@ -115,7 +110,7 @@ class DataService {
   // retrieves the current qod data from local storage or api
   static Future getQOD() async {
     final preferences = await SharedPreferences.getInstance();
-    
+
     DateTime now = DateTime.now();
     String today = DateTime(now.year, now.month, now.day).toString();
 
@@ -124,11 +119,18 @@ class DataService {
 
     if (qod.isEmpty || qod[0] != today) {
       // fetch qod from api
-      var response = await http.get(Uri.parse('http://quotes.rest/qod.json?category=inspire'));
+      var response = await http
+          .get(Uri.parse('http://quotes.rest/qod.json?category=inspire'));
 
       if (response.statusCode == 200) {
-        Map<String, dynamic> qodData = jsonDecode(response.body)['contents']['quotes'][0];
-        qod = [today, qodData['quote'], qodData['author'], qodData['background']];
+        Map<String, dynamic> qodData =
+            jsonDecode(response.body)['contents']['quotes'][0];
+        qod = [
+          today,
+          qodData['quote'],
+          qodData['author'],
+          qodData['background']
+        ];
       }
 
       preferences.setStringList('qod', qod);
