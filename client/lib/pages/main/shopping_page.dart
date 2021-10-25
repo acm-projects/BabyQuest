@@ -18,16 +18,10 @@ class _ShoppingPageState extends State<ShoppingPage> {
         automaticallyImplyLeading: false,
         elevation: 0,
         centerTitle: true,
-        foregroundColor: accentColor,
-        backgroundColor: Colors.white,
         title: const Text(
           "Shopping Cart",
           style: TextStyle(fontWeight: FontWeight.w200, fontSize: 50),
         ),
-      ),
-      body: SvgPicture.asset(
-        'images/undraw_baby.svg',
-        color: Colors.green.shade100,
       ),
     );
   }

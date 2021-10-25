@@ -1,9 +1,11 @@
+import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/pages/main/home_page.dart';
 import 'package:client/pages/main/profile_page.dart';
 import 'package:client/pages/main/shopping_page.dart';
 import 'package:client/pages/main/statistics_page.dart';
+import 'package:client/pages/main/user_input_page.dart';
 
 class MainWrapper extends StatefulWidget {
   const MainWrapper({Key? key}) : super(key: key);
@@ -13,39 +15,36 @@ class MainWrapper extends StatefulWidget {
 }
 
 class _MainWrapperState extends State<MainWrapper> {
-  static const Color accentColor = Color(0xFF008080);
+  PageController pageController = PageController(initialPage: 1);
 
-  int currentIndex = 1;
-  final screens = [
+  final pages = [
     const ProfilePage(),
     const HomePage(),
     const StatisticsPage(),
-    const ShoppingPage()
+    const ShoppingPage(),
+    const DataInput()
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: currentIndex,
-        children: screens,
+      body: PageView(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: pageController,
+        children: pages,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: currentIndex,
-        onTap: (index) => setState(() => currentIndex = index),
-        selectedItemColor: accentColor,
-        unselectedItemColor: Colors.grey[500],
-        backgroundColor: Colors.white,
+      bottomNavigationBar: ConvexAppBar(
+        initialActiveIndex: 1,
+        elevation: 0,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        style: TabStyle.react,
         items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle), label: "Profile"),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart), label: "Statistics"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart), label: "Shopping")
+          TabItem(icon: Icons.account_circle, title: 'Profile'),
+          TabItem(icon: Icons.home, title: 'Home'),
+          TabItem(icon: Icons.bar_chart, title: 'Statistics'),
+          TabItem(icon: Icons.shopping_cart, title: 'Shopping'),
         ],
+        onTap: (index) => pageController.jumpToPage(index),
       ),
     );
   }
