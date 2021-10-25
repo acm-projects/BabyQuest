@@ -61,7 +61,7 @@ class BabyProfile {
   String get pediatrician => _pediatrician ?? '';
   String get pediatricianPhone => _pediatricianPhone ?? '';
 
-  String get profilePic => _profilePic ?? '';
+  String get profilePic => _profilePic ?? 'images/Osbaldo.jpg';
 
   BabyProfile(this.uid);
 
