@@ -6,16 +6,17 @@ class BabyProfile {
   // private properties
   String? _firstName;
   String? _lastName;
-  DateTime? _birthDate;
   int? _gender;
   double? _height;
   double? _weight;
+  DateTime? _birthDate;
+  Map<String, String>? _allergies;
 
   String? _pediatrician;
   String? _pediatricianPhone;
+
   String? _profilePic;
-    
-  Map<String, int>? _allergies;
+
   Map<String, int>? _diaperChanges;
   List<Map<DateTime, DateTime>>? _sleep;
   Map<String, int>? _feedings;
@@ -38,13 +39,29 @@ class BabyProfile {
   String get firstName => _firstName ?? '';
   String get lastName => _lastName ?? '';
   String get fullName => firstName + ' ' + lastName;
-
+  String get gender {
+    if (_gender == 0) {
+      return "Male";
+    } else if (_gender == 1) {
+      return "Female";
+    } else {
+      return "Other";
+    }
+  }
+  double get height => _height ?? 0;
+  double get weight => _weight ?? 0;
   DateTime? get birthDate => _birthDate;
   Duration? get age {
     if (birthDate != null) {
       return DateTime.now().difference(birthDate!);
     }
   }
+  Map<String, String> get allergies => _allergies;
+
+  String get pediatrician => _pediatrician ?? '';
+  String get pediatricianPhone => _pediatricianPhone ?? '';
+
+  String get profilePic => _profilePic ?? '';
 
   BabyProfile(this.uid);
 
