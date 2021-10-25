@@ -22,6 +22,8 @@ class _DataInputState extends State<DataInput> {
   final lastName = TextEditingController();
   final heightFt = TextEditingController();
   final heightIn = TextEditingController();
+  final weightLb = TextEditingController();
+  final weightOz = TextEditingController();
   final allergies = TextEditingController();
   final pedName = TextEditingController();
   final pedPhone = TextEditingController();
@@ -82,6 +84,7 @@ class _DataInputState extends State<DataInput> {
                           decoration: InputDecoration(labelText: 'Last Name'),
                           controller: lastName,
                         ),
+                        const SizedBox(height: 10),
                         Text('Select Gender of child:'),
                         DropdownButton(
                           value: dropdownValue,
@@ -99,6 +102,7 @@ class _DataInputState extends State<DataInput> {
                             });
                           },
                         ),
+                        const SizedBox(height: 10),
                         Text('Height'),
                         TextFormField(
                           decoration: InputDecoration(labelText: 'Feet'),
@@ -108,6 +112,17 @@ class _DataInputState extends State<DataInput> {
                           decoration: InputDecoration(labelText: 'Inches'),
                           controller: heightIn,
                         ),
+                        const SizedBox(height: 10),
+                        Text('Weight'),
+                        TextFormField(
+                          decoration: InputDecoration(labelText: 'Pounds'),
+                          controller: weightLb,
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(labelText: 'Ounces'),
+                          controller: weightOz,
+                        ),
+                        const SizedBox(height: 10),
                         Text('Date of Birth:'),
                         ElevatedButton(
                           onPressed: () => _selectDate(context), // Refer step 3
