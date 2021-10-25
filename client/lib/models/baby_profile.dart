@@ -11,7 +11,7 @@ class BabyProfile {
   double? _height;
   double? _weight;
   DateTime? _birthDate;
-  Map<String, String>? _allergies;
+  Map<String, int>? _allergies;
 
   String? _pediatrician;
   String? _pediatricianPhone;
@@ -59,7 +59,7 @@ class BabyProfile {
       return DateTime.now().difference(birthDate!);
     }
   }
-  Map<String, String> get allergies => _allergies ?? {};
+  Map<String, int> get allergies => _allergies ?? {};
 
   String get pediatrician => _pediatrician ?? '';
   String get pediatricianPhone => _pediatricianPhone ?? '';
@@ -80,6 +80,19 @@ class BabyProfile {
   Future _setData(Map<String, dynamic> profileData) async {
     _firstName = profileData['first_name'] as String;
     _lastName = profileData['last_name'] as String;
+    _gender = profileData['gender'] as int;
+    _height = profileData['height'] as double;
+    _weight = profileData['weight'] as double;
     _birthDate = DateTime.parse(profileData['birth_date'] as String);
+    // _allergies = profileData['allergies'];
+
+    _pediatrician = profileData['pediatrician'];
+    _pediatricianPhone = profileData['pediatrician_phone'];
+
+    // _profilePic = profileData['profile_pic'] as String;
+
+    // _diaperChanges = profileData['diaper_changes'];
+    // _sleep = profileData['sleep'];
+    // _feedings = profileData['feedings'];
   }
 }

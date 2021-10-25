@@ -70,7 +70,7 @@ class AppUser {
     required double height,
     required double weight,
     required String pediatrician,
-    required String pediatricianNumber,
+    required String pediatricianPhone,
     required Map<String, int> allergies,
   }) async {
     String profileId = await DataService.createProfile(
@@ -81,7 +81,7 @@ class AppUser {
       height: height,
       weight: weight,
       pediatrician: pediatrician,
-      pediatricianNumber: pediatricianNumber,
+      pediatricianPhone: pediatricianPhone,
       allergies: allergies,
     );
 
