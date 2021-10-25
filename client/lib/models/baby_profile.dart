@@ -1,6 +1,7 @@
 import 'package:client/services/data_service.dart';
 
 class BabyProfile {
+  static BabyProfile defaultProfile = BabyProfile('');
   static BabyProfile? _currentProfile;
 
   // private properties
@@ -11,7 +12,7 @@ class BabyProfile {
   double? _height;
   double? _weight;
   DateTime? _birthDate;
-  Map<String, String>? _allergies;
+  Map<String, int>? _allergies;
 
   String? _pediatrician;
   String? _pediatricianPhone;
@@ -26,17 +27,19 @@ class BabyProfile {
   final String uid;
 
   // static accessors
-  static BabyProfile? get currentProfile => _currentProfile;
+  static BabyProfile get currentProfile => _currentProfile ?? defaultProfile;
 
   static set currentProfile(BabyProfile? profile) {
     if (profile == currentProfile) return;
-    if (currentProfile != null) currentProfile!._removeDataSync();
+    if (currentProfile.exists) currentProfile._removeDataSync();
     if (profile != null) profile._setDataSync();
 
     _currentProfile = profile;
   }
 
   // public accessors
+  bool get exists => uid.isNotEmpty;
+
   String get firstName => _firstName ?? '';
   String get lastName => _lastName ?? '';
   String get fullName => firstName + ' ' + lastName;
@@ -57,7 +60,8 @@ class BabyProfile {
       return DateTime.now().difference(birthDate!);
     }
   }
-  //Map<String, String> get allergies => _allergies;
+
+  Map<String, int> get allergies => _allergies ?? {};
 
   String get pediatrician => _pediatrician ?? '';
   String get pediatricianPhone => _pediatricianPhone ?? '';
@@ -78,6 +82,19 @@ class BabyProfile {
   Future _setData(Map<String, dynamic> profileData) async {
     _firstName = profileData['first_name'] as String;
     _lastName = profileData['last_name'] as String;
+    _gender = profileData['gender'] as int;
+    _height = profileData['height'] as double;
+    _weight = profileData['weight'] as double;
     _birthDate = DateTime.parse(profileData['birth_date'] as String);
+    // _allergies = profileData['allergies'];
+
+    _pediatrician = profileData['pediatrician'];
+    _pediatricianPhone = profileData['pediatrician_phone'];
+
+    // _profilePic = profileData['profile_pic'] as String;
+
+    // _diaperChanges = profileData['diaper_changes'];
+    // _sleep = profileData['sleep'];
+    // _feedings = profileData['feedings'];
   }
 }

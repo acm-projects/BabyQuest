@@ -59,10 +59,12 @@ class DataService {
     required double height,
     required double weight,
     required String pediatrician,
-    required String pediatricianNumber,
+    required String pediatricianPhone,
     required Map<String, int> allergies,
   }) async {
-    _profileCollection.add({
+    String documentId = '';
+
+    await _profileCollection.add({
       'first_name': firstName,
       'last_name': lastName,
       'birth_date': birthDate.toString(),
@@ -70,11 +72,13 @@ class DataService {
       'height': height,
       'weight': weight,
       'pediatrician': pediatrician,
-      'pediatricianNumber': pediatricianNumber,
+      'pediatrician_phone': pediatricianPhone,
       'allergies': allergies,
     }).then((document) {
-      return document.id;
+      documentId = document.id;
     });
+
+    return documentId;
   }
 
   // retrieves profile data from the database, or creates it if not yet created
