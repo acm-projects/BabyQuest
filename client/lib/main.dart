@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:client/pages/splash_page.dart';
+import 'package:client/pages/wrapper.dart';
 
 Future main() async {
   // setup flutter and firebase
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        home: const SplashPage(),
+        home: SplashPage(() => const Wrapper()),
       ),
     );
   }
