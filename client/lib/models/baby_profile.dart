@@ -4,6 +4,7 @@ class BabyProfile {
   static BabyProfile? _currentProfile;
 
   // private properties
+  bool? _created;
   String? _firstName;
   String? _lastName;
   int? _gender;
@@ -56,7 +57,7 @@ class BabyProfile {
       return DateTime.now().difference(birthDate!);
     }
   }
-  Map<String, String> get allergies => _allergies;
+  //Map<String, String> get allergies => _allergies;
 
   String get pediatrician => _pediatrician ?? '';
   String get pediatricianPhone => _pediatricianPhone ?? '';

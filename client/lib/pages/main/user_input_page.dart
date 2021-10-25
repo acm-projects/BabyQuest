@@ -17,12 +17,18 @@ class _DataInputState extends State<DataInput> {
   var items = ['Choose','Male','Female'];
   String newValue = 'Choose';
 
+  //text editing controllers
+  final firstName = TextEditingController();
+  final lastName = TextEditingController();
+  final heightFt = TextEditingController();
+  final heightIn = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('User Data Input'),
+        title: Text('Profile Data Input'),
         centerTitle: true,
       ),
       body: Container(
@@ -36,6 +42,29 @@ class _DataInputState extends State<DataInput> {
                 onStepTapped: (step) => tapped(step),
                 onStepContinue: continued,
                 onStepCancel: cancel,
+                controlsBuilder: (context, {onStepContinue, onStepCancel}) {
+                  return Container(
+                    margin: EdgeInsets.only(top: 30),
+                    child: Row(
+                      children: [
+                        if (_currentStep != 0)
+                          Expanded(
+                            child: ElevatedButton(
+                              child: Text('Back'),
+                              onPressed: onStepCancel,
+                            ),
+                          ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton(
+                            child: Text(_currentStep == 2 ? 'Submit' : 'Continue'),
+                            onPressed: onStepContinue,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
                 steps: <Step>[
                   Step(
                     title: new Text('General Information'),
@@ -43,9 +72,11 @@ class _DataInputState extends State<DataInput> {
                       children: <Widget>[
                         TextFormField(
                           decoration: InputDecoration(labelText: 'First Name'),
+                          controller: firstName,
                         ),
                         TextFormField(
                           decoration: InputDecoration(labelText: 'Last Name'),
+                          controller: lastName,
                         ),
                         Text('Select Gender of child:'),
                         DropdownButton(
@@ -67,14 +98,16 @@ class _DataInputState extends State<DataInput> {
                         Text('Height'),
                         TextFormField(
                           decoration: InputDecoration(labelText: 'Feet'),
+                          controller: heightFt,
                         ),
                         TextFormField(
                           decoration: InputDecoration(labelText: 'Inches'),
+                          controller: heightIn,
                         ),
                         Text('Date of Birth:'),
                         ElevatedButton(
                           onPressed: () => _selectDate(context), // Refer step 3
-                          child: Text(
+                          child: const Text(
                             'Select Date of Birth',
                             style: TextStyle(
                                 color: Colors.black,
@@ -92,15 +125,14 @@ class _DataInputState extends State<DataInput> {
                         : StepState.disabled,
                   ),
                   Step(
-                    title: new Text('Medical Information'),
+                    title: Text('Medical Information'),
                     content: Column(
                       children: <Widget>[
                         TextFormField(
                           decoration: InputDecoration(labelText: 'Allergies'),
                         ),
                         TextFormField(
-                          decoration:
-                          InputDecoration(labelText: 'Name of Doctor'),
+                          decoration: InputDecoration(labelText: 'Name of Doctor'),
                         ),
                         TextFormField(
                           decoration: InputDecoration(
@@ -114,7 +146,7 @@ class _DataInputState extends State<DataInput> {
                         : StepState.disabled,
                   ),
                   Step(
-                    title: new Text('Profile Picture'),
+                    title: Text('Profile Picture'),
                     content: Column(
                       children: <Widget>[
                         TextFormField(
@@ -128,6 +160,10 @@ class _DataInputState extends State<DataInput> {
                         ? StepState.complete
                         : StepState.disabled,
                   ),
+                  /*Step(
+                    title: Text('Confirm Submission'),
+                    content
+                  ),*/
                 ],
               ),
             ),
@@ -143,7 +179,12 @@ class _DataInputState extends State<DataInput> {
   }
 
   continued() {
-    _currentStep < 2 ? setState(() => _currentStep += 1) : null;
+    if (false/*_currentStep == 2*/) {
+
+
+    } else {
+      _currentStep < 2 ? setState(() => _currentStep += 1) : null;
+    }
   }
 
   cancel() {

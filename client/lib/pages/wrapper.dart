@@ -5,6 +5,8 @@ import 'package:client/pages/authenticate/authenticate.dart';
 import 'package:client/pages/main/main_wrapper.dart';
 import 'package:client/services/auth_service.dart';
 
+import 'package:client/pages/main/user_input_page.dart';
+
 class Wrapper extends StatelessWidget {
   const Wrapper({Key? key}) : super(key: key);
 
@@ -12,7 +14,7 @@ class Wrapper extends StatelessWidget {
     if (snapshot.connectionState == ConnectionState.waiting) {
       return const Center(child: CircularProgressIndicator());
     } else if (snapshot.hasData) {
-      return const MainWrapper(); // main page
+      return const DataInput(); // main page
     } else if (snapshot.hasError) {
       return const Center(child: Text('Something went wrong!'));
     } else {
@@ -23,7 +25,7 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.amber.shade100,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: StreamBuilder(
         stream: AuthService.appUserStream,
         builder: _builder,
