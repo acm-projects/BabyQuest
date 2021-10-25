@@ -6,7 +6,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:client/pages/wrapper.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({Key? key}) : super(key: key);
+  final Function getNextPage;
+
+  const SplashPage(this.getNextPage, {Key? key}) : super(key: key);
 
   @override
   _SplashPageState createState() => _SplashPageState();
@@ -22,7 +24,7 @@ class _SplashPageState extends State<SplashPage> {
   _navigateToHome() async {
     await Future.delayed(const Duration(milliseconds: 3500), () {});
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const Wrapper()));
+        context, MaterialPageRoute(builder: (context) => widget.getNextPage()));
   }
 
   @override

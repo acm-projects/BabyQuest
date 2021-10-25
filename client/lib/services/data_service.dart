@@ -42,7 +42,7 @@ class DataService {
   // removes data sync for user data with database
   static removeUserDataSync(String uid) {
     if (_userListener != null) {
-      _userListener.cancal();
+      _userListener.cancel();
     }
 
     if (_userListener == null) return;

@@ -1,6 +1,7 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
+import 'package:client/models/app_user.dart';
 import 'package:client/pages/main/home_page.dart';
 import 'package:client/pages/main/profile_page.dart';
 import 'package:client/pages/main/shopping_page.dart';
@@ -15,18 +16,34 @@ class MainWrapper extends StatefulWidget {
 }
 
 class _MainWrapperState extends State<MainWrapper> {
+  bool creatingProfile = false;
   PageController pageController = PageController(initialPage: 1);
+  
+  _MainWrapperState() {
+    if (AppUser.currentUser.exists && AppUser.currentUser.ownedProfiles.isEmpty) {
+      creatingProfile = true;
+    } else if (!AppUser.currentUser.exists) {
+      print('ahhhhhhhh... u SUCK');
+    }
+  }
 
   final pages = [
     const ProfilePage(),
     const HomePage(),
     const StatisticsPage(),
     const ShoppingPage(),
-    const DataInput()
   ];
 
   @override
   Widget build(BuildContext context) {
+    if (creatingProfile) {
+      return DataInput(_completeDataInput);
+    } else {
+      return _mainPage();
+    }
+  }
+
+  Widget _mainPage() {
     return Scaffold(
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
@@ -47,5 +64,9 @@ class _MainWrapperState extends State<MainWrapper> {
         onTap: (index) => pageController.jumpToPage(index),
       ),
     );
+  }
+
+  void _completeDataInput() {
+    setState(() => creatingProfile = false);
   }
 }

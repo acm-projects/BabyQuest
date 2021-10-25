@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
+import 'package:client/models/app_user.dart';
 
 class DataInput extends StatefulWidget {
-  const DataInput({Key? key}) : super(key: key);
+  final Function completed;
+
+  const DataInput(this.completed, {Key? key}) : super(key: key);
 
   @override
   _DataInputState createState() => _DataInputState();
@@ -12,9 +15,9 @@ class DataInput extends StatefulWidget {
 class _DataInputState extends State<DataInput> {
   int _currentStep = 0;
   StepperType stepperType = StepperType.vertical;
-  DateTime selectedDate = DateTime.now();
+  DateTime birthDate = DateTime.now();
   String dropdownValue = 'Choose';
-  var items = ['Choose','Male','Female'];
+  var items = ['Choose', 'Male', 'Female'];
   String newValue = 'Choose';
 
   //text editing controllers
@@ -63,7 +66,8 @@ class _DataInputState extends State<DataInput> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: ElevatedButton(
-                            child: Text(_currentStep == 2 ? 'Submit' : 'Continue'),
+                            child:
+                                Text(_currentStep == 2 ? 'Submit' : 'Continue'),
                             onPressed: onStepContinue,
                           ),
                         ),
@@ -89,14 +93,11 @@ class _DataInputState extends State<DataInput> {
                         DropdownButton(
                           value: dropdownValue,
                           icon: Icon(Icons.keyboard_arrow_down),
-                          items:items.map((String items) {
+                          items: items.map((String items) {
                             return DropdownMenuItem(
-                                value: items,
-                                child: Text(items)
-                            );
-                          }
-                          ).toList(),
-                          onChanged: (newValue){
+                                value: items, child: Text(items));
+                          }).toList(),
+                          onChanged: (newValue) {
                             setState(() {
                               dropdownValue = newValue.toString();
                             });
@@ -152,11 +153,13 @@ class _DataInputState extends State<DataInput> {
                           controller: allergies,
                         ),
                         TextFormField(
-                          decoration: InputDecoration(labelText: 'Name of Doctor'),
+                          decoration:
+                              InputDecoration(labelText: 'Name of Doctor'),
                           controller: pedName,
                         ),
                         TextFormField(
-                          decoration: InputDecoration(labelText: 'Doctor Contact Information'),
+                          decoration: InputDecoration(
+                              labelText: 'Doctor Contact Information'),
                           controller: pedPhone,
                         ),
                       ],
@@ -194,15 +197,29 @@ class _DataInputState extends State<DataInput> {
     );
   }
 
-
   tapped(int step) {
     setState(() => _currentStep = step);
   }
 
   continued() {
-    if (false/*_currentStep == 2*/) {
+    if (_currentStep == 2) {
+      if (AppUser.currentUser.exists) {
+        double height = ((heightFt.value as double) * 12) + (heightIn.value as double);
 
 
+        AppUser.currentUser.createNewProfile(
+            firstName: firstName.text,
+            lastName: lastName.text,
+            birthDate: birthDate,
+            gender: items.indexOf(dropdownValue) - 1,
+            height: height,
+            weight: 0.0, // TODO
+            pediatrician: pedName.text,
+            pediatricianPhone: pedPhone.text,
+            allergies: {});
+      }
+
+      widget.completed();
     } else {
       _currentStep < 2 ? setState(() => _currentStep += 1) : null;
     }
@@ -215,13 +232,13 @@ class _DataInputState extends State<DataInput> {
   _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate, // Refer step 1
+      initialDate: birthDate, // Refer step 1
       firstDate: DateTime(2000),
       lastDate: DateTime(2025),
     );
-    if (picked != null && picked != selectedDate) {
+    if (picked != null && picked != birthDate) {
       setState(() {
-        selectedDate = picked;
+        birthDate = picked;
       });
     }
   }
