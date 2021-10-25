@@ -103,7 +103,6 @@ class _DataInputState extends State<DataInput> {
                             });
                           },
                         ),
-                        const SizedBox(height: 10),
                         Text('Height'),
                         TextFormField(
                           decoration: InputDecoration(labelText: 'Feet'),
@@ -205,7 +204,7 @@ class _DataInputState extends State<DataInput> {
     if (_currentStep == 2) {
       if (AppUser.currentUser.exists) {
         double height = ((heightFt.value as double) * 12) + (heightIn.value as double);
-
+        double weight = ((weightLb.value as double) * 16) + (weightOz.value as double);
 
         AppUser.currentUser.createNewProfile(
             firstName: firstName.text,
@@ -213,7 +212,7 @@ class _DataInputState extends State<DataInput> {
             birthDate: birthDate,
             gender: items.indexOf(dropdownValue) - 1,
             height: height,
-            weight: 0.0, // TODO
+            weight: weight,
             pediatrician: pedName.text,
             pediatricianPhone: pedPhone.text,
             allergies: {});
