@@ -1,6 +1,7 @@
 import 'package:client/services/data_service.dart';
 
 class BabyProfile {
+  static BabyProfile defaultProfile = BabyProfile('');
   static BabyProfile? _currentProfile;
 
   // private properties
@@ -25,17 +26,19 @@ class BabyProfile {
   final String uid;
 
   // static accessors
-  static BabyProfile? get currentProfile => _currentProfile;
+  static BabyProfile get currentProfile => _currentProfile ?? defaultProfile;
 
   static set currentProfile(BabyProfile? profile) {
     if (profile == currentProfile) return;
-    if (currentProfile != null) currentProfile!._removeDataSync();
+    if (currentProfile.exists) currentProfile._removeDataSync();
     if (profile != null) profile._setDataSync();
 
     _currentProfile = profile;
   }
 
   // public accessors
+  bool get exists => uid.isNotEmpty;
+
   String get firstName => _firstName ?? '';
   String get lastName => _lastName ?? '';
   String get fullName => firstName + ' ' + lastName;
@@ -56,7 +59,7 @@ class BabyProfile {
       return DateTime.now().difference(birthDate!);
     }
   }
-  Map<String, String> get allergies => _allergies;
+  Map<String, String> get allergies => _allergies ?? {};
 
   String get pediatrician => _pediatrician ?? '';
   String get pediatricianPhone => _pediatricianPhone ?? '';

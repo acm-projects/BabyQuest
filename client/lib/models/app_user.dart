@@ -2,6 +2,7 @@ import 'package:client/models/baby_profile.dart';
 import 'package:client/services/data_service.dart';
 
 class AppUser {
+  static AppUser defaultUser = AppUser('');
   static AppUser? _currentUser;
 
   // private properties
@@ -13,24 +14,21 @@ class AppUser {
   final String uid;
 
   // static accessors
-  static AppUser? get currentUser => _currentUser;
+  static AppUser get currentUser => _currentUser ?? defaultUser;
 
   static set currentUser(AppUser? user) {
     if (user == currentUser) return;
-    if (currentUser != null) currentUser!._removeDataSync();
+    if (currentUser.exists) currentUser._removeDataSync();
     if (user != null) user._setDataSync();
 
     _currentUser = user;
   }
 
   // public accessors
-  List<String> get ownedProfiles {
-    return _profiles ?? [];
-  }
-
-  List<String> get sharedProfiles {
-    return _sharedProfiles ?? [];
-  }
+  bool get exists => uid.isNotEmpty;
+  List<String> get ownedProfiles => _profiles ?? [];
+  List<String> get sharedProfiles => _sharedProfiles ?? [];
+  List<String> get toDoList => _toDoList ?? [];
 
   AppUser(this.uid);
 
@@ -52,13 +50,10 @@ class AppUser {
     _toDoList =
         (userData['to_do_list'] as List).map((item) => item as String).toList();
 
-    // TEMPORARY: assumes every user has only 1 profile
-    if (ownedProfiles.length == 1) {
+    if (ownedProfiles.isNotEmpty) {
       setCurrentProfile(ownedProfiles[0]);
     }
   }
-
-  // public methods
 
   // Switches the currently displayed BabyProfile based on the provided uid
   void setCurrentProfile(String uid) {
@@ -90,8 +85,10 @@ class AppUser {
       allergies: allergies,
     );
 
-    _profiles?.add(profileId);
-    await DataService.updateUserData(uid, {'profiles': _profiles});
+    List<String> newProfiles = ownedProfiles;
+    newProfiles.add(profileId);
+    await DataService.updateUserData(uid, {'profiles': newProfiles});
+
     setCurrentProfile(profileId);
   }
 }

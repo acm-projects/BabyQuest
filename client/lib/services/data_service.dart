@@ -62,7 +62,9 @@ class DataService {
     required String pediatricianNumber,
     required Map<String, int> allergies,
   }) async {
-    _profileCollection.add({
+    String documentId = '';
+
+    await _profileCollection.add({
       'first_name': firstName,
       'last_name': lastName,
       'birth_date': birthDate.toString(),
@@ -73,8 +75,10 @@ class DataService {
       'pediatricianNumber': pediatricianNumber,
       'allergies': allergies,
     }).then((document) {
-      return document.id;
+      documentId = document.id;
     });
+
+    return documentId;
   }
 
   // retrieves profile data from the database, or creates it if not yet created
