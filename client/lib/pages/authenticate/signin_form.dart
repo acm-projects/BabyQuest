@@ -83,16 +83,9 @@ class _SignInFormState extends State<SignInForm> {
     String label = widget.register ? 'Create Account' : 'Login';
 
     return Container(
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      width: double.infinity,
-      height: 60,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-      ),
-      child: MaterialButton(
+      child: ElevatedButton(
         onPressed: () async {
-          if (_formKey.currentState != null &&
-              _formKey.currentState!.validate()) {
+          if (_formKey.currentState != null && _formKey.currentState!.validate()) {
             final provider = Provider.of<AuthService>(context, listen: false);
 
             if (widget.register) {
@@ -102,7 +95,12 @@ class _SignInFormState extends State<SignInForm> {
             }
           }
         },
-        color: Theme.of(context).colorScheme.secondary,
+        style: ElevatedButton.styleFrom(
+          primary: Theme.of(context).colorScheme.secondary,
+          onPrimary: Theme.of(context).colorScheme.onSecondary,
+          minimumSize: const Size(double.infinity, 60),
+          shape: const StadiumBorder(),
+        ),
         child: Text(
           label,
           style: TextStyle(
@@ -142,13 +140,11 @@ class _SignInFormState extends State<SignInForm> {
                 minimumSize: const Size(double.infinity, 60),
                 shape: const StadiumBorder(),
               ),
-              icon: FaIcon(FontAwesomeIcons.google,
-                  color: Theme.of(context).colorScheme.primary),
+              icon: FaIcon(FontAwesomeIcons.google, color: Theme.of(context).colorScheme.primary),
               label: Text(
                 'Login with Google',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onBackground,
-                  fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),
               ),

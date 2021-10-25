@@ -22,6 +22,10 @@ class _DataInputState extends State<DataInput> {
   final lastName = TextEditingController();
   final heightFt = TextEditingController();
   final heightIn = TextEditingController();
+  final allergies = TextEditingController();
+  final pedName = TextEditingController();
+  final pedPhone = TextEditingController();
+  final image = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -130,13 +134,15 @@ class _DataInputState extends State<DataInput> {
                       children: <Widget>[
                         TextFormField(
                           decoration: InputDecoration(labelText: 'Allergies'),
+                          controller: allergies,
                         ),
                         TextFormField(
                           decoration: InputDecoration(labelText: 'Name of Doctor'),
+                          controller: pedName,
                         ),
                         TextFormField(
-                          decoration: InputDecoration(
-                              labelText: 'Doctor Contact Information'),
+                          decoration: InputDecoration(labelText: 'Doctor Contact Information'),
+                          controller: pedPhone,
                         ),
                       ],
                     ),
@@ -150,8 +156,8 @@ class _DataInputState extends State<DataInput> {
                     content: Column(
                       children: <Widget>[
                         TextFormField(
-                          decoration:
-                          InputDecoration(labelText: 'Mobile Number'),
+                          decoration: InputDecoration(labelText: 'Image URL'),
+                          controller: image,
                         ),
                       ],
                     ),
@@ -198,9 +204,10 @@ class _DataInputState extends State<DataInput> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2025),
     );
-    if (picked != null && picked != selectedDate)
+    if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
       });
+    }
   }
 }
