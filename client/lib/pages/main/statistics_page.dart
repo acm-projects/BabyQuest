@@ -24,7 +24,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
             decoration: const BoxDecoration(
               image: DecorationImage(
                   colorFilter:
-                      ColorFilter.mode(Color(0x25FFFFFF), BlendMode.dstATop),
+                      ColorFilter.mode(Color(0x15FFFFFF), BlendMode.dstATop),
                   image: AssetImage('assets/images/undraw_play.png'),
                   fit: BoxFit.cover),
             ),
@@ -323,7 +323,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                       child: Text(
                         'Add Notes',
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary),
+                            color: Theme.of(context).colorScheme.secondary),
                       ),
                     ),
                   ),

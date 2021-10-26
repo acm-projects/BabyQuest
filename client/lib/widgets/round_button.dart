@@ -34,7 +34,7 @@ class RoundButton extends StatelessWidget {
             ? Theme.of(context).colorScheme.primary
             : backgroundColor == Theme.of(context).colorScheme.primary
                 ? Theme.of(context).colorScheme.secondary
-                : Colors.white,
+                : Theme.of(context).colorScheme.onPrimary,
         child: child ??
             Text(
               text!,

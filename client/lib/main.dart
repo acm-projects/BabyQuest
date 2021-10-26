@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: createMaterialColor(Colors.deepPurple.shade300),
           ).copyWith(
+            onPrimary: Colors.white,
             onBackground: Colors.grey.shade700,
             onSurface: Colors.grey.shade700,
             secondary: Colors.green.shade200,
