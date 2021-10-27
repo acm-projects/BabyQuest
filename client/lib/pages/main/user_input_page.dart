@@ -14,7 +14,7 @@ class _DataInputState extends State<DataInput> {
   StepperType stepperType = StepperType.vertical;
   DateTime selectedDate = DateTime.now();
   String dropdownValue = 'Choose';
-  var items = ['Choose','Male','Female'];
+  var genderValue = ['Choose','Male','Female','Other'];
   String newValue = 'Choose';
 
   @override
@@ -51,10 +51,10 @@ class _DataInputState extends State<DataInput> {
                         DropdownButton(
                           value: dropdownValue,
                           icon: Icon(Icons.keyboard_arrow_down),
-                          items:items.map((String items) {
+                          items: genderValue.map((String items) {
                             return DropdownMenuItem(
-                                value: items,
-                                child: Text(items)
+                                value: genderValue,
+                                child: Text(genderValue)
                             );
                           }
                           ).toList(),
@@ -95,6 +95,29 @@ class _DataInputState extends State<DataInput> {
                     title: new Text('Medical Information'),
                     content: Column(
                       children: <Widget>[
+                        Row(
+                          children: [
+                            TextFormField(
+                                decoration: InputDecoration(labelText: 'Allergies:'),
+                            ),
+                            DropdownButton(
+                              value: dropdownValue,
+                              icon: Icon(Icons.keyboard_arrow_down),
+                              items:items.map((String items) {
+                                return DropdownMenuItem(
+                                    value: items,
+                                    child: Text(items)
+                                );
+                              }
+                              ).toList(),
+                              onChanged: (newValue){
+                                setState(() {
+                                  dropdownValue = newValue.toString();
+                                });
+                              },
+                            ),
+                          ],
+                        ),
                         TextFormField(
                           decoration: InputDecoration(labelText: 'Allergies'),
                         ),
