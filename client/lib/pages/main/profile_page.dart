@@ -133,7 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           iconData:
                                               Icons.monitor_weight_outlined,
                                           topText: '20 pounds',
-                                          bottomText: 'Weight',
+                                          bottomText: currentBby.weight.toString(),
                                         ),
                                       ],
                                     ),

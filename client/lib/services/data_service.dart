@@ -57,10 +57,11 @@ class DataService {
     required DateTime birthDate,
     required int gender,
     required double height,
-    required double weight,
+    required double weightLb,
+    required double weightOz,
     required String pediatrician,
     required String pediatricianPhone,
-    required Map<String, int> allergies,
+    required List<String> allergies,
   }) async {
     String documentId = '';
 
@@ -70,7 +71,8 @@ class DataService {
       'birth_date': birthDate.toString(),
       'gender': gender,
       'height': height,
-      'weight': weight,
+      'weightLb': weightLb,
+      'weightOz': weightOz,
       'pediatrician': pediatrician,
       'pediatrician_phone': pediatricianPhone,
       'allergies': allergies,

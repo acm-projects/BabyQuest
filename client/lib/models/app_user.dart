@@ -70,10 +70,11 @@ class AppUser {
     required DateTime birthDate,
     required int gender,
     required double height,
-    required double weight,
+    required double weightLb,
+    required double weightOz,
     required String pediatrician,
     required String pediatricianPhone,
-    required Map<String, int> allergies,
+    required List<String> allergies,
   }) async {
     String profileId = await DataService.createProfile(
       firstName: firstName,
@@ -81,7 +82,8 @@ class AppUser {
       birthDate: birthDate,
       gender: gender,
       height: height,
-      weight: weight,
+      weightLb: weightLb,
+      weightOz: weightOz,
       pediatrician: pediatrician,
       pediatricianPhone: pediatricianPhone,
       allergies: allergies,

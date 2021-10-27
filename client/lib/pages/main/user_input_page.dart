@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:phone_number/phone_number.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:client/models/app_user.dart';
 import 'package:client/models/baby_profile.dart';
@@ -9,14 +10,18 @@ import 'package:flutter/widgets.dart';
 
 class DataInput extends StatefulWidget {
   final Function completed;
+  final bool editing;
 
-  const DataInput(this.completed, {Key? key}) : super(key: key);
+  const DataInput(this.completed, {this.editing = false, Key? key}) : super(key: key);
 
   @override
   _DataInputState createState() => _DataInputState();
 }
 
 class _DataInputState extends State<DataInput> {
+  static final _database = FirebaseFirestore.instance;
+  BabyProfile currentBby = BabyProfile.currentProfile;
+
   final List<GlobalKey<FormState>> _formKeys =
   [GlobalKey<FormState>(), GlobalKey<FormState>(), GlobalKey<FormState>()];
 
@@ -37,6 +42,24 @@ class _DataInputState extends State<DataInput> {
   final pedName = TextEditingController();
   final pedPhone = TextEditingController();
   final image = TextEditingController();
+
+  @override
+  void initState() {
+    if (widget.editing) {
+      firstName.text = currentBby.firstName;
+      lastName.text = currentBby.lastName;
+      heightIn.text = currentBby.height.toString();
+      weightLb.text = currentBby.weightLb.toString();
+      weightOz.text = currentBby.weightOz.toString();
+      allergies.text = currentBby.achooList;
+      pedName.text = currentBby.pediatrician;
+      pedPhone.text = currentBby.pediatricianPhone;
+      image.text = currentBby.profilePic;
+    }
+    // TODO: implement initState
+    super.initState();
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,35 +169,6 @@ class _DataInputState extends State<DataInput> {
                                 : null;
                           },
                         ),
-                        /*Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                decoration: const InputDecoration(labelText: 'Feet'),
-                                keyboardType: TextInputType.number,
-                                controller: heightFt,
-                                validator: (value) {
-                                  return (value == null || value.isEmpty)
-                                      ? 'Enter the height (ft)'
-                                      : null;
-                                },
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: TextFormField(
-                                decoration: const InputDecoration(labelText: 'Inches'),
-                                keyboardType: TextInputType.number,
-                                controller: heightIn,
-                                validator: (value) {
-                                  return (value == null || value.isEmpty)
-                                      ? 'Enter the height (in)'
-                                      : null;
-                                },
-                              ),
-                            ),
-                          ],
-                        ),*/
                         const SizedBox(height: 12),
                         const Text('Weight',),
                         Row(
@@ -222,8 +216,12 @@ class _DataInputState extends State<DataInput> {
                       children: <Widget>[
                         TextFormField(
                           decoration:
-                          const InputDecoration(labelText: 'Allergies'),
+                          const InputDecoration(labelText: 'Allergies - enter as allergy, severity, ... or None'),
                           controller: allergies,
+                          validator: (value) {
+                            return (value == null || value.isEmpty)
+                                ? 'Enter your child\'s allergies or type None' : null;
+                          },
                         ),
                         TextFormField(
                           decoration:
@@ -297,8 +295,9 @@ class _DataInputState extends State<DataInput> {
     if (_currentStep == 2 && _formKeys[_currentStep].currentState!.validate()) {
       if (AppUser.currentUser != null) {
         double height = double.parse(heightIn.text);
-        double weight =
-            (double.parse(weightLb.text) * 16) + double.parse(weightOz.text);
+        double lbs = double.parse(weightLb.text);
+        double oz = double.parse(weightOz.text);
+        List<String> achoo = allergies.text.split(',');
 
         AppUser.currentUser!.createNewProfile(
             firstName: firstName.text,
@@ -306,10 +305,15 @@ class _DataInputState extends State<DataInput> {
             birthDate: birthDate,
             gender: items.indexOf(dropdownValue) - 1,
             height: height,
-            weight: weight,
+            weightLb: lbs,
+            weightOz: oz,
             pediatrician: pedName.text,
             pediatricianPhone: pedPhone.text,
-            allergies: {});
+            allergies: achoo);
+      }
+
+      if (widget.editing) {
+        //pass in new profile info
       }
 
       widget.completed();
