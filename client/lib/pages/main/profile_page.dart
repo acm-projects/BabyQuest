@@ -4,6 +4,8 @@ import 'package:client/widgets/icon_information.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:client/models/baby_profile.dart';
+
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
@@ -274,7 +276,14 @@ class ProfilePage extends StatelessWidget {
                               LabeledIconButton(
                                 icon: const Icon(Icons.edit),
                                 label: 'Edit Info',
-                                onPressed: () {},
+                                onPressed: () {
+                                  /*go to data input page with existing profile info filled in
+                                  pass profile from here? pass a bool saying editing not creating new profile.
+                                  so if editing, pass profile into controller
+                                  use .fromValue on controllers
+                                  when submit is hit, if editing then return to profile page - nav push replacement?
+                                   */
+                                },
                               ),
                               const Spacer(),
                               LabeledIconButton(
