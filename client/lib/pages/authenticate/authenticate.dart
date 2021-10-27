@@ -42,24 +42,11 @@ class _AuthenticateState extends State<Authenticate> {
       children: [
         Align(
           alignment: Alignment.centerLeft,
-          child: Text(
-            title,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          child: Text(title, style: Theme.of(context).textTheme.headline1),
         ),
         Align(
           alignment: Alignment.centerLeft,
-          child: Text(
-            subtitle,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-            ),
-          ),
+          child: Text(subtitle, style: Theme.of(context).textTheme.headline2),
         )
       ],
     );
@@ -75,22 +62,18 @@ class _AuthenticateState extends State<Authenticate> {
       children: [
         Text(
           label,
-          style: const TextStyle(
-            color: Colors.black,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onBackground,
             fontSize: 16.0,
           ),
         ),
         TextButton(
           style: TextButton.styleFrom(
-            primary: Colors.deepPurple.shade400,
+            primary: Theme.of(context).colorScheme.primary,
           ),
           onPressed: () => setState(() => register = !register),
-          child: Text(
-              buttonLabel,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold
-              )
-          ),
+          child: Text(buttonLabel,
+              style: const TextStyle(fontWeight: FontWeight.bold)),
         ),
       ],
     );
