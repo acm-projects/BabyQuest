@@ -201,66 +201,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 const DottedDivider(),
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                        width: 16,
-                      ),
-                      Container(
-                        height: 150,
-                        width: 150,
-                        padding: const EdgeInsets.all(16),
-                        child: ValueListenableBuilder<int>(
-                          valueListenable: _selectedIndex,
-                          builder:
-                              (BuildContext context, value, Widget? child) {
-                            return FractionCircle(
-                              backgroundCircleColor: Colors.black12,
-                              fraction: (value % 10) / 10,
-                              strokeWidth: 13,
-                              child: Text(
-                                '${(value % 10) * 10}%',
-                                style: TextStyle(
-                                    fontSize: 40,
-                                    fontWeight: FontWeight.w900,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onBackground),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 32,
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: '8h 27m',
-                              style: TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.w800,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface),
-                            ),
-                            const TextSpan(
-                              text: '\n',
-                            ),
-                            TextSpan(
-                              text: 'of sleep',
-                              style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 15),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                  child: MainDayCircle(selectedIndex: _selectedIndex),
                 ),
                 const DottedDivider(),
                 Padding(
@@ -323,6 +264,75 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 }
 
+class MainDayCircle extends StatelessWidget {
+  const MainDayCircle({
+    Key? key,
+    required ValueNotifier<int> selectedIndex,
+  })  : _selectedIndex = selectedIndex,
+        super(key: key);
+
+  final ValueNotifier<int> _selectedIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        const SizedBox(
+          width: 16,
+        ),
+        Container(
+          height: 150,
+          width: 150,
+          padding: const EdgeInsets.all(16),
+          child: ValueListenableBuilder<int>(
+            valueListenable: _selectedIndex,
+            builder: (BuildContext context, value, Widget? child) {
+              return FractionCircle(
+                backgroundCircleColor: Colors.black12,
+                fraction: (value % 10) / 10,
+                strokeWidth: 13,
+                child: Text(
+                  '${(value % 10) * 10}%',
+                  style: TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.w900,
+                      color: Theme.of(context).colorScheme.onBackground),
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(
+          width: 32,
+        ),
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: '8h 27m',
+                style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w800,
+                    color: Theme.of(context).colorScheme.onSurface),
+              ),
+              const TextSpan(
+                text: '\n',
+              ),
+              TextSpan(
+                text: 'of sleep',
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15),
+              )
+            ],
+          ),
+        )
+      ],
+    );
+  }
+}
+
 class SleepInformation extends StatelessWidget {
   const SleepInformation({
     Key? key,
@@ -359,21 +369,17 @@ class SleepInformation extends StatelessWidget {
         const SizedBox(
           width: 8,
         ),
-        InkWell(
-          splashColor: Theme.of(context).colorScheme.primary,
-          onTap: () {},
-          child: RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                    text: startTime,
-                    style: Theme.of(context).textTheme.headline2),
-                const TextSpan(text: '\n'),
-                TextSpan(
-                    text: 'Slept at',
-                    style: Theme.of(context).textTheme.subtitle1)
-              ],
-            ),
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                  text: startTime,
+                  style: Theme.of(context).textTheme.headline2),
+              const TextSpan(text: '\n'),
+              TextSpan(
+                  text: 'Slept at',
+                  style: Theme.of(context).textTheme.subtitle1)
+            ],
           ),
         ),
         Expanded(
