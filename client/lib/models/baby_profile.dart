@@ -51,14 +51,15 @@ class BabyProfile {
       return "Other";
     }
   }
-  double get height => _height ?? 0;
-  double get weight => _weight ?? 0;
+  double get height => _height ?? 0; //TODO
+  double get weight => _weight ?? 0; //TODO
   DateTime? get birthDate => _birthDate;
-  Duration? get age {
+  String get age {
     if (birthDate != null) {
-      return DateTime.now().difference(birthDate!);
-    }
-  }
+      int days = DateTime.now().difference(birthDate!).inDays;
+      return (days / 30.44).round().toString();
+    } else {return '';}
+  } //will calcuate age in months and return as String
 
   Map<String, int> get allergies => _allergies ?? {};
 

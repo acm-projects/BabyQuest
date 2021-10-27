@@ -30,7 +30,6 @@ class _DataInputState extends State<DataInput> {
   //text editing controllers
   final firstName = TextEditingController();
   final lastName = TextEditingController();
-  final heightFt = TextEditingController();
   final heightIn = TextEditingController();
   final weightLb = TextEditingController();
   final weightOz = TextEditingController();
@@ -137,7 +136,17 @@ class _DataInputState extends State<DataInput> {
                           },
                         ),
                         const Text('Height'),
-                        Row(
+                        TextFormField(
+                          decoration: const InputDecoration(labelText: 'Inches'),
+                          keyboardType: TextInputType.number,
+                          controller: heightIn,
+                          validator: (value) {
+                            return (value == null || value.isEmpty)
+                                ? 'Enter the height (in)'
+                                : null;
+                          },
+                        ),
+                        /*Row(
                           children: [
                             Expanded(
                               child: TextFormField(
@@ -165,7 +174,7 @@ class _DataInputState extends State<DataInput> {
                               ),
                             ),
                           ],
-                        ),
+                        ),*/
                         const SizedBox(height: 12),
                         const Text('Weight',),
                         Row(
@@ -287,8 +296,7 @@ class _DataInputState extends State<DataInput> {
   continued() {
     if (_currentStep == 2 && _formKeys[_currentStep].currentState!.validate()) {
       if (AppUser.currentUser != null) {
-        double height =
-            (double.parse(heightFt.text) * 12) + double.parse(heightIn.text);
+        double height = double.parse(heightIn.text);
         double weight =
             (double.parse(weightLb.text) * 16) + double.parse(weightOz.text);
 

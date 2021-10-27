@@ -7,11 +7,16 @@ import 'package:provider/provider.dart';
 
 import 'package:client/models/baby_profile.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   static final _database = FirebaseFirestore.instance;
-  static final _profileCollection = _database.collection('profiles');
+  //static final _profileCollection = _database.collection('profiles');
   BabyProfile currentBby = BabyProfile.currentProfile;
 
   @override
@@ -52,8 +57,8 @@ class ProfilePage extends StatelessWidget {
                             alignment: Alignment.bottomLeft,
                             child: Container(
                               padding: const EdgeInsets.only(left: 16),
-                              child: const Text(
-                                'Osbaldo Waldo',
+                              child: Text(
+                                currentBby.fullName,
                                 style: TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 40,
@@ -115,13 +120,13 @@ class ProfilePage extends StatelessWidget {
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      children: const [
+                                      children: [
                                         IconInformation(
                                           iconData: Icons.male,
-                                          topText: 'Male',
+                                          topText: currentBby.gender,
                                           bottomText: 'Gender',
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 32,
                                         ),
                                         IconInformation(
@@ -136,13 +141,13 @@ class ProfilePage extends StatelessWidget {
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      children: const [
+                                      children: [
                                         IconInformation(
                                           iconData: Icons.calendar_today,
-                                          topText: '14 months old',
+                                          topText: currentBby.age,
                                           bottomText: 'Age',
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 32,
                                         ),
                                         IconInformation(
