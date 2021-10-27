@@ -5,7 +5,6 @@ class BabyProfile {
   static BabyProfile? _currentProfile;
 
   // private properties
-  bool? _created;
   String? _firstName;
   String? _lastName;
   int? _gender;

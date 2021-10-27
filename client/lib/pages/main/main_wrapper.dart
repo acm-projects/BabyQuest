@@ -20,10 +20,8 @@ class _MainWrapperState extends State<MainWrapper> {
   PageController pageController = PageController(initialPage: 1);
   
   _MainWrapperState() {
-    if (AppUser.currentUser.exists && AppUser.currentUser.ownedProfiles.isEmpty) {
+    if (AppUser.currentUser != null && AppUser.currentUser!.ownedProfiles.isEmpty) {
       creatingProfile = true;
-    } else if (!AppUser.currentUser.exists) {
-      print('ahhhhhhhh... u SUCK');
     }
   }
 

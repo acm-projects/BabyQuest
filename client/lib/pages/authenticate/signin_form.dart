@@ -82,31 +82,30 @@ class _SignInFormState extends State<SignInForm> {
   Widget _buildSignUpButton() {
     String label = widget.register ? 'Create Account' : 'Login';
 
-    return Container(
-      child: ElevatedButton(
-        onPressed: () async {
-          if (_formKey.currentState != null && _formKey.currentState!.validate()) {
-            final provider = Provider.of<AuthService>(context, listen: false);
+    return ElevatedButton(
+      onPressed: () async {
+        if (_formKey.currentState != null &&
+            _formKey.currentState!.validate()) {
+          final provider = Provider.of<AuthService>(context, listen: false);
 
-            if (widget.register) {
-              provider.registerWithEmailAndPassword(email, password);
-            } else {
-              provider.signInWithEmailAndPassword(email, password);
-            }
+          if (widget.register) {
+            provider.registerWithEmailAndPassword(email, password);
+          } else {
+            provider.signInWithEmailAndPassword(email, password);
           }
-        },
-        style: ElevatedButton.styleFrom(
-          primary: Theme.of(context).colorScheme.secondary,
-          onPrimary: Theme.of(context).colorScheme.onSecondary,
-          minimumSize: const Size(double.infinity, 60),
-          shape: const StadiumBorder(),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 20,
-            color: Theme.of(context).colorScheme.onBackground,
-          ),
+        }
+      },
+      style: ElevatedButton.styleFrom(
+        primary: Theme.of(context).colorScheme.secondary,
+        onPrimary: Theme.of(context).colorScheme.onSecondary,
+        minimumSize: const Size(double.infinity, 60),
+        shape: const StadiumBorder(),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 20,
+          color: Theme.of(context).colorScheme.onBackground,
         ),
       ),
     );
@@ -140,7 +139,8 @@ class _SignInFormState extends State<SignInForm> {
                 minimumSize: const Size(double.infinity, 60),
                 shape: const StadiumBorder(),
               ),
-              icon: FaIcon(FontAwesomeIcons.google, color: Theme.of(context).colorScheme.primary),
+              icon: FaIcon(FontAwesomeIcons.google,
+                  color: Theme.of(context).colorScheme.primary),
               label: Text(
                 'Login with Google',
                 style: TextStyle(

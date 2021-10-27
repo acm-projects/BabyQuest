@@ -25,8 +25,6 @@ class _DataInputState extends State<DataInput> {
   final lastName = TextEditingController();
   final heightFt = TextEditingController();
   final heightIn = TextEditingController();
-  final weightLb = TextEditingController();
-  final weightOz = TextEditingController();
   final allergies = TextEditingController();
   final pedName = TextEditingController();
   final pedPhone = TextEditingController();
@@ -37,161 +35,150 @@ class _DataInputState extends State<DataInput> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('Profile Data Input'),
+        title: const Text('Profile Data Input'),
         centerTitle: true,
       ),
-      body: Container(
-        child: Column(
-          children: [
-            Expanded(
-              child: Stepper(
-                type: stepperType,
-                physics: ScrollPhysics(),
-                currentStep: _currentStep,
-                onStepTapped: (step) => tapped(step),
-                onStepContinue: continued,
-                onStepCancel: cancel,
-                controlsBuilder: (context, {onStepContinue, onStepCancel}) {
-                  return Container(
-                    margin: EdgeInsets.only(top: 30),
-                    child: Row(
-                      children: [
-                        if (_currentStep != 0)
-                          Expanded(
-                            child: ElevatedButton(
-                              child: Text('Back'),
-                              onPressed: onStepCancel,
-                            ),
-                          ),
-                        const SizedBox(width: 12),
+      body: Column(
+        children: [
+          Expanded(
+            child: Stepper(
+              type: stepperType,
+              physics: const ScrollPhysics(),
+              currentStep: _currentStep,
+              onStepTapped: (step) => tapped(step),
+              onStepContinue: continued,
+              onStepCancel: cancel,
+              controlsBuilder: (context, {onStepContinue, onStepCancel}) {
+                return Container(
+                  margin: const EdgeInsets.only(top: 30),
+                  child: Row(
+                    children: [
+                      if (_currentStep != 0)
                         Expanded(
                           child: ElevatedButton(
-                            child:
-                                Text(_currentStep == 2 ? 'Submit' : 'Continue'),
-                            onPressed: onStepContinue,
+                            child: const Text('Back'),
+                            onPressed: onStepCancel,
                           ),
                         ),
-                      ],
-                    ),
-                  );
-                },
-                steps: <Step>[
-                  Step(
-                    title: new Text('General Information'),
-                    content: Column(
-                      children: <Widget>[
-                        TextFormField(
-                          decoration: InputDecoration(labelText: 'First Name'),
-                          controller: firstName,
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          child:
+                          Text(_currentStep == 2 ? 'Submit' : 'Continue'),
+                          onPressed: onStepContinue,
                         ),
-                        TextFormField(
-                          decoration: InputDecoration(labelText: 'Last Name'),
-                          controller: lastName,
-                        ),
-                        const SizedBox(height: 10),
-                        Text('Select Gender of child:'),
-                        DropdownButton(
-                          value: dropdownValue,
-                          icon: Icon(Icons.keyboard_arrow_down),
-                          items: items.map((String items) {
-                            return DropdownMenuItem(
-                                value: items, child: Text(items));
-                          }).toList(),
-                          onChanged: (newValue) {
-                            setState(() {
-                              dropdownValue = newValue.toString();
-                            });
-                          },
-                        ),
-                        Text('Height'),
-                        TextFormField(
-                          decoration: InputDecoration(labelText: 'Feet'),
-                          controller: heightFt,
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(labelText: 'Inches'),
-                          controller: heightIn,
-                        ),
-                        const SizedBox(height: 10),
-                        Text('Weight'),
-                        TextFormField(
-                          decoration: InputDecoration(labelText: 'Pounds'),
-                          controller: weightLb,
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(labelText: 'Ounces'),
-                          controller: weightOz,
-                        ),
-                        const SizedBox(height: 10),
-                        Text('Date of Birth:'),
-                        ElevatedButton(
-                          onPressed: () => _selectDate(context), // Refer step 3
-                          child: const Text(
-                            'Select Date of Birth',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.lightBlueAccent,
-                          ),
-                        ),
-                      ],
-                    ),
-                    isActive: _currentStep >= 0,
-                    state: _currentStep >= 0
-                        ? StepState.complete
-                        : StepState.disabled,
+                      ),
+                    ],
                   ),
-                  Step(
-                    title: Text('Medical Information'),
-                    content: Column(
-                      children: <Widget>[
-                        TextFormField(
-                          decoration: InputDecoration(labelText: 'Allergies'),
-                          controller: allergies,
+                );
+              },
+              steps: <Step>[
+                Step(
+                  title: const Text('General Information'),
+                  content: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        decoration:
+                        const InputDecoration(labelText: 'First Name'),
+                        controller: firstName,
+                      ),
+                      TextFormField(
+                        decoration:
+                        const InputDecoration(labelText: 'Last Name'),
+                        controller: lastName,
+                      ),
+                      const Text('Select Gender of child:'),
+                      DropdownButton(
+                        value: dropdownValue,
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        items: items.map((String items) {
+                          return DropdownMenuItem(
+                              value: items, child: Text(items));
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            dropdownValue = newValue.toString();
+                          });
+                        },
+                      ),
+                      const Text('Height'),
+                      TextFormField(
+                        decoration: const InputDecoration(labelText: 'Feet'),
+                        controller: heightFt,
+                      ),
+                      TextFormField(
+                        decoration: const InputDecoration(labelText: 'Inches'),
+                        controller: heightIn,
+                      ),
+                      const Text('Date of Birth:'),
+                      ElevatedButton(
+                        onPressed: () => _selectDate(context), // Refer step 3
+                        child: const Text(
+                          'Select Date of Birth',
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
                         ),
-                        TextFormField(
-                          decoration:
-                              InputDecoration(labelText: 'Name of Doctor'),
-                          controller: pedName,
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.lightBlueAccent,
                         ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                              labelText: 'Doctor Contact Information'),
-                          controller: pedPhone,
-                        ),
-                      ],
-                    ),
-                    isActive: _currentStep >= 0,
-                    state: _currentStep >= 1
-                        ? StepState.complete
-                        : StepState.disabled,
+                      ),
+                    ],
                   ),
-                  Step(
-                    title: Text('Profile Picture'),
-                    content: Column(
-                      children: <Widget>[
-                        TextFormField(
-                          decoration: InputDecoration(labelText: 'Image URL'),
-                          controller: image,
-                        ),
-                      ],
-                    ),
-                    isActive: _currentStep >= 0,
-                    state: _currentStep >= 2
-                        ? StepState.complete
-                        : StepState.disabled,
+                  isActive: _currentStep >= 0,
+                  state: _currentStep >= 0
+                      ? StepState.complete
+                      : StepState.disabled,
+                ),
+                Step(
+                  title: const Text('Medical Information'),
+                  content: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        decoration:
+                        const InputDecoration(labelText: 'Allergies'),
+                        controller: allergies,
+                      ),
+                      TextFormField(
+                        decoration:
+                        const InputDecoration(labelText: 'Name of Doctor'),
+                        controller: pedName,
+                      ),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                            labelText: 'Doctor Contact Information'),
+                        controller: pedPhone,
+                      ),
+                    ],
                   ),
-                  /*Step(
+                  isActive: _currentStep >= 0,
+                  state: _currentStep >= 1
+                      ? StepState.complete
+                      : StepState.disabled,
+                ),
+                Step(
+                  title: const Text('Profile Picture'),
+                  content: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        decoration:
+                        const InputDecoration(labelText: 'Image URL'),
+                        controller: image,
+                      ),
+                    ],
+                  ),
+                  isActive: _currentStep >= 0,
+                  state: _currentStep >= 2
+                      ? StepState.complete
+                      : StepState.disabled,
+                ),
+                /*Step(
                     title: Text('Confirm Submission'),
                     content
                   ),*/
-                ],
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -202,17 +189,17 @@ class _DataInputState extends State<DataInput> {
 
   continued() {
     if (_currentStep == 2) {
-      if (AppUser.currentUser.exists) {
-        double height = ((heightFt.value as double) * 12) + (heightIn.value as double);
-        double weight = ((weightLb.value as double) * 16) + (weightOz.value as double);
+      if (AppUser.currentUser != null) {
+        double height =
+            (double.parse(heightFt.text) * 12) + double.parse(heightIn.text);
 
-        AppUser.currentUser.createNewProfile(
+        AppUser.currentUser!.createNewProfile(
             firstName: firstName.text,
             lastName: lastName.text,
             birthDate: birthDate,
             gender: items.indexOf(dropdownValue) - 1,
             height: height,
-            weight: weight,
+            weight: 0.0, // TODO
             pediatrician: pedName.text,
             pediatricianPhone: pedPhone.text,
             allergies: {});
