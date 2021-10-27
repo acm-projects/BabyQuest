@@ -1,3 +1,4 @@
+import 'package:client/widgets/dotted_divider.dart';
 import 'package:client/widgets/round_button.dart';
 import 'package:flutter/material.dart';
 import 'package:client/services/data_service.dart';
@@ -13,8 +14,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String _qodMessage = '';
   String _qodAuthor = '';
-  String _qodImage =
-      'https://www.muralswallpaper.co.uk/app/uploads/baby-clouds-and-moon-nursery-room-825x535.jpg';
 
   bool _isSleeping = false;
   int _feedingCount = 0;
@@ -30,7 +29,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  SnackBar getSnackBar(String text, [VoidCallback? onPressed]) {
+  SnackBar _getSnackBar({required String text, VoidCallback? onPressed}) {
     return SnackBar(
       padding: (onPressed != null)
           ? const EdgeInsets.symmetric(horizontal: 16)
@@ -47,17 +46,17 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _showSleepStatus() {
+  //Builds the message. Only shows 2 units of time (Days, Minutes, Seconds)
+  String _getSleepMessage() {
     String sleepMessage = '';
     int unitCount = 0;
 
-    //Builds the message. Only shows 2 units of time (Days, Minutes, Seconds)
     if (_sleepDays > 0) {
       if (_sleepDays == 1) {
-        sleepMessage += '1 day';
+        sleepMessage += '1 Day';
         unitCount++;
       } else {
-        sleepMessage += '$_sleepDays days';
+        sleepMessage += '$_sleepDays Days';
         unitCount++;
       }
     }
@@ -66,10 +65,10 @@ class _HomePageState extends State<HomePage> {
         sleepMessage += ' and ';
       }
       if (_sleepHours == 1) {
-        sleepMessage += '1 hr';
+        sleepMessage += '1 Hr';
         unitCount++;
       } else {
-        sleepMessage += '$_sleepHours hrs';
+        sleepMessage += '$_sleepHours Hrs';
         unitCount++;
       }
     }
@@ -78,48 +77,48 @@ class _HomePageState extends State<HomePage> {
         sleepMessage += ' and ';
       }
       if (_sleepMins == 1) {
-        sleepMessage += '1 min';
+        sleepMessage += '1 Min';
         unitCount++;
       } else {
-        sleepMessage += '$_sleepMins mins';
+        sleepMessage += '$_sleepMins Mins';
         unitCount++;
       }
     }
+    sleepMessage += ' of Sleep';
+    return 'Recorded ' + sleepMessage;
+  }
 
+  void _showSleepStatus() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         behavior: SnackBarBehavior.floating,
         duration: const Duration(milliseconds: 1250),
-        content: Text(_isSleeping
-            ? 'Starting Sleep...'
-            : _sleepDays < 1
-                ? '${_sleepHours}hrs and ${_sleepMins}mins of Sleep Recorded'
-                : '$_sleepDays days and ${_sleepHours}hrs of Sleep Recorded'),
+        content: Text(_isSleeping ? 'Starting Sleep...' : _getSleepMessage()),
       ),
     );
   }
 
   void _recordFeeding() {
-    _feedingCount++;
+    setState(() => _feedingCount++);
     ScaffoldMessenger.of(context).showSnackBar(
-      getSnackBar(
-        _feedingCount > 1
+      _getSnackBar(
+        text: _feedingCount > 1
             ? '$_feedingCount Feedings Recorded'
             : '$_feedingCount Feeding Recorded',
-        () => _feedingCount--,
+        onPressed: () => setState(() => _feedingCount--),
       ),
     );
   }
 
   void _recordDiaper() {
-    _diaperCount++;
+    setState(() => _diaperCount++);
     ScaffoldMessenger.of(context).showSnackBar(
-      getSnackBar(
-        _diaperCount > 1
+      _getSnackBar(
+        text: _diaperCount > 1
             ? '$_diaperCount Diaper Changes Recorded'
             : '$_diaperCount Diaper Change Recorded',
-        () => _diaperCount--,
+        onPressed: () => setState(() => _diaperCount--),
       ),
     );
   }
@@ -150,10 +149,7 @@ class _HomePageState extends State<HomePage> {
                       .copyWith(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
-              Divider(
-                color: Theme.of(context).colorScheme.onBackground,
-                thickness: 1,
-              ),
+              const DottedDivider(),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
@@ -165,8 +161,8 @@ class _HomePageState extends State<HomePage> {
                       ClipboardData(text: '$_qodMessage - $_qodAuthor'),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(
-                      getSnackBar(
-                        'Quote Copied To Clipboard',
+                      _getSnackBar(
+                        text: 'Quote Copied To Clipboard',
                       ),
                     );
                   },
@@ -194,10 +190,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              Divider(
-                color: Theme.of(context).colorScheme.onBackground,
-                thickness: 1,
-              ),
+              const DottedDivider(),
               const Spacer(),
               Padding(
                 padding: const EdgeInsets.only(
@@ -232,14 +225,14 @@ class _HomePageState extends State<HomePage> {
                       height: 16,
                     ),
                     RoundButton(
-                      text: 'Record Feeding',
+                      text: 'Record Feeding  |  $_feedingCount',
                       onPressed: _recordFeeding,
                     ),
                     const SizedBox(
                       height: 16,
                     ),
                     RoundButton(
-                      text: 'Record Diaper Change',
+                      text: 'Record Diaper Change  |  $_diaperCount',
                       onPressed: _recordDiaper,
                     ),
                   ],
@@ -258,7 +251,6 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _qodMessage = qodData[1];
       _qodAuthor = qodData[2];
-      _qodImage = qodData[3];
     });
   }
 }

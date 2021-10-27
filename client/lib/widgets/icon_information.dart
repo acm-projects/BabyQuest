@@ -15,42 +15,60 @@ class IconInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        RichText(
-          text: TextSpan(
+    return iconData != null
+        ? Row(
             children: [
-              WidgetSpan(
-                  child: Icon(
-                    iconData,
-                    size: 45,
-                    color: Theme.of(context).colorScheme.primary,
+              RichText(
+                text: TextSpan(
+                  children: [
+                    WidgetSpan(
+                        child: Icon(
+                          iconData,
+                          size: 45,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        alignment: PlaceholderAlignment.middle),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              InkWell(
+                splashColor: Theme.of(context).colorScheme.primary,
+                onTap: () {},
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text: topText,
+                          style: Theme.of(context).textTheme.headline2),
+                      const TextSpan(text: '\n'),
+                      TextSpan(
+                          text: bottomText,
+                          style: Theme.of(context).textTheme.subtitle1)
+                    ],
                   ),
-                  alignment: PlaceholderAlignment.middle),
+                ),
+              ),
             ],
-          ),
-        ),
-        const SizedBox(
-          width: 8,
-        ),
-        InkWell(
-          splashColor: Theme.of(context).colorScheme.primary,
-          onTap: () {},
-          child: RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                    text: topText,
-                    style: Theme.of(context).textTheme.headline2),
-                const TextSpan(text: '\n'),
-                TextSpan(
-                    text: bottomText,
-                    style: Theme.of(context).textTheme.subtitle1)
-              ],
+          )
+        : InkWell(
+            splashColor: Theme.of(context).colorScheme.primary,
+            onTap: () {},
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                      text: topText,
+                      style: Theme.of(context).textTheme.headline2),
+                  const TextSpan(text: '\n'),
+                  TextSpan(
+                      text: bottomText,
+                      style: Theme.of(context).textTheme.subtitle1)
+                ],
+              ),
             ),
-          ),
-        ),
-      ],
-    );
+          );
   }
 }
