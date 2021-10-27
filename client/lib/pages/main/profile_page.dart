@@ -3,7 +3,6 @@ import 'package:client/widgets/icon_information.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tinycolor2/tinycolor2.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);

@@ -2,10 +2,10 @@ import 'package:client/models/baby_profile.dart';
 import 'package:client/services/data_service.dart';
 
 class AppUser {
-  static AppUser defaultUser = AppUser('');
   static AppUser? _currentUser;
 
   // private properties
+  bool _isLoaded = false;
   List<String>? _profiles;
   List<String>? _sharedProfiles;
   List<String>? _toDoList;
@@ -14,18 +14,18 @@ class AppUser {
   final String uid;
 
   // static accessors
-  static AppUser get currentUser => _currentUser ?? defaultUser;
+  static AppUser? get currentUser => _currentUser;
 
   static set currentUser(AppUser? user) {
-    if (user == currentUser) return;
-    if (currentUser.exists) currentUser._removeDataSync();
+    if (user?.uid == currentUser?.uid) return;
+    if (currentUser != null) currentUser!._removeDataSync();
     if (user != null) user._setDataSync();
 
     _currentUser = user;
   }
 
   // public accessors
-  bool get exists => uid.isNotEmpty;
+  bool get isLoaded => _isLoaded;
   List<String> get ownedProfiles => _profiles ?? [];
   List<String> get sharedProfiles => _sharedProfiles ?? [];
   List<String> get toDoList => _toDoList ?? [];
@@ -53,6 +53,8 @@ class AppUser {
     if (ownedProfiles.isNotEmpty) {
       setCurrentProfile(ownedProfiles[0]);
     }
+
+    _isLoaded = true;
   }
 
   // Switches the currently displayed BabyProfile based on the provided uid

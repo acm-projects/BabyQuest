@@ -23,8 +23,15 @@ Future main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool isLoaded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +56,16 @@ class MyApp extends StatelessWidget {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        home: SplashPage(() => const Wrapper()),
+        home: isLoaded
+            ? const Wrapper()
+            : SplashPage("Waking up from a nap...",
+                completed: _completeLoading),
       ),
     );
+  }
+
+  void _completeLoading() {
+    setState(() => isLoaded = true);
   }
 }
 
