@@ -42,6 +42,7 @@ dependencies:
   font_awesome_flutter: ^9.1.0
   google_sign_in: ^5.1.1
   http: ^0.13.4
+  image_picker: ^0.8.4+3
   provider: ^6.0.1
   shared_preferences: ^2.0.8
   tinycolor2:

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:client/models/app_user.dart';
 import 'package:client/pages/main/user_input_widgets.dart';
@@ -89,7 +90,7 @@ class _DataInputState extends State<DataInput> {
                   content: Form(
                     key: _formKeys[0],
                     child: Column(
-                      children: <Widget>[
+                      children: [
                         ...UserInputWidgets.name(firstName, lastName),
                         const SizedBox(height: 12),
                         ...UserInputWidgets.birthDate(
@@ -133,7 +134,7 @@ class _DataInputState extends State<DataInput> {
                   content: Form(
                     key: _formKeys[1],
                     child: Column(
-                      children: <Widget>[
+                      children: [
                         ..._buildAllergyFields(), // TODO
                         ...UserInputWidgets.pediatrician(pedName),
                         ...UserInputWidgets.pediatricianPhone(pedPhone),
@@ -150,16 +151,18 @@ class _DataInputState extends State<DataInput> {
                   content: Form(
                     key: _formKeys[2],
                     child: Column(
-                      children: <Widget>[
-                        TextFormField(
-                          decoration:
-                              const InputDecoration(labelText: 'Image URL'),
-                          controller: image,
-                          validator: (value) {
-                            return (value == null || value.isEmpty)
-                                ? 'Enter an image URL'
-                                : null;
-                          },
+                      children: [
+                        ElevatedButton(
+                          onPressed: () => _pickImage(),
+                          child: const Text(
+                            'Select profile picture',
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.lightBlueAccent,
+                          ),
                         ),
                       ],
                     ),
@@ -179,6 +182,12 @@ class _DataInputState extends State<DataInput> {
 
   tapped(int step) {
     setState(() => _currentStep = step);
+  }
+
+  Future _pickImage() async {
+    final picker = ImagePicker();
+
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
   }
 
   continued() {
