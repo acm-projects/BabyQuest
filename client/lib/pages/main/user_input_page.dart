@@ -38,7 +38,6 @@ class _DataInputState extends State<DataInput> {
   final heightIn = TextEditingController();
   final weightLb = TextEditingController();
   final weightOz = TextEditingController();
-  final allergies = TextEditingController();
   final pedName = TextEditingController();
   final pedPhone = TextEditingController();
   final image = TextEditingController();
@@ -232,11 +231,6 @@ class _DataInputState extends State<DataInput> {
                     child: Column(
                       children: <Widget>[
                         ..._buildAllergyFields(),
-                        // TextFormField(
-                        //   decoration:
-                        //       const InputDecoration(labelText: 'Allergies'),
-                        //   controller: allergies,
-                        // ),
                         TextFormField(
                           decoration: const InputDecoration(
                               labelText: 'Name of Doctor'),
