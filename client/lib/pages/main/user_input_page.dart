@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:client/models/app_user.dart';
-import 'package:client/models/baby_profile.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+
+import 'package:client/models/baby_profile.dart';
 
 class DataInput extends StatefulWidget {
   final Function completed;
@@ -19,11 +20,16 @@ class DataInput extends StatefulWidget {
 }
 
 class _DataInputState extends State<DataInput> {
-  static final _database = FirebaseFirestore.instance;
   BabyProfile currentBby = BabyProfile.currentProfile;
 
-  final List<GlobalKey<FormState>> _formKeys =
-  [GlobalKey<FormState>(), GlobalKey<FormState>(), GlobalKey<FormState>()];
+  static List<String> allergyNames = [''];
+  static List<int> allergySeverities = [-1];
+
+  final List<GlobalKey<FormState>> _formKeys = [
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>()
+  ];
 
   int _currentStep = 0;
   StepperType stepperType = StepperType.vertical;
@@ -51,7 +57,7 @@ class _DataInputState extends State<DataInput> {
       heightIn.text = currentBby.height.toString();
       weightLb.text = currentBby.weightLb.toString();
       weightOz.text = currentBby.weightOz.toString();
-      allergies.text = currentBby.achooList;
+      //allergies.text = currentBby.achooList;
       pedName.text = currentBby.pediatrician;
       pedPhone.text = currentBby.pediatricianPhone;
       image.text = currentBby.profilePic;
@@ -95,7 +101,7 @@ class _DataInputState extends State<DataInput> {
                       Expanded(
                         child: ElevatedButton(
                           child:
-                          Text(_currentStep == 2 ? 'Submit' : 'Continue'),
+                              Text(_currentStep == 2 ? 'Submit' : 'Continue'),
                           onPressed: onStepContinue,
                         ),
                       ),
@@ -112,7 +118,7 @@ class _DataInputState extends State<DataInput> {
                       children: <Widget>[
                         TextFormField(
                           decoration:
-                          const InputDecoration(labelText: 'First Name'),
+                              const InputDecoration(labelText: 'First Name'),
                           controller: firstName,
                           validator: (value) {
                             return (value == null || value.isEmpty)
@@ -122,7 +128,7 @@ class _DataInputState extends State<DataInput> {
                         ),
                         TextFormField(
                           decoration:
-                          const InputDecoration(labelText: 'Last Name'),
+                              const InputDecoration(labelText: 'Last Name'),
                           controller: lastName,
                           validator: (value) {
                             return (value == null || value.isEmpty)
@@ -137,7 +143,8 @@ class _DataInputState extends State<DataInput> {
                           child: const Text(
                             'Select Date of Birth',
                             style: TextStyle(
-                                color: Colors.black, fontWeight: FontWeight.bold),
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
                           ),
                           style: ElevatedButton.styleFrom(
                             primary: Colors.lightBlueAccent,
@@ -160,7 +167,8 @@ class _DataInputState extends State<DataInput> {
                         ),
                         const Text('Height'),
                         TextFormField(
-                          decoration: const InputDecoration(labelText: 'Inches'),
+                          decoration:
+                              const InputDecoration(labelText: 'Inches'),
                           keyboardType: TextInputType.number,
                           controller: heightIn,
                           validator: (value) {
@@ -170,12 +178,15 @@ class _DataInputState extends State<DataInput> {
                           },
                         ),
                         const SizedBox(height: 12),
-                        const Text('Weight',),
+                        const Text(
+                          'Weight',
+                        ),
                         Row(
                           children: [
                             Expanded(
                               child: TextFormField(
-                                decoration: const InputDecoration(labelText: 'Pounds'),
+                                decoration:
+                                    const InputDecoration(labelText: 'Pounds'),
                                 keyboardType: TextInputType.number,
                                 controller: weightLb,
                                 validator: (value) {
@@ -188,7 +199,8 @@ class _DataInputState extends State<DataInput> {
                             const SizedBox(width: 12),
                             Expanded(
                               child: TextFormField(
-                                decoration: const InputDecoration(labelText: 'Ounces'),
+                                decoration:
+                                    const InputDecoration(labelText: 'Ounces'),
                                 keyboardType: TextInputType.number,
                                 controller: weightOz,
                                 validator: (value) {
@@ -214,22 +226,20 @@ class _DataInputState extends State<DataInput> {
                     key: _formKeys[1],
                     child: Column(
                       children: <Widget>[
+                        ..._buildAllergyFields(),
+                        // TextFormField(
+                        //   decoration:
+                        //       const InputDecoration(labelText: 'Allergies'),
+                        //   controller: allergies,
+                        // ),
                         TextFormField(
-                          decoration:
-                          const InputDecoration(labelText: 'Allergies - enter as allergy, severity, ... or None'),
-                          controller: allergies,
-                          validator: (value) {
-                            return (value == null || value.isEmpty)
-                                ? 'Enter your child\'s allergies or type None' : null;
-                          },
-                        ),
-                        TextFormField(
-                          decoration:
-                          const InputDecoration(labelText: 'Name of Doctor'),
+                          decoration: const InputDecoration(
+                              labelText: 'Name of Doctor'),
                           controller: pedName,
                           validator: (value) {
                             return (value == null || value.isEmpty)
-                                ? 'Enter your pediatrician\'s name' : null;
+                                ? 'Enter your pediatrician\'s name'
+                                : null;
                           },
                         ),
                         TextFormField(
@@ -259,7 +269,7 @@ class _DataInputState extends State<DataInput> {
                       children: <Widget>[
                         TextFormField(
                           decoration:
-                          const InputDecoration(labelText: 'Image URL'),
+                              const InputDecoration(labelText: 'Image URL'),
                           controller: image,
                           validator: (value) {
                             return (value == null || value.isEmpty)
@@ -297,7 +307,9 @@ class _DataInputState extends State<DataInput> {
         double height = double.parse(heightIn.text);
         double lbs = double.parse(weightLb.text);
         double oz = double.parse(weightOz.text);
-        List<String> achoo = allergies.text.split(',');
+
+        Map<String, int> allergies =
+            Map.fromIterables(allergyNames, allergySeverities);
 
         AppUser.currentUser!.createNewProfile(
             firstName: firstName.text,
@@ -309,11 +321,12 @@ class _DataInputState extends State<DataInput> {
             weightOz: oz,
             pediatrician: pedName.text,
             pediatricianPhone: pedPhone.text,
-            allergies: achoo);
+            allergies: allergies);
       }
 
       if (widget.editing) {
         //pass in new profile info
+
       }
 
       widget.completed();
@@ -343,5 +356,77 @@ class _DataInputState extends State<DataInput> {
         birthDate = picked;
       });
     }
+  }
+
+  List<Widget> _buildAllergyFields() {
+    List<Widget> allergyFields = [];
+
+    for (int i = 0; i < allergyNames.length; i++) {
+      allergyFields.add(AllergyInputField(i));
+    }
+
+    allergyFields.add(ElevatedButton(
+      child: const Text('Add another allergy'),
+      onPressed: () {
+        setState(() {
+          allergyNames.add('');
+          allergySeverities.add(-1);
+        });
+      },
+    ));
+
+    return allergyFields;
+  }
+}
+
+class AllergyInputField extends StatefulWidget {
+  final int index;
+
+  const AllergyInputField(this.index, {Key? key}) : super(key: key);
+
+  @override
+  _AllergyInputFieldState createState() => _AllergyInputFieldState();
+}
+
+class _AllergyInputFieldState extends State<AllergyInputField> {
+  String dropdownValue = 'Select';
+  var items = ['Select', 'Mild', 'Moderate', 'Severe'];
+
+  final allergy = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    allergy.text = _DataInputState.allergyNames[widget.index];
+    dropdownValue = items[_DataInputState.allergySeverities[widget.index] + 1];
+
+    return Row(
+      children: [
+        SizedBox(
+          width: 200,
+          child: TextFormField(
+            decoration: const InputDecoration(labelText: 'Allergies'),
+            controller: allergy,
+            onChanged: (newValue) {
+              _DataInputState.allergyNames[widget.index] = newValue.toString();
+            },
+          ),
+        ),
+        const SizedBox(width: 16),
+        DropdownButton(
+          value: dropdownValue,
+          icon: const Icon(Icons.keyboard_arrow_down),
+          items: items.map((String items) {
+            return DropdownMenuItem(value: items, child: Text(items));
+          }).toList(),
+          onChanged: (newValue) {
+            setState(() {
+              dropdownValue = newValue.toString();
+              _DataInputState.allergySeverities[widget.index] =
+                  items.indexOf(dropdownValue) - 1;
+            });
+          },
+        ),
+      ],
+    );
   }
 }

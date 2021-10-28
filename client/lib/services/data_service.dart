@@ -61,7 +61,7 @@ class DataService {
     required double weightOz,
     required String pediatrician,
     required String pediatricianPhone,
-    required List<String> allergies,
+    required Map<String, int> allergies,
   }) async {
     String documentId = '';
 

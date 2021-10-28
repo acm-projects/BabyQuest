@@ -74,7 +74,7 @@ class AppUser {
     required double weightOz,
     required String pediatrician,
     required String pediatricianPhone,
-    required List<String> allergies,
+    required Map<String, int> allergies,
   }) async {
     String profileId = await DataService.createProfile(
       firstName: firstName,
