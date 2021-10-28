@@ -1,4 +1,5 @@
 import 'package:client/services/auth_service.dart';
+import 'package:client/widgets/dotted_divider.dart';
 import 'package:client/widgets/icon_information.dart';
 
 import 'package:flutter/material.dart';
@@ -104,11 +105,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     style:
                                         Theme.of(context).textTheme.headline2),
                               ),
-                              Divider(
-                                color:
-                                    Theme.of(context).colorScheme.onBackground,
-                                thickness: 1,
-                              ),
+                              const DottedDivider(),
                               Container(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16),
@@ -172,11 +169,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   style: Theme.of(context).textTheme.headline2,
                                 ),
                               ),
-                              Divider(
-                                color:
-                                    Theme.of(context).colorScheme.onBackground,
-                                thickness: 1,
-                              ),
+                              const DottedDivider(),
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16),
@@ -214,11 +207,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   style: Theme.of(context).textTheme.headline2,
                                 ),
                               ),
-                              Divider(
-                                color:
-                                    Theme.of(context).colorScheme.onBackground,
-                                thickness: 1,
-                              ),
+                              const DottedDivider(),
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16),
@@ -231,10 +220,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ],
                           ),
                         ),
-                        Divider(
-                          color: Theme.of(context).colorScheme.onBackground,
-                          thickness: 1,
-                        ),
+                        const DottedDivider(),
                         Padding(
                           padding: const EdgeInsets.only(
                               left: 32, right: 32, top: 16, bottom: 32),
@@ -355,6 +341,7 @@ class LabeledIconButton extends StatelessWidget {
               shape: const CircleBorder(),
             ),
             child: IconButton(
+              splashColor: Theme.of(context).colorScheme.primary,
               iconSize: 30,
               padding: const EdgeInsets.all(12),
               color: iconColor,
