@@ -1,5 +1,4 @@
 import 'package:client/services/auth_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:client/widgets/icon_information.dart';
 
 import 'package:flutter/material.dart';
@@ -15,8 +14,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  static final _database = FirebaseFirestore.instance;
-  //static final _profileCollection = _database.collection('profiles');
   BabyProfile currentBby = BabyProfile.currentProfile;
 
   @override
@@ -226,28 +223,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16),
                                 child: Column(
-                                  children: const [
-                                    IconInformation(
-                                      iconData: Icons.warning_amber_outlined,
-                                      topText: 'Latex',
-                                      bottomText: 'Extreme',
-                                    ),
-                                    SizedBox(
-                                      height: 32,
-                                    ),
-                                    IconInformation(
-                                      iconData: Icons.warning_amber_outlined,
-                                      topText: 'Strawberries',
-                                      bottomText: 'Mild',
-                                    ),
-                                    SizedBox(
-                                      height: 32,
-                                    ),
-                                    IconInformation(
-                                      iconData: Icons.warning_amber_outlined,
-                                      topText: 'Eggs',
-                                      bottomText: 'Mild',
-                                    ),
+                                  children: [
+                                    ..._buildAllergies(),
                                   ],
                                 ),
                               ),
@@ -314,6 +291,31 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
     );
+  }
+
+  List<Widget> _buildAllergies() {
+    List<String> severities = ['Mild', 'Moderate', 'Severe'];
+    List<Widget> allergies = [];
+
+    currentBby.allergies.forEach((String allergy, int severity) {
+      allergies.add(
+        IconInformation(
+          iconData: Icons.warning_amber_outlined,
+          topText: allergy,
+          bottomText: severities[severity],
+        ),
+      );
+
+      allergies.add(const SizedBox(
+        height: 32,
+      ));
+    });
+
+    if (allergies.isNotEmpty) {
+      allergies.removeLast();
+    }
+
+    return allergies;
   }
 }
 

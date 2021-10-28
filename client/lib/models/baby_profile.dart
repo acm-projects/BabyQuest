@@ -51,6 +51,7 @@ class BabyProfile {
       return "Other";
     }
   }
+
   double get height => _height ?? 0; //TODO
   double get weight => _weight ?? 0; //TODO
   DateTime? get birthDate => _birthDate;
@@ -58,7 +59,9 @@ class BabyProfile {
     if (birthDate != null) {
       int days = DateTime.now().difference(birthDate!).inDays;
       return (days / 30.44).round().toString();
-    } else {return '';}
+    } else {
+      return '';
+    }
   } //will calcuate age in months and return as String
 
   Map<String, int> get allergies => _allergies ?? {};
@@ -86,7 +89,10 @@ class BabyProfile {
     _height = profileData['height'] as double;
     _weight = profileData['weight'] as double;
     _birthDate = DateTime.parse(profileData['birth_date'] as String);
-    // _allergies = profileData['allergies'];
+    _allergies = (profileData['allergies'] as Map<String, dynamic>)
+        .map((String key, dynamic value) {
+      return MapEntry(key, value as int);
+    });
 
     _pediatrician = profileData['pediatrician'];
     _pediatricianPhone = profileData['pediatrician_phone'];
