@@ -28,6 +28,7 @@ class _MainWrapperState extends State<MainWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,

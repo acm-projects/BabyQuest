@@ -1,3 +1,4 @@
+import 'package:client/widgets/round_button.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -41,17 +42,17 @@ class _SignInFormState extends State<SignInForm> {
   Widget _buildEmailAddressField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
-      decoration: const InputDecoration(
-        fillColor: Colors.white,
+      decoration: InputDecoration(
+        fillColor: Theme.of(context).scaffoldBackgroundColor,
         filled: true,
         labelText: 'Email Address',
-        border: OutlineInputBorder(
+        border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(100))),
-        prefixIcon: Icon(Icons.email),
+        prefixIcon: const Icon(Icons.email),
       ),
       validator: (value) {
         return (value == null || value.isEmpty)
-            ? 'Enter an email adress'
+            ? 'Enter an email address'
             : null;
       },
       onChanged: (value) => setState(() => email = value),
@@ -62,13 +63,13 @@ class _SignInFormState extends State<SignInForm> {
     return TextFormField(
       keyboardType: TextInputType.visiblePassword,
       obscureText: true,
-      decoration: const InputDecoration(
-        fillColor: Colors.white,
+      decoration: InputDecoration(
+        fillColor: Theme.of(context).scaffoldBackgroundColor,
         filled: true,
         labelText: 'Password',
-        border: OutlineInputBorder(
+        border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(100))),
-        prefixIcon: Icon(Icons.lock),
+        prefixIcon: const Icon(Icons.lock),
       ),
       validator: (value) {
         return (value == null || value.length < 6)
@@ -82,35 +83,20 @@ class _SignInFormState extends State<SignInForm> {
   Widget _buildSignUpButton() {
     String label = widget.register ? 'Create Account' : 'Login';
 
-    return Container(
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      width: double.infinity,
-      height: 60,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-      ),
-      child: MaterialButton(
-        onPressed: () async {
-          if (_formKey.currentState != null &&
-              _formKey.currentState!.validate()) {
-            final provider = Provider.of<AuthService>(context, listen: false);
+    return RoundButton(
+      onPressed: () async {
+        if (_formKey.currentState != null &&
+            _formKey.currentState!.validate()) {
+          final provider = Provider.of<AuthService>(context, listen: false);
 
-            if (widget.register) {
-              provider.registerWithEmailAndPassword(email, password);
-            } else {
-              provider.signInWithEmailAndPassword(email, password);
-            }
+          if (widget.register) {
+            provider.registerWithEmailAndPassword(email, password);
+          } else {
+            provider.signInWithEmailAndPassword(email, password);
           }
-        },
-        color: Theme.of(context).colorScheme.secondary,
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 20,
-            color: Theme.of(context).colorScheme.onBackground,
-          ),
-        ),
-      ),
+        }
+      },
+      text: label,
     );
   }
 
@@ -128,32 +114,29 @@ class _SignInFormState extends State<SignInForm> {
             Expanded(child: Divider(color: Colors.black.withOpacity(0.5))),
           ]),
           const SizedBox(height: 25.0),
-          Container(
-            padding: const EdgeInsets.all(4),
-            child: ElevatedButton.icon(
-              onPressed: () {
-                final provider =
-                    Provider.of<AuthService>(context, listen: false);
-                provider.signInWithGoogle();
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Theme.of(context).colorScheme.secondary,
-                onPrimary: Theme.of(context).colorScheme.onSecondary,
-                minimumSize: const Size(double.infinity, 60),
-                shape: const StadiumBorder(),
-              ),
-              icon: FaIcon(FontAwesomeIcons.google,
-                  color: Theme.of(context).colorScheme.primary),
-              label: Text(
-                'Login with Google',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+          RoundButton(
+            onPressed: () {
+              final provider = Provider.of<AuthService>(context, listen: false);
+              provider.signInWithGoogle();
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FaIcon(
+                  FontAwesomeIcons.google,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
-              ),
+                const SizedBox(
+                  width: 8,
+                ),
+                Text(
+                  'Login with Google',
+                  style: Theme.of(context).textTheme.headline2!.copyWith(
+                      color: Theme.of(context).colorScheme.onSecondary),
+                ),
+              ],
             ),
-          ),
+          )
         ],
       );
     }

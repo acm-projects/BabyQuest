@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'package:client/pages/splash_page.dart';
+import 'package:tinycolor2/src/color_extension.dart';
 
 Future main() async {
   // setup flutter and firebase
@@ -13,9 +14,10 @@ Future main() async {
   await Firebase.initializeApp();
 
   SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      systemNavigationBarIconBrightness: Brightness.dark,
+    SystemUiOverlayStyle(
+      statusBarColor: Colors.deepPurple.shade300,
+      systemNavigationBarIconBrightness: Brightness.light,
+      statusBarIconBrightness: Brightness.light,
     ),
   );
 
@@ -34,17 +36,31 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
           textTheme: const TextTheme(
             headline1: TextStyle(fontWeight: FontWeight.w800, fontSize: 30),
-            headline2: TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
+            headline2: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
             subtitle1: TextStyle(fontWeight: FontWeight.w300, fontSize: 15),
           ),
           scaffoldBackgroundColor: Colors.amber.shade100,
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: createMaterialColor(Colors.deepPurple.shade300),
           ).copyWith(
+            onPrimary: Colors.white,
             onBackground: Colors.grey.shade700,
             onSurface: Colors.grey.shade700,
             secondary: Colors.green.shade200,
-            onSecondary: const Color(0xFF668567),
+            onSecondary: Colors.green.shade200.darken(40).desaturate(25),
+          ),
+          snackBarTheme: SnackBarThemeData(
+            elevation: 0,
+            backgroundColor: Colors.green.shade200,
+            contentTextStyle: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 20,
+              color: Colors.green.shade200.darken(40).desaturate(25),
+            ),
+            actionTextColor: Colors.grey.shade700,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(100),
+            ),
           ),
         ),
         debugShowCheckedModeBanner: false,
