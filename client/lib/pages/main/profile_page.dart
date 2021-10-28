@@ -19,6 +19,9 @@ class _ProfilePageState extends State<ProfilePage> {
   //static final _profileCollection = _database.collection('profiles');
   BabyProfile currentBby = BabyProfile.currentProfile;
 
+  List<Widget> _allergyFields = _populateAllergyList();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -314,6 +317,31 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
     );
+  }
+
+  List<Widget> _populateAllergyList() {
+    List<Widget> sniffle = List.empty();
+    if (currentBby.allergies.isEmpty) {
+      sniffle.add(
+        const IconInformation(
+          iconData: Icons.warning_amber_outlined,
+          topText: 'None',
+          bottomText: 'N/A',
+        ),
+      );
+
+      return sniffle;
+    }
+
+    for (int idx = 0; idx < currentBby.allergies.length; idx += 1) {
+      sniffle.add(
+        const IconInformation(
+          iconData: Icons.warning_amber_outlined,
+          topText: ,
+          bottomText: 'N/A',
+        ),
+      );
+    }
   }
 }
 
