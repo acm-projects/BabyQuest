@@ -16,7 +16,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   static final _database = FirebaseFirestore.instance;
-  //static final _profileCollection = _database.collection('profiles');
   BabyProfile currentBby = BabyProfile.currentProfile;
 
   List<Widget> _allergyFields = _populateAllergyList();
@@ -319,7 +318,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  List<Widget> _populateAllergyList() {
+  /*List<Widget> _populateAllergyList() {
     List<Widget> sniffle = List.empty();
     if (currentBby.allergies.isEmpty) {
       sniffle.add(
@@ -342,7 +341,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       );
     }
-  }
+  }*/
 }
 
 class LabeledIconButton extends StatelessWidget {
