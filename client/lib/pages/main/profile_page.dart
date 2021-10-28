@@ -56,7 +56,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               padding: const EdgeInsets.only(left: 16),
                               child: Text(
                                 currentBby.fullName,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 40,
                                     color: Colors.white),
@@ -147,7 +147,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         const SizedBox(
                                           height: 32,
                                         ),
-                                        IconInformation(
+                                        const IconInformation(
                                           iconData: Icons.straighten,
                                           topText: '2\'5"',
                                           bottomText: 'Height',

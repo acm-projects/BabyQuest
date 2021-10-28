@@ -1,27 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'package:client/models/app_user.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:client/models/baby_profile.dart';
+import 'package:client/models/app_user.dart';
+import 'package:client/pages/main/user_input_widgets.dart';
 
 class DataInput extends StatefulWidget {
   final Function completed;
-  final bool editing;
 
-  const DataInput(this.completed, {this.editing = false, Key? key}) : super(key: key);
+  const DataInput(this.completed, {Key? key}) : super(key: key);
 
   @override
   _DataInputState createState() => _DataInputState();
 }
 
 class _DataInputState extends State<DataInput> {
-  BabyProfile currentBby = BabyProfile.currentProfile;
-
   static List<String> allergyNames = [''];
   static List<int> allergySeverities = [-1];
 
@@ -33,7 +26,6 @@ class _DataInputState extends State<DataInput> {
 
   int _currentStep = 0;
   StepperType stepperType = StepperType.vertical;
-  DateTime birthDate = DateTime.now();
   String dropdownValue = 'Choose';
   var items = ['Choose', 'Male', 'Female'];
   String newValue = 'Choose';
@@ -41,30 +33,13 @@ class _DataInputState extends State<DataInput> {
   //text editing controllers
   final firstName = TextEditingController();
   final lastName = TextEditingController();
+  final birthDate = TextEditingController();
   final heightIn = TextEditingController();
   final weightLb = TextEditingController();
   final weightOz = TextEditingController();
   final pedName = TextEditingController();
   final pedPhone = TextEditingController();
   final image = TextEditingController();
-
-  @override
-  void initState() {
-    if (widget.editing) {
-      firstName.text = currentBby.firstName;
-      lastName.text = currentBby.lastName;
-      heightIn.text = currentBby.height.toString();
-      weightLb.text = currentBby.weightLb.toString();
-      weightOz.text = currentBby.weightOz.toString();
-      //allergies.text = currentBby.achooList;
-      pedName.text = currentBby.pediatrician;
-      pedPhone.text = currentBby.pediatricianPhone;
-      image.text = currentBby.profilePic;
-    }
-    // TODO: implement initState
-    super.initState();
-
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,109 +83,43 @@ class _DataInputState extends State<DataInput> {
                   ),
                 );
               },
-              steps: <Step>[
+              steps: [
                 Step(
                   title: const Text('General Information'),
                   content: Form(
                     key: _formKeys[0],
                     child: Column(
                       children: <Widget>[
-                        TextFormField(
-                          decoration:
-                              const InputDecoration(labelText: 'First Name'),
-                          controller: firstName,
-                          validator: (value) {
-                            return (value == null || value.isEmpty)
-                                ? 'Enter the first name'
-                                : null;
-                          },
-                        ),
-                        TextFormField(
-                          decoration:
-                              const InputDecoration(labelText: 'Last Name'),
-                          controller: lastName,
-                          validator: (value) {
-                            return (value == null || value.isEmpty)
-                                ? 'Enter the last name'
-                                : null;
-                          },
-                        ),
+                        ...UserInputWidgets.name(firstName, lastName),
                         const SizedBox(height: 12),
-                        const Text('Date of Birth:'),
-                        ElevatedButton(
-                          onPressed: () => _selectDate(context), // Refer step 3
-                          child: const Text(
-                            'Select Date of Birth',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.lightBlueAccent,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        const Text('Select Gender of child:'),
-                        DropdownButton(
-                          value: dropdownValue,
-                          icon: const Icon(Icons.keyboard_arrow_down),
-                          items: items.map((String items) {
-                            return DropdownMenuItem(
-                                value: items, child: Text(items));
-                          }).toList(),
-                          onChanged: (newValue) {
-                            setState(() {
-                              dropdownValue = newValue.toString();
-                            });
-                          },
-                        ),
-                        const Text('Height'),
-                        TextFormField(
-                          decoration:
-                              const InputDecoration(labelText: 'Inches'),
-                          keyboardType: TextInputType.number,
-                          controller: heightIn,
-                          validator: (value) {
-                            return (value == null || value.isEmpty)
-                                ? 'Enter the height (in)'
-                                : null;
-                          },
-                        ),
+                        ...UserInputWidgets.birthDate(
+                            context, setState, birthDate),
                         const SizedBox(height: 12),
-                        const Text(
-                          'Weight',
-                        ),
                         Row(
                           children: [
+                            const Text('Select Gender of child:'), // TODO
+                            const SizedBox(width: 50),
                             Expanded(
-                              child: TextFormField(
-                                decoration:
-                                    const InputDecoration(labelText: 'Pounds'),
-                                keyboardType: TextInputType.number,
-                                controller: weightLb,
-                                validator: (value) {
-                                  return (value == null || value.isEmpty)
-                                      ? 'Enter the weight (lbs)'
-                                      : null;
-                                },
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: TextFormField(
-                                decoration:
-                                    const InputDecoration(labelText: 'Ounces'),
-                                keyboardType: TextInputType.number,
-                                controller: weightOz,
-                                validator: (value) {
-                                  return (value == null || value.isEmpty)
-                                      ? 'Enter the weight (oz)'
-                                      : null;
+                              child: DropdownButton(
+                                value: dropdownValue,
+                                icon: const Icon(Icons.keyboard_arrow_down),
+                                items: items.map((String items) {
+                                  return DropdownMenuItem(
+                                      value: items, child: Text(items));
+                                }).toList(),
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    dropdownValue = newValue.toString();
+                                  });
                                 },
                               ),
                             ),
                           ],
                         ),
+                        const SizedBox(height: 12),
+                        ...UserInputWidgets.height(heightIn),
+                        const SizedBox(height: 12),
+                        ...UserInputWidgets.weight(weightLb, weightOz),
                       ],
                     ),
                   ),
@@ -225,28 +134,9 @@ class _DataInputState extends State<DataInput> {
                     key: _formKeys[1],
                     child: Column(
                       children: <Widget>[
-                        ..._buildAllergyFields(),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              labelText: 'Name of Doctor'),
-                          controller: pedName,
-                          validator: (value) {
-                            return (value == null || value.isEmpty)
-                                ? 'Enter your pediatrician\'s name'
-                                : null;
-                          },
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              labelText: 'Doctor Contact Information'),
-                          keyboardType: TextInputType.phone,
-                          controller: pedPhone,
-                          validator: (value) {
-                            return (value == null || value.length != 10)
-                                ? 'Enter a valid phone number'
-                                : null;
-                          },
-                        ),
+                        ..._buildAllergyFields(), // TODO
+                        ...UserInputWidgets.pediatrician(pedName),
+                        ...UserInputWidgets.pediatricianPhone(pedPhone),
                       ],
                     ),
                   ),
@@ -279,10 +169,6 @@ class _DataInputState extends State<DataInput> {
                       ? StepState.complete
                       : StepState.disabled,
                 ),
-                /*Step(
-                    title: Text('Confirm Submission'),
-                    content
-                  ),*/
               ],
             ),
           ),
@@ -308,7 +194,7 @@ class _DataInputState extends State<DataInput> {
         AppUser.currentUser!.createNewProfile(
             firstName: firstName.text,
             lastName: lastName.text,
-            birthDate: birthDate,
+            birthDate: DateTime.parse(birthDate.text),
             gender: items.indexOf(dropdownValue) - 1,
             height: height,
             weightLb: lbs,
@@ -316,11 +202,6 @@ class _DataInputState extends State<DataInput> {
             pediatrician: pedName.text,
             pediatricianPhone: pedPhone.text,
             allergies: allergies);
-      }
-
-      if (widget.editing) {
-        //pass in new profile info
-
       }
 
       widget.completed();
@@ -336,20 +217,6 @@ class _DataInputState extends State<DataInput> {
 
   cancel() {
     _currentStep > 0 ? setState(() => _currentStep -= 1) : null;
-  }
-
-  _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: birthDate, // Refer step 1
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
-    );
-    if (picked != null && picked != birthDate) {
-      setState(() {
-        birthDate = picked;
-      });
-    }
   }
 
   List<Widget> _buildAllergyFields() {
