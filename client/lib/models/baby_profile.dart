@@ -9,7 +9,8 @@ class BabyProfile {
   String? _lastName;
   int? _gender;
   double? _height;
-  double? _weight;
+  double? _weightLb;
+  double? _weightOz;
   DateTime? _birthDate;
   Map<String, int>? _allergies;
 
@@ -51,9 +52,15 @@ class BabyProfile {
       return "Other";
     }
   }
+  double get height => _height ?? 0;
+  double get weightLb => _weightLb ?? 0;
+  double get weightOz => _weightOz ?? 0;
+  double get weight {
+    return _weightLb != 0
+        ? _weightLb! * 16 + _weightOz!
+        : 0;
+  }
 
-  double get height => _height ?? 0; //TODO
-  double get weight => _weight ?? 0; //TODO
   DateTime? get birthDate => _birthDate;
   String get age {
     if (birthDate != null) {
@@ -65,6 +72,19 @@ class BabyProfile {
   } //will calcuate age in months and return as String
 
   Map<String, int> get allergies => _allergies ?? {};
+  /*String get achooList {
+    String result = '';
+    if (_allergies!.isEmpty) {return result;}
+
+    for (int idx = 0; idx < _allergies!.length; idx += 1) {
+      if (idx == _allergies!.length -1) {
+        result += _allergies![idx];
+      } else {
+        result += ', ' + _allergies![idx];
+      }
+    }
+    return result;
+  }*/
 
   String get pediatrician => _pediatrician ?? '';
   String get pediatricianPhone => _pediatricianPhone ?? '';
@@ -87,7 +107,8 @@ class BabyProfile {
     _lastName = profileData['last_name'] as String;
     _gender = profileData['gender'] as int;
     _height = profileData['height'] as double;
-    _weight = profileData['weight'] as double;
+    _weightLb = profileData['weightLb'] as double;
+    _weightOz = profileData['weightOz'] as double;
     _birthDate = DateTime.parse(profileData['birth_date'] as String);
     _allergies = (profileData['allergies'] as Map<String, dynamic>)
         .map((String key, dynamic value) {
