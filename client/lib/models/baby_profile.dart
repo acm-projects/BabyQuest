@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'package:client/services/data_service.dart';
 
 class BabyProfile {
@@ -43,51 +45,61 @@ class BabyProfile {
   String get firstName => _firstName ?? '';
   String get lastName => _lastName ?? '';
   String get fullName => firstName + ' ' + lastName;
+
   String get gender {
-    if (_gender == 0) {
-      return "Male";
-    } else if (_gender == 1) {
-      return "Female";
-    } else {
-      return "Other";
+    switch (_gender) {
+      case 0:
+        return "Male";
+      case 1:
+        return "Female";
+      default:
+        return "Other";
     }
   }
-  double get height => _height ?? 0;
+
+  IconData get genderIcon {
+    switch (_gender) {
+      case 0:
+        return Icons.male;
+      case 1:
+        return Icons.female;
+      default:
+        return Icons.transgender;
+    }
+  }
+
+  double get heightIn => _height ?? 0;
+  String get height {
+    return (heightIn * 12).round().toString() + '"';
+  }
+
   double get weightLb => _weightLb ?? 0;
   double get weightOz => _weightOz ?? 0;
-  double get weight {
-    return _weightLb != 0
-        ? _weightLb! * 16 + _weightOz!
-        : 0;
+  String get weight {
+    return weightLb.toInt().toString() + 'lbs ' + weightOz.toString() + 'oz';
   }
 
   DateTime? get birthDate => _birthDate;
   String get age {
-    if (birthDate != null) {
-      int days = DateTime.now().difference(birthDate!).inDays;
-      return (days / 30.44).round().toString();
+    if (birthDate == null) return '';
+    int days = DateTime.now().difference(birthDate!).inDays;
+
+    if (days < 7) {
+      return days.toString() + ' days';
+    } else if (days < 30.44) {
+      return (days / 7).round().toString() + ' weeks';
     } else {
-      return '';
+      return (days / 30.44).round().toString() + ' months';
     }
-  } //will calcuate age in months and return as String
+  } //will calcuate age in days, weeks, or months and return as String
 
   Map<String, int> get allergies => _allergies ?? {};
-  /*String get achooList {
-    String result = '';
-    if (_allergies!.isEmpty) {return result;}
-
-    for (int idx = 0; idx < _allergies!.length; idx += 1) {
-      if (idx == _allergies!.length -1) {
-        result += _allergies![idx];
-      } else {
-        result += ', ' + _allergies![idx];
-      }
-    }
-    return result;
-  }*/
 
   String get pediatrician => _pediatrician ?? '';
   String get pediatricianPhone => _pediatricianPhone ?? '';
+  String get formattedPediatricianPhone {
+    return pediatricianPhone; // TODO
+  }
 
   String get profilePic => _profilePic ?? 'images/Osbaldo.jpg';
 
@@ -118,7 +130,7 @@ class BabyProfile {
     _pediatrician = profileData['pediatrician'];
     _pediatricianPhone = profileData['pediatrician_phone'];
 
-    // _profilePic = profileData['profile_pic'] as String;
+    _profilePic = profileData['profile_pic'] as String;
 
     // _diaperChanges = profileData['diaper_changes'];
     // _sleep = profileData['sleep'];

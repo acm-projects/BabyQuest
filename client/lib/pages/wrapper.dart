@@ -36,7 +36,7 @@ class _WrapperState extends State<Wrapper> {
     if (snapshot.connectionState == ConnectionState.waiting) {
       return const Center(child: CircularProgressIndicator());
     } else if (snapshot.hasData && !userLoaded) {
-      waitForUserToLoad();
+      _waitForUserToLoad();
       return const SplashPage("Welcome...", timed: false);
     } else if (snapshot.hasData && userLoaded) {
       return const MainWrapper(); // main page
@@ -47,12 +47,12 @@ class _WrapperState extends State<Wrapper> {
     }
   }
 
-  Future waitForUserToLoad() async {
+  Future _waitForUserToLoad() async {
     await Future.delayed(const Duration(milliseconds: 250), () {
       if (AppUser.currentUser != null && AppUser.currentUser!.isLoaded) {
         setState(() => userLoaded = true);
       } else {
-        waitForUserToLoad();
+        _waitForUserToLoad();
       }
     });
   }

@@ -75,6 +75,7 @@ class AppUser {
     required String pediatrician,
     required String pediatricianPhone,
     required Map<String, int> allergies,
+    required String imagePath,
   }) async {
     String profileId = await DataService.createProfile(
       firstName: firstName,
@@ -87,6 +88,7 @@ class AppUser {
       pediatrician: pediatrician,
       pediatricianPhone: pediatricianPhone,
       allergies: allergies,
+      imagePath: imagePath,
     );
 
     List<String> newProfiles = ownedProfiles;

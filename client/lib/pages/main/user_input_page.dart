@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -41,6 +43,8 @@ class _DataInputState extends State<DataInput> {
   final pedName = TextEditingController();
   final pedPhone = TextEditingController();
   final image = TextEditingController();
+
+  String? _imagePath;
 
   @override
   Widget build(BuildContext context) {
@@ -152,6 +156,7 @@ class _DataInputState extends State<DataInput> {
                     key: _formKeys[2],
                     child: Column(
                       children: [
+                        ..._getImage(),
                         ElevatedButton(
                           onPressed: () => _pickImage(),
                           child: const Text(
@@ -180,14 +185,25 @@ class _DataInputState extends State<DataInput> {
     );
   }
 
+  List<Widget> _getImage() {
+    if (_imagePath != null) {
+      return [Image.file(File(_imagePath!))];
+    }
+
+    return [];
+  }
+
   tapped(int step) {
     setState(() => _currentStep = step);
   }
 
   Future _pickImage() async {
     final picker = ImagePicker();
-
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() => _imagePath = pickedFile.path);
+    }
   }
 
   continued() {
@@ -200,6 +216,8 @@ class _DataInputState extends State<DataInput> {
         Map<String, int> allergies =
             Map.fromIterables(allergyNames, allergySeverities);
 
+        String pedPhoneRaw = pedPhone.text.replaceAll('-', '');
+
         AppUser.currentUser!.createNewProfile(
             firstName: firstName.text,
             lastName: lastName.text,
@@ -209,8 +227,10 @@ class _DataInputState extends State<DataInput> {
             weightLb: lbs,
             weightOz: oz,
             pediatrician: pedName.text,
-            pediatricianPhone: pedPhone.text,
-            allergies: allergies);
+            pediatricianPhone: pedPhoneRaw,
+            allergies: allergies,
+            imagePath: _imagePath!,
+        );
       }
 
       widget.completed();

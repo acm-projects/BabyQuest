@@ -1,11 +1,11 @@
+import 'package:client/models/baby_profile.dart';
 import 'package:client/services/auth_service.dart';
 import 'package:client/widgets/dotted_divider.dart';
 import 'package:client/widgets/icon_information.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'package:client/models/baby_profile.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -39,11 +39,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         ).createShader(bounds),
                         child: Container(
                           child: null,
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             image: DecorationImage(
                               fit: BoxFit.cover,
                               alignment: Alignment.topCenter,
-                              image: AssetImage('assets/images/Osbaldo.jpg'),
+                              image: NetworkImage(currentBby.profilePic),
                             ),
                           ),
                         ),
@@ -116,7 +116,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         IconInformation(
-                                          iconData: Icons.male,
+                                          iconData: currentBby.genderIcon,
                                           topText: currentBby.gender,
                                           bottomText: 'Gender',
                                         ),
@@ -126,8 +126,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                         IconInformation(
                                           iconData:
                                               Icons.monitor_weight_outlined,
-                                          topText: '20 pounds',
-                                          bottomText: currentBby.weight.toString(),
+                                          topText: currentBby.weight,
+                                          bottomText: 'Weight',
                                         ),
                                       ],
                                     ),
@@ -144,9 +144,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                         const SizedBox(
                                           height: 32,
                                         ),
-                                        const IconInformation(
+                                        IconInformation(
                                           iconData: Icons.straighten,
-                                          topText: '2\'5"',
+                                          topText: currentBby.height,
                                           bottomText: 'Height',
                                         )
                                       ],
@@ -174,18 +174,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16),
                                 child: Column(
-                                  children: const [
+                                  children: [
                                     IconInformation(
                                       iconData: Icons.medical_services_outlined,
-                                      topText: 'Al Zeimers',
+                                      topText: currentBby.pediatrician,
                                       bottomText: 'Doctor',
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 32,
                                     ),
                                     IconInformation(
                                       iconData: Icons.contacts_outlined,
-                                      topText: '(555)-555-5555',
+                                      topText: currentBby.formattedPediatricianPhone,
                                       bottomText: 'Phone',
                                     ),
                                   ],
@@ -243,7 +243,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               LabeledIconButton(
                                 icon: const Icon(Icons.phone),
                                 label: 'Pediatrician',
-                                onPressed: () {},
+                                onPressed: () {
+                                  launch('tel://1' + currentBby.pediatricianPhone);
+                                },
                               ),
                               const Spacer(),
                               LabeledIconButton(

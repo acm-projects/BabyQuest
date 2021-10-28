@@ -36,6 +36,7 @@ dependencies:
   cloud_firestore: ^2.5.3
   cupertino_icons: ^1.0.2
   firebase_auth: ^3.1.2
+  firebase_storage: ^10.0.6
   flutter_libphonenumber: ^1.2.1
   flutter_spinkit: ^5.1.0
   flutter_svg: ^0.23.0+1
@@ -48,6 +49,7 @@ dependencies:
   tinycolor2:
     git:
       url: https://github.com/TinyCommunity/tinycolor2.git
+  url_launcher: ^6.0.12
   convex_bottom_bar: ^3.0.0
 
 dev_dependencies:

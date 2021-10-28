@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -7,6 +9,9 @@ class DataService {
   static final _database = FirebaseFirestore.instance;
   static final _userCollection = _database.collection('users');
   static final _profileCollection = _database.collection('profiles');
+
+  static final _storage = FirebaseStorage.instance;
+  static final _profilePics = _storage.ref('profile_pics');
 
   static dynamic _userListener;
   static dynamic _profileListener;
@@ -51,6 +56,19 @@ class DataService {
     _userListener = null;
   }
 
+  static Future uploadProfileImage(String uid, File imageFile) async {
+    String imageUrl = '';
+
+    Reference imageRef =
+        _profilePics.child(uid + '.' + imageFile.path.split('.').last);
+    UploadTask uploadTask = imageRef.putFile(imageFile);
+    await uploadTask.whenComplete(() async {
+      imageUrl = await uploadTask.snapshot.ref.getDownloadURL();
+    });
+
+    return imageUrl;
+  }
+
   static createProfile({
     required String firstName,
     required String lastName,
@@ -62,6 +80,7 @@ class DataService {
     required String pediatrician,
     required String pediatricianPhone,
     required Map<String, int> allergies,
+    required String imagePath,
   }) async {
     String documentId = '';
 
@@ -76,11 +95,21 @@ class DataService {
       'pediatrician': pediatrician,
       'pediatrician_phone': pediatricianPhone,
       'allergies': allergies,
-    }).then((document) {
+    }).then((document) async {
       documentId = document.id;
+
+      File imageFile = File(imagePath);
+      String imageUrl = await uploadProfileImage(documentId, imageFile);
+
+      await updateProfileData(documentId, {'profile_pic': imageUrl});
     });
 
     return documentId;
+  }
+
+  static updateProfileData(String uid, Map<String, dynamic> fields) async {
+    DocumentReference profileDocument = _profileCollection.doc(uid);
+    await profileDocument.update(fields);
   }
 
   // retrieves profile data from the database, or creates it if not yet created
@@ -140,7 +169,6 @@ class DataService {
           today,
           qodData['quote'],
           qodData['author'],
-          qodData['background']
         ];
       }
 

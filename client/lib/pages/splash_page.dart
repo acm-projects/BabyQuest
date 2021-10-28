@@ -24,16 +24,6 @@ class _SplashPageState extends State<SplashPage> {
     _navigateToHome();
   }
 
-  _navigateToHome() async {
-    if (!widget.timed) return;
-
-    await Future.delayed(Duration(milliseconds: widget.milliseconds), () {
-      if (widget.completed != null) {
-        widget.completed!();
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,5 +89,15 @@ class _SplashPageState extends State<SplashPage> {
         )
       ],
     ));
+  }
+
+  _navigateToHome() async {
+    if (!widget.timed) return;
+
+    await Future.delayed(Duration(milliseconds: widget.milliseconds), () {
+      if (widget.completed != null) {
+        widget.completed!();
+      }
+    });
   }
 }
