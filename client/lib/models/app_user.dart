@@ -65,8 +65,7 @@ class AppUser {
   }
 
   void createNewProfile({
-    required String firstName,
-    required String lastName,
+    required String name,
     required DateTime birthDate,
     required int gender,
     required double height,
@@ -78,8 +77,7 @@ class AppUser {
     required String imagePath,
   }) async {
     String profileId = await DataService.createProfile(
-      firstName: firstName,
-      lastName: lastName,
+      name: name,
       birthDate: birthDate,
       gender: gender,
       height: height,

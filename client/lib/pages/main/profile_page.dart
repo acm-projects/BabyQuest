@@ -56,7 +56,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: Container(
                               padding: const EdgeInsets.only(left: 16),
                               child: Text(
-                                currentBby.fullName,
+                                currentBby.name,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 40,
@@ -185,7 +185,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                     IconInformation(
                                       iconData: Icons.contacts_outlined,
-                                      topText: currentBby.formattedPediatricianPhone,
+                                      topText: currentBby.formattedPedPhone,
                                       bottomText: 'Phone',
                                     ),
                                   ],
@@ -244,7 +244,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 icon: const Icon(Icons.phone),
                                 label: 'Pediatrician',
                                 onPressed: () {
-                                  launch('tel://1' + currentBby.pediatricianPhone);
+                                  launch('tel://' + currentBby.pediatricianPhone);
                                 },
                               ),
                               const Spacer(),

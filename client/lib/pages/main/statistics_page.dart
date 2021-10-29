@@ -287,17 +287,25 @@ class MainDayCircle extends StatelessWidget {
           child: ValueListenableBuilder<int>(
             valueListenable: _selectedIndex,
             builder: (BuildContext context, value, Widget? child) {
-              return FractionCircle(
-                backgroundCircleColor: Colors.black12,
-                fraction: (value % 10) / 10,
-                strokeWidth: 13,
-                child: Text(
-                  '${(value % 10) * 10}%',
-                  style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.w900,
-                      color: Theme.of(context).colorScheme.onBackground),
-                ),
+              return TweenAnimationBuilder<double>(
+                tween: Tween<double>(begin: 0, end: value % 10),
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.decelerate,
+                builder: (BuildContext context, double progress, Widget? child) {
+                  return FractionCircle(
+                    backgroundCircleColor: Colors.black12,
+                    fraction: progress / 10,
+                    strokeWidth: 13,
+                    child: Text(
+                      '${(progress * 10).round()}%',
+                      style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.w900,
+                          color: Theme.of(context).colorScheme.onBackground),
+                    ),
+                  );
+                },
+                child: const Icon(Icons.aspect_ratio),
               );
             },
           ),

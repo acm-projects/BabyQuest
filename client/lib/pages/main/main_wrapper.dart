@@ -6,7 +6,7 @@ import 'package:client/pages/main/home_page.dart';
 import 'package:client/pages/main/profile_page.dart';
 import 'package:client/pages/main/shopping_page.dart';
 import 'package:client/pages/main/statistics_page.dart';
-import 'package:client/pages/main/user_input_page.dart';
+import 'package:client/pages/main/create_profile_page.dart';
 
 class MainWrapper extends StatefulWidget {
   const MainWrapper({Key? key}) : super(key: key);
@@ -35,7 +35,7 @@ class _MainWrapperState extends State<MainWrapper> {
   @override
   Widget build(BuildContext context) {
     if (creatingProfile) {
-      return DataInput(_completeDataInput);
+      return CreateProfilePage(_completeDataInput);
     } else {
       return _mainPage();
     }

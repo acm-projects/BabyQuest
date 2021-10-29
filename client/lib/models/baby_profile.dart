@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 
 import 'package:client/services/data_service.dart';
 
@@ -7,8 +8,7 @@ class BabyProfile {
   static BabyProfile? _currentProfile;
 
   // private properties
-  String? _firstName;
-  String? _lastName;
+  String? _name;
   int? _gender;
   double? _height;
   double? _weightLb;
@@ -18,6 +18,7 @@ class BabyProfile {
 
   String? _pediatrician;
   String? _pediatricianPhone;
+  String? _formattedPedPhone;
 
   String? _profilePic;
 
@@ -42,9 +43,7 @@ class BabyProfile {
   // public accessors
   bool get exists => uid.isNotEmpty;
 
-  String get firstName => _firstName ?? '';
-  String get lastName => _lastName ?? '';
-  String get fullName => firstName + ' ' + lastName;
+  String get name => _name ?? '';
 
   String get gender {
     switch (_gender) {
@@ -70,7 +69,7 @@ class BabyProfile {
 
   double get heightIn => _height ?? 0;
   String get height {
-    return (heightIn * 12).round().toString() + '"';
+    return heightIn.toString() + '"';
   }
 
   double get weightLb => _weightLb ?? 0;
@@ -88,20 +87,22 @@ class BabyProfile {
       return days.toString() + ' days';
     } else if (days < 30.44) {
       return (days / 7).round().toString() + ' weeks';
-    } else {
+    } else if (days < 365.25) {
       return (days / 30.44).round().toString() + ' months';
+    } else {
+      return (days / 365.25).round().toString() + ' years';
     }
-  } //will calcuate age in days, weeks, or months and return as String
+  } //will calcuate age in days, weeks, months, or years and return as String
 
   Map<String, int> get allergies => _allergies ?? {};
 
   String get pediatrician => _pediatrician ?? '';
   String get pediatricianPhone => _pediatricianPhone ?? '';
-  String get formattedPediatricianPhone {
-    return pediatricianPhone; // TODO
+  String get formattedPedPhone {
+    return _formattedPedPhone ?? '';
   }
 
-  String get profilePic => _profilePic ?? 'images/Osbaldo.jpg';
+  String get profilePic => _profilePic ?? '';
 
   BabyProfile(this.uid);
 
@@ -115,8 +116,7 @@ class BabyProfile {
   }
 
   Future _setData(Map<String, dynamic> profileData) async {
-    _firstName = profileData['first_name'] as String;
-    _lastName = profileData['last_name'] as String;
+    _name = profileData['name'] as String;
     _gender = profileData['gender'] as int;
     _height = profileData['height'] as double;
     _weightLb = profileData['weightLb'] as double;
@@ -129,6 +129,7 @@ class BabyProfile {
 
     _pediatrician = profileData['pediatrician'];
     _pediatricianPhone = profileData['pediatrician_phone'];
+   _formattedPedPhone = (await FlutterLibphonenumber().format(pediatricianPhone, 'US'))['formatted'];
 
     _profilePic = profileData['profile_pic'] as String;
 

@@ -9,7 +9,6 @@ import 'package:client/pages/wrapper.dart';
 import 'package:client/services/auth_service.dart';
 
 Future main() async {
-  // setup flutter and firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 

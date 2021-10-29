@@ -70,8 +70,7 @@ class DataService {
   }
 
   static createProfile({
-    required String firstName,
-    required String lastName,
+    required String name,
     required DateTime birthDate,
     required int gender,
     required double height,
@@ -85,8 +84,7 @@ class DataService {
     String documentId = '';
 
     await _profileCollection.add({
-      'first_name': firstName,
-      'last_name': lastName,
+      'name': name,
       'birth_date': birthDate.toString(),
       'gender': gender,
       'height': height,
