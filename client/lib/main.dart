@@ -1,15 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:client/services/auth_service.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:tinycolor2/tinycolor2.dart';
 
 import 'package:client/pages/splash_page.dart';
-import 'package:tinycolor2/src/color_extension.dart';
+import 'package:client/pages/wrapper.dart';
+import 'package:client/services/auth_service.dart';
 
 Future main() async {
-  // setup flutter and firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
@@ -24,8 +23,15 @@ Future main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool isLoaded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +70,16 @@ class MyApp extends StatelessWidget {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        home: const SplashPage(),
+        home: isLoaded
+            ? const Wrapper()
+            : SplashPage("Waking up from a nap...",
+                completed: _completeLoading),
       ),
     );
+  }
+
+  void _completeLoading() {
+    setState(() => isLoaded = true);
   }
 }
 

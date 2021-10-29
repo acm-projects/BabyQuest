@@ -3,10 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:client/pages/wrapper.dart';
-
 class SplashPage extends StatefulWidget {
-  const SplashPage({Key? key}) : super(key: key);
+  final bool timed;
+  final int milliseconds;
+  final String label;
+  final Function? completed;
+
+  const SplashPage(this.label,
+      {this.timed = true, this.milliseconds = 3500, this.completed, Key? key})
+      : super(key: key);
 
   @override
   _SplashPageState createState() => _SplashPageState();
@@ -17,12 +22,6 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     _navigateToHome();
-  }
-
-  _navigateToHome() async {
-    await Future.delayed(const Duration(milliseconds: 3500), () {});
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const Wrapper()));
   }
 
   @override
@@ -56,7 +55,7 @@ class _SplashPageState extends State<SplashPage> {
                     padding: EdgeInsets.only(top: 20.0),
                   ),
                   Text(
-                    "Waking up from a nap...",
+                    widget.label,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onBackground,
                       fontSize: 25,
@@ -90,5 +89,15 @@ class _SplashPageState extends State<SplashPage> {
         )
       ],
     ));
+  }
+
+  _navigateToHome() async {
+    if (!widget.timed) return;
+
+    await Future.delayed(Duration(milliseconds: widget.milliseconds), () {
+      if (widget.completed != null) {
+        widget.completed!();
+      }
+    });
   }
 }
