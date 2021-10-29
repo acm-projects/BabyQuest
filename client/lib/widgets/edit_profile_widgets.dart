@@ -19,7 +19,7 @@ class EditProfileWidgets {
         },
         decoration: const InputDecoration(
           icon: Icon(Icons.edit),
-          hintText: 'Baby\'s Full Name',
+          labelText: 'Baby\'s Full Name',
         ),
       ),
     );
@@ -87,7 +87,7 @@ class EditProfileWidgets {
   }
 
   static Widget gender(TextEditingController genderController) {
-    var items = ['Select', 'Male', 'Female', 'Other'];
+    var items = ['Select Gender', 'Male', 'Female', 'Other'];
 
     if (genderController.text.isEmpty) {
       genderController.text = '-1';
@@ -97,13 +97,27 @@ class EditProfileWidgets {
       builder: (context, setState) {
         return Row(
           children: [
-            Icon(BabyProfile.getGenderIcon(int.parse(genderController.text))),
+            Icon(
+              BabyProfile.getGenderIcon(
+                int.parse(genderController.text),
+              ),
+              color: const Color(0xFF8C8161),
+              size: 17,
+            ),
+            const SizedBox(
+              width: 16,
+            ),
             DropdownButton(
+              hint: const Text('Select Gender'),
+              isDense: true,
               underline: Container(),
               style: Theme.of(context).textTheme.subtitle1,
               autofocus: true,
+              icon: const Icon(
+                Icons.keyboard_arrow_down,
+                color: Color(0xFF8C8161),
+              ),
               value: items[int.parse(genderController.text) + 1],
-              icon: const Icon(Icons.keyboard_arrow_down),
               items: items.map((String items) {
                 return DropdownMenuItem(value: items, child: Text(items));
               }).toList(),
@@ -128,12 +142,14 @@ class EditProfileWidgets {
             keyboardType: TextInputType.number,
             controller: heightController,
             validator: (value) {
-              return (value == null || value.isEmpty)
-                  ? 'Enter the height (in)'
-                  : null;
+              return (value == null || value.isEmpty) ? '' : null;
             },
             decoration: const InputDecoration(
-                icon: Icon(Icons.straighten), hintText: 'Height'),
+              icon: Icon(Icons.straighten),
+              labelText: 'Height',
+              isDense: true,
+              contentPadding: EdgeInsets.zero,
+            ),
           ),
         ),
         const Text('in'),
@@ -153,12 +169,13 @@ class EditProfileWidgets {
             keyboardType: TextInputType.number,
             controller: weightLbController,
             validator: (value) {
-              return (value == null || value.isEmpty)
-                  ? 'Enter the weight (lbs)'
-                  : null;
+              return (value == null || value.isEmpty) ? '' : null;
             },
             decoration: const InputDecoration(
-                icon: Icon(Icons.monitor_weight_outlined), hintText: '19'),
+              icon: Icon(Icons.monitor_weight_outlined),
+              hintText: '19',
+              contentPadding: EdgeInsets.only(bottom: 6),
+            ),
           ),
         ),
         const Padding(
@@ -171,16 +188,16 @@ class EditProfileWidgets {
             keyboardType: TextInputType.number,
             controller: weightOzController,
             validator: (value) {
-              return (value == null || value.isEmpty)
-                  ? 'Enter the weight (oz)'
-                  : null;
+              return (value == null || value.isEmpty) ? '' : null;
             },
             decoration: const InputDecoration(
-                icon: Icon(
-                  Icons.monitor_weight_outlined,
-                  color: Colors.transparent,
-                ),
-                hintText: '3'),
+              icon: Icon(
+                Icons.monitor_weight_outlined,
+                color: Colors.transparent,
+              ),
+              hintText: '3',
+              contentPadding: EdgeInsets.only(bottom: 6),
+            ),
           ),
         ),
         const Text('oz'),
@@ -198,7 +215,10 @@ class EditProfileWidgets {
           width: 200,
           child: TextFormField(
             initialValue: allergyNames[index],
-            decoration: const InputDecoration(labelText: 'Allergies'),
+            decoration: const InputDecoration(
+                labelText: 'Allergy',
+                isDense: true,
+                contentPadding: EdgeInsets.zero),
             onChanged: (newValue) {
               allergyNames[index] = newValue.toString();
             },
@@ -206,6 +226,7 @@ class EditProfileWidgets {
         ),
         const SizedBox(width: 16),
         DropdownButton(
+          underline: Container(),
           value: items[allergySeverities[index] + 1],
           icon: const Icon(Icons.keyboard_arrow_down),
           items: items.map((String items) {
@@ -258,7 +279,7 @@ class EditProfileWidgets {
         },
         decoration: const InputDecoration(
             icon: Icon(Icons.medical_services_outlined),
-            hintText: 'Name of Pediatrician'),
+            labelText: 'Name of Pediatrician'),
       ),
     );
   }
@@ -277,7 +298,7 @@ class EditProfileWidgets {
         },
         decoration: const InputDecoration(
           icon: Icon(Icons.contacts_outlined),
-          hintText: 'Pediatrician\'s Phone Number',
+          labelText: 'Pediatrician\'s Phone Number',
         ),
         inputFormatters: [
           LibPhonenumberTextFormatter(
@@ -314,14 +335,20 @@ class EditProfileWidgets {
             ..._getLocalImage(imageController),
             ElevatedButton(
               onPressed: () => _pickImage(imageController, setState),
-              child: const Text(
-                'Select profile picture',
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Select profile picture',
+                  style: Theme.of(context).textTheme.headline2,
+                ),
               ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.lightBlueAccent,
-              ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  elevation: 0,
+                  primary: Theme.of(context).colorScheme.primary,
+                  onPrimary: Theme.of(context).colorScheme.onPrimary),
             ),
           ],
         );

@@ -19,7 +19,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   BabyProfile currentBby = BabyProfile.currentProfile;
-  bool editMode = true;
+  bool editMode = false;
 
   @override
   Widget build(BuildContext context) {

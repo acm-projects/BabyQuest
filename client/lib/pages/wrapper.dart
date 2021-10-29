@@ -15,7 +15,7 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
-  bool userLoaded = false;
+  bool userLoaded = true;
 
   @override
   Widget build(BuildContext context) {

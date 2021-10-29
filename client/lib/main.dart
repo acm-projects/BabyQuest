@@ -45,11 +45,13 @@ class _MyAppState extends State<MyApp> {
             headline2: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
             subtitle1: TextStyle(fontWeight: FontWeight.w300, fontSize: 15),
           ),
+          canvasColor: Colors.green.shade200,
           scaffoldBackgroundColor: Colors.amber.shade100,
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: createMaterialColor(Colors.deepPurple.shade300),
           ).copyWith(
             onPrimary: Colors.white,
+            background: Colors.amber.shade100,
             onBackground: Colors.grey.shade700,
             onSurface: Colors.grey.shade700,
             secondary: Colors.green.shade200,
@@ -82,7 +84,19 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
           ),
-          inputDecorationTheme: const InputDecorationTheme(isDense: true),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                elevation: 0,
+                primary: Colors.green.shade200,
+                onPrimary: Colors.grey.shade700),
+          ),
+          inputDecorationTheme: const InputDecorationTheme(
+            isDense: true,
+            contentPadding: EdgeInsets.symmetric(vertical: 4),
+          ),
         ),
         debugShowCheckedModeBanner: false,
         home: isLoaded
