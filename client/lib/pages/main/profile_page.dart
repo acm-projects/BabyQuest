@@ -1,3 +1,4 @@
+import 'package:client/models/baby_profile.dart';
 import 'package:client/services/auth_service.dart';
 import 'package:client/widgets/dotted_divider.dart';
 import 'package:client/widgets/icon_information.dart';
@@ -15,6 +16,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  BabyProfile currentBby = BabyProfile.currentProfile;
 
   bool editMode = false;
 
@@ -110,11 +112,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         ).createShader(bounds),
                         child: Container(
                           child: null,
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             image: DecorationImage(
                               fit: BoxFit.cover,
                               alignment: Alignment.topCenter,
-                              image: AssetImage('assets/images/Osbaldo.jpg'),
+                              image: NetworkImage(currentBby.profilePic),
                             ),
                           ),
                         ),
@@ -126,9 +128,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             alignment: Alignment.bottomLeft,
                             child: Container(
                               padding: const EdgeInsets.only(left: 16),
-                              child: const Text(
-                                'Osbaldo Waldo',
-                                style: TextStyle(
+                              child: Text(
+                                currentBby.name,
+                                style: const TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 40,
                                     color: Colors.white),
@@ -194,8 +196,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         IconInformation(
-                                          iconData: Icons.male,
-                                          topText: 'Male',
+                                          iconData: currentBby.genderIcon,
+                                          topText: currentBby.gender,
                                           bottomText: 'Gender',
                                           enabled: editMode,
                                           onTap: () async {
@@ -213,7 +215,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         IconInformation(
                                           iconData:
                                               Icons.monitor_weight_outlined,
-                                          topText: '20 pounds',
+                                          topText: currentBby.weight,
                                           bottomText: 'Weight',
                                           enabled: editMode,
                                           onTap: () async {
@@ -235,7 +237,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       children: [
                                         IconInformation(
                                           iconData: Icons.calendar_today,
-                                          topText: '14 months old',
+                                          topText: currentBby.age,
                                           bottomText: 'Age',
                                           enabled: editMode,
                                           onTap: () async {
@@ -252,7 +254,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         ),
                                         IconInformation(
                                           iconData: Icons.straighten,
-                                          topText: '2\'5"',
+                                          topText: currentBby.height,
                                           bottomText: 'Height',
                                           enabled: editMode,
                                           onTap: () async {
@@ -292,7 +294,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   children: [
                                     IconInformation(
                                       iconData: Icons.medical_services_outlined,
-                                      topText: 'Al Zeimers',
+                                      topText: currentBby.pediatrician,
                                       bottomText: 'Doctor',
                                       enabled: editMode,
                                       onTap: () async {
@@ -310,7 +312,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     ),
                                     IconInformation(
                                       iconData: Icons.contacts_outlined,
-                                      topText: '(555)-555-5555',
+                                      topText: currentBby.formattedPedPhone,
                                       bottomText: 'Phone',
                                       enabled: editMode,
                                       onTap: () async {
@@ -346,28 +348,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16),
                                 child: Column(
-                                  children: const [
-                                    IconInformation(
-                                      iconData: Icons.warning_amber_outlined,
-                                      topText: 'Latex',
-                                      bottomText: 'Extreme',
-                                    ),
-                                    SizedBox(
-                                      height: 32,
-                                    ),
-                                    IconInformation(
-                                      iconData: Icons.warning_amber_outlined,
-                                      topText: 'Strawberries',
-                                      bottomText: 'Mild',
-                                    ),
-                                    SizedBox(
-                                      height: 32,
-                                    ),
-                                    IconInformation(
-                                      iconData: Icons.warning_amber_outlined,
-                                      topText: 'Eggs',
-                                      bottomText: 'Mild',
-                                    ),
+                                  children: [
+                                    ..._buildAllergies(),
                                   ],
                                 ),
                               ),
@@ -397,8 +379,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               LabeledIconButton(
                                 icon: const Icon(Icons.phone),
                                 label: 'Pediatrician',
-                                onPressed: () async {
-                                  launch('tel://5555555555');
+                                onPressed: () {
+                                  launch('tel://' + currentBby.pediatricianPhone);
                                 },
                               ),
                               const Spacer(),
@@ -440,6 +422,31 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
     );
+  }
+
+  List<Widget> _buildAllergies() {
+    List<String> severities = ['Mild', 'Moderate', 'Severe'];
+    List<Widget> allergies = [];
+
+    currentBby.allergies.forEach((String allergy, int severity) {
+      allergies.add(
+        IconInformation(
+          iconData: Icons.warning_amber_outlined,
+          topText: allergy,
+          bottomText: severities[severity],
+        ),
+      );
+
+      allergies.add(const SizedBox(
+        height: 32,
+      ));
+    });
+
+    if (allergies.isNotEmpty) {
+      allergies.removeLast();
+    }
+
+    return allergies;
   }
 }
 
