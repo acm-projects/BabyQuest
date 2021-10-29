@@ -89,9 +89,9 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                         EditProfileWidgets.name(name),
                         const SizedBox(height: 12),
                         EditProfileWidgets.birthDate(
-                            context, setState, birthDate),
+                            context, birthDate),
                         const SizedBox(height: 12),
-                        EditProfileWidgets.gender(gender, setState),
+                        EditProfileWidgets.gender(gender),
                         const SizedBox(height: 12),
                         EditProfileWidgets.height(heightIn),
                         const SizedBox(height: 12),
@@ -111,7 +111,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                     child: Column(
                       children: [
                         EditProfileWidgets.allergies(
-                            allergyNames, allergySeverities, setState),
+                            allergyNames, allergySeverities),
                         EditProfileWidgets.pediatrician(pedName),
                         EditProfileWidgets.pediatricianPhone(pedPhone),
                       ],
@@ -126,7 +126,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   title: const Text('Profile Picture'),
                   content: Form(
                     key: _formKeys[2],
-                    child: EditProfileWidgets.profilePicture(image, setState),
+                    child: EditProfileWidgets.profilePicture(image),
                   ),
                   isActive: _currentStep >= 0,
                   state: _currentStep >= 2

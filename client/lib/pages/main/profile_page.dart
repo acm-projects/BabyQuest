@@ -1,6 +1,7 @@
 import 'package:client/models/baby_profile.dart';
 import 'package:client/services/auth_service.dart';
 import 'package:client/widgets/dotted_divider.dart';
+import 'package:client/widgets/edit_profile_widgets.dart';
 import 'package:client/widgets/icon_information.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -16,78 +17,9 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   BabyProfile currentBby = BabyProfile.currentProfile;
-
   bool editMode = false;
-
-  Future<void> _showEditDialog(
-      {required BuildContext context,
-      required String label,
-      required String value,
-      required IconData iconData}) async {
-    final TextEditingController _textEditingController =
-        TextEditingController(text: value);
-
-    return await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          titlePadding: const EdgeInsets.only(left: 16, top: 16, bottom: 8),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-          actionsPadding: const EdgeInsets.symmetric(vertical: 16),
-          title: Text(
-            'Editing ' + label,
-            style: Theme.of(context).textTheme.headline2,
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const DottedDivider(),
-              Padding(
-                padding: const EdgeInsets.only(top: 8, right: 48),
-                child: Form(
-                  key: _formKey,
-                  child: TextFormField(
-                    style: Theme.of(context).textTheme.subtitle1,
-                    autofocus: true,
-                    controller: _textEditingController,
-                    validator: (value) {
-                      return value!.isNotEmpty ? null : "Invalid";
-                    },
-                    decoration: InputDecoration(
-                      icon: Icon(iconData),
-                      hintText: "Enter Text",
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            Center(
-              child: OutlinedButton(
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 32),
-                  child: Text(
-                    'Save',
-                  ),
-                ),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    Navigator.of(context).pop();
-                  }
-                },
-              ),
-            )
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,11 +74,15 @@ class _ProfilePageState extends State<ProfilePage> {
                             alignment: Alignment.bottomRight,
                             child: IconButton(
                               onPressed: () async {
+                                final name = TextEditingController(
+                                    text: currentBby.name);
+
                                 await _showEditDialog(
-                                  iconData: Icons.edit,
                                   context: context,
                                   label: 'Baby Name',
-                                  value: 'Osbaldo Waldo',
+                                  field: EditProfileWidgets.name(name),
+                                  updateData: () => currentBby
+                                      .updateData({'name': name.text}),
                                 );
                               },
                               color: Colors.white,
@@ -201,11 +137,20 @@ class _ProfilePageState extends State<ProfilePage> {
                                           bottomText: 'Gender',
                                           enabled: editMode,
                                           onTap: () async {
+                                            final gender =
+                                                TextEditingController(
+                                                    text: currentBby.genderRaw
+                                                        .toString());
+
                                             await _showEditDialog(
-                                              iconData: Icons.male,
                                               context: context,
                                               label: 'Gender',
-                                              value: 'Male',
+                                              field: EditProfileWidgets.gender(
+                                                  gender),
+                                              updateData: () => currentBby
+                                                  .updateData({
+                                                'gender': int.parse(gender.text)
+                                              }),
                                             );
                                           },
                                         ),
@@ -219,13 +164,28 @@ class _ProfilePageState extends State<ProfilePage> {
                                           bottomText: 'Weight',
                                           enabled: editMode,
                                           onTap: () async {
+                                            final weightLb =
+                                                TextEditingController(
+                                                    text: currentBby.weightLb
+                                                        .toString());
+                                            final weightOz =
+                                                TextEditingController(
+                                                    text: currentBby.weightOz
+                                                        .toString());
+
                                             await _showEditDialog(
-                                              iconData:
-                                                  Icons.monitor_weight_outlined,
-                                              context: context,
-                                              label: 'Weight',
-                                              value: '20 pounds',
-                                            );
+                                                context: context,
+                                                label: 'Weight',
+                                                field:
+                                                    EditProfileWidgets.weight(
+                                                        weightLb, weightOz),
+                                                updateData: () => currentBby
+                                                        .updateData({
+                                                      'weightLb': double.parse(
+                                                          weightLb.text),
+                                                      'weightOz': double.parse(
+                                                          weightOz.text)
+                                                    }));
                                           },
                                         ),
                                       ],
@@ -241,12 +201,22 @@ class _ProfilePageState extends State<ProfilePage> {
                                           bottomText: 'Age',
                                           enabled: editMode,
                                           onTap: () async {
+                                            final birthDate =
+                                                TextEditingController(
+                                                    text: currentBby.birthDate
+                                                        .toString());
+
                                             await _showEditDialog(
-                                              iconData: Icons.calendar_today,
-                                              context: context,
-                                              label: 'Age',
-                                              value: '14 months old',
-                                            );
+                                                context: context,
+                                                label: 'Date of Birth',
+                                                field: EditProfileWidgets
+                                                    .birthDate(
+                                                        context, birthDate),
+                                                updateData: () => currentBby
+                                                        .updateData({
+                                                      'birth_date':
+                                                          birthDate.text.split(' ').first
+                                                    }));
                                           },
                                         ),
                                         const SizedBox(
@@ -258,12 +228,22 @@ class _ProfilePageState extends State<ProfilePage> {
                                           bottomText: 'Height',
                                           enabled: editMode,
                                           onTap: () async {
+                                            final height =
+                                                TextEditingController(
+                                                    text: currentBby.heightIn
+                                                        .toString());
+
                                             await _showEditDialog(
-                                              iconData: Icons.straighten,
-                                              context: context,
-                                              label: 'Height',
-                                              value: '2\'5"',
-                                            );
+                                                context: context,
+                                                label: 'Height',
+                                                field:
+                                                    EditProfileWidgets.height(
+                                                        height),
+                                                updateData: () => currentBby
+                                                        .updateData({
+                                                      'height': double.parse(
+                                                          height.text)
+                                                    }));
                                           },
                                         )
                                       ],
@@ -295,15 +275,23 @@ class _ProfilePageState extends State<ProfilePage> {
                                     IconInformation(
                                       iconData: Icons.medical_services_outlined,
                                       topText: currentBby.pediatrician,
-                                      bottomText: 'Doctor',
+                                      bottomText: 'Pediatrician',
                                       enabled: editMode,
                                       onTap: () async {
+                                        final pediatrician =
+                                            TextEditingController(
+                                                text: currentBby.pediatrician);
+
                                         await _showEditDialog(
-                                          iconData:
-                                              Icons.medical_services_outlined,
                                           context: context,
-                                          label: 'Doctor',
-                                          value: 'Al Zeimers',
+                                          label: 'Pediatrician Name',
+                                          field:
+                                              EditProfileWidgets.pediatrician(
+                                                  pediatrician),
+                                          updateData: () => currentBby
+                                              .updateData({
+                                            'pediatrician': pediatrician.text
+                                          }),
                                         );
                                       },
                                     ),
@@ -316,12 +304,20 @@ class _ProfilePageState extends State<ProfilePage> {
                                       bottomText: 'Phone',
                                       enabled: editMode,
                                       onTap: () async {
+                                        final pedPhone = TextEditingController(
+                                            text: currentBby.pediatricianPhone);
+
                                         await _showEditDialog(
-                                          iconData: Icons.contacts_outlined,
-                                          context: context,
-                                          label: 'Phone',
-                                          value: '(555)-555-5555',
-                                        );
+                                            context: context,
+                                            label: 'Pediatrician Phone',
+                                            field: EditProfileWidgets
+                                                .pediatricianPhone(pedPhone),
+                                            updateData: () => currentBby
+                                                    .updateData({
+                                                  'pediatrician_phone': pedPhone
+                                                      .text
+                                                      .replaceAll('-', '')
+                                                }));
                                       },
                                     ),
                                   ],
@@ -380,7 +376,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 icon: const Icon(Icons.phone),
                                 label: 'Pediatrician',
                                 onPressed: () {
-                                  launch('tel://' + currentBby.pediatricianPhone);
+                                  launch(
+                                      'tel://' + currentBby.pediatricianPhone);
                                 },
                               ),
                               const Spacer(),
@@ -421,6 +418,72 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _showEditDialog({
+    required BuildContext context,
+    required String label,
+    required Widget field,
+    required Function updateData,
+  }) async {
+    return await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          titlePadding: const EdgeInsets.only(left: 16, top: 16, bottom: 8),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+          actionsPadding: const EdgeInsets.symmetric(vertical: 16),
+          title: Text(
+            'Editing ' + label,
+            style: Theme.of(context).textTheme.headline2,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const DottedDivider(),
+              Padding(
+                padding: const EdgeInsets.only(top: 8, right: 48),
+                child: Form(
+                  key: _formKey,
+                  child: field,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                    child: const Text('Cancel'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    }),
+                const SizedBox(width: 50),
+                OutlinedButton(
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 32),
+                    child: Text(
+                      'Save',
+                    ),
+                  ),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      updateData();
+                      Navigator.of(context).pop();
+                    }
+                  },
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 

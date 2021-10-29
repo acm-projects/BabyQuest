@@ -85,7 +85,7 @@ class DataService {
 
     await _profileCollection.add({
       'name': name,
-      'birth_date': birthDate.toString(),
+      'birth_date': birthDate.toString().split(' ').first,
       'gender': gender,
       'height': height,
       'weightLb': weightLb,
