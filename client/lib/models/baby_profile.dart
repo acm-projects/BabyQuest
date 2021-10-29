@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 
@@ -28,6 +30,10 @@ class BabyProfile {
 
   // public properties
   final String uid;
+
+  // babyProfile update stream
+  static final _streamController = StreamController.broadcast();
+  static final updateStream = _streamController.stream;
 
   // static accessors
   static BabyProfile get currentProfile => _currentProfile ?? defaultProfile;
@@ -87,11 +93,11 @@ class BabyProfile {
     if (days < 7) {
       return days.toString() + ' days';
     } else if (days < 30.44) {
-      return (days / 7).round().toString() + ' weeks';
+      return (days / 7).floor().toString() + ' weeks';
     } else if (days < 365.25) {
-      return (days / 30.44).round().toString() + ' months';
+      return (days / 30.44).floor().toString() + ' months';
     } else {
-      return (days / 365.25).round().toString() + ' years';
+      return (days / 365.25).floor().toString() + ' years';
     }
   } //will calcuate age in days, weeks, months, or years and return as String
 
@@ -137,6 +143,8 @@ class BabyProfile {
     // _diaperChanges = profileData['diaper_changes'];
     // _sleep = profileData['sleep'];
     // _feedings = profileData['feedings'];
+
+    _streamController.add(currentProfile);
   }
 
   void updateData(Map<String, dynamic> data) {
