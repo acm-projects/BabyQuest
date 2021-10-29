@@ -3,10 +3,10 @@ import 'package:client/services/auth_service.dart';
 import 'package:client/widgets/dotted_divider.dart';
 import 'package:client/widgets/edit_profile_widgets.dart';
 import 'package:client/widgets/icon_information.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
