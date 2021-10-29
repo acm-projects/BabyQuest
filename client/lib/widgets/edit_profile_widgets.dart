@@ -13,12 +13,12 @@ class EditProfileWidgets {
         controller: nameController,
         validator: (value) {
           return (value == null || value.isEmpty)
-              ? 'Enter the full name'
+              ? 'Enter the baby\'s full name'
               : null;
         },
         decoration: const InputDecoration(
           icon: Icon(Icons.edit),
-          hintText: 'Full Name',
+          hintText: 'Baby\'s Full Name',
         ),
       ),
     );
@@ -53,7 +53,7 @@ class EditProfileWidgets {
       return '${unformattedDate.month}/${unformattedDate.day}/${unformattedDate.year}';
     }
 
-    return 'Select';
+    return 'Select Date of Birth';
   }
 
   static Widget birthDate(
@@ -64,12 +64,15 @@ class EditProfileWidgets {
     return StatefulBuilder(
       builder: (context, setState) {
         return GestureDetector(
-          child: TextFormField(
-            controller: viewController,
-            enabled: false,
-            decoration: const InputDecoration(
-              icon: Icon(Icons.calendar_today),
-              hintText: 'Select Date',
+          child: SizedBox(
+            width: 256,
+            child: TextFormField(
+              controller: viewController,
+              enabled: false,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                icon: Icon(Icons.calendar_today),
+              ),
             ),
           ),
           onTap: () async {
@@ -91,22 +94,19 @@ class EditProfileWidgets {
 
     return StatefulBuilder(
       builder: (context, setState) {
-        return Row(
-          children: [
-            DropdownButton(
-              style: Theme.of(context).textTheme.subtitle1,
-              autofocus: true,
-              value: items[int.parse(genderController.text) + 1],
-              icon: const Icon(Icons.keyboard_arrow_down),
-              items: items.map((String items) {
-                return DropdownMenuItem(value: items, child: Text(items));
-              }).toList(),
-              onChanged: (newValue) {
-                setState(() => genderController.text =
-                    (items.indexOf(newValue.toString()) - 1).toString());
-              },
-            ),
-          ],
+        return DropdownButton(
+          underline: Container(),
+          style: Theme.of(context).textTheme.subtitle1,
+          autofocus: true,
+          value: items[int.parse(genderController.text) + 1],
+          icon: const Icon(Icons.keyboard_arrow_down),
+          items: items.map((String items) {
+            return DropdownMenuItem(value: items, child: Text(items));
+          }).toList(),
+          onChanged: (newValue) {
+            setState(() => genderController.text =
+                (items.indexOf(newValue.toString()) - 1).toString());
+          },
         );
       },
     );
@@ -127,7 +127,7 @@ class EditProfileWidgets {
                   : null;
             },
             decoration: const InputDecoration(
-                icon: Icon(Icons.straighten), hintText: 'Inches'),
+                icon: Icon(Icons.straighten), hintText: 'Height'),
           ),
         ),
         const Text('in'),
@@ -138,7 +138,7 @@ class EditProfileWidgets {
   static Widget weight(TextEditingController weightLbController,
       TextEditingController weightOzController) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         SizedBox(
           width: 80,
@@ -152,7 +152,7 @@ class EditProfileWidgets {
                   : null;
             },
             decoration: const InputDecoration(
-                icon: Icon(Icons.monitor_weight_outlined), hintText: 'Pounds'),
+                icon: Icon(Icons.monitor_weight_outlined), hintText: '19'),
           ),
         ),
         const Padding(
@@ -174,7 +174,7 @@ class EditProfileWidgets {
                   Icons.monitor_weight_outlined,
                   color: Colors.transparent,
                 ),
-                hintText: 'Ounces'),
+                hintText: '3'),
           ),
         ),
         const Text('oz'),

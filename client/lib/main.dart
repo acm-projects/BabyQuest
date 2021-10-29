@@ -82,6 +82,7 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
           ),
+          inputDecorationTheme: const InputDecorationTheme(isDense: true),
         ),
         debugShowCheckedModeBanner: false,
         home: isLoaded

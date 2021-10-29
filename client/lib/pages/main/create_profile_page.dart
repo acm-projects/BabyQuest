@@ -85,11 +85,12 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   content: Form(
                     key: _formKeys[0],
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         EditProfileWidgets.name(name),
                         const SizedBox(height: 12),
-                        EditProfileWidgets.birthDate(
-                            context, birthDate),
+                        EditProfileWidgets.birthDate(context, birthDate),
                         const SizedBox(height: 12),
                         EditProfileWidgets.gender(gender),
                         const SizedBox(height: 12),
