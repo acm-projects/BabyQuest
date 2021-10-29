@@ -141,7 +141,7 @@ class EditProfileWidgets {
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
-          width: 96,
+          width: 80,
           child: TextFormField(
             autofocus: true,
             keyboardType: TextInputType.number,
@@ -160,7 +160,7 @@ class EditProfileWidgets {
           child: Text('lbs'),
         ),
         SizedBox(
-          width: 96,
+          width: 80,
           child: TextFormField(
             keyboardType: TextInputType.number,
             controller: weightOzController,
