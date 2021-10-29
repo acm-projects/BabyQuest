@@ -62,6 +62,20 @@ class MyApp extends StatelessWidget {
               borderRadius: BorderRadius.circular(100),
             ),
           ),
+          outlinedButtonTheme: OutlinedButtonThemeData(
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(style: BorderStyle.none),
+              primary: Colors.grey.shade700,
+              textStyle: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 20,
+              ),
+              backgroundColor: Colors.green.shade200,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
         ),
         debugShowCheckedModeBanner: false,
         home: const SplashPage(),

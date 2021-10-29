@@ -6,12 +6,91 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tinycolor2/tinycolor2.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  bool editMode = false;
+
+  Future<void> _showEditDialog(
+      {required BuildContext context,
+      required String label,
+      required String value,
+      required IconData iconData}) async {
+    final TextEditingController _textEditingController =
+        TextEditingController(text: value);
+
+    return await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          titlePadding: const EdgeInsets.only(left: 16, top: 16, bottom: 8),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+          actionsPadding: const EdgeInsets.symmetric(vertical: 16),
+          title: Text(
+            'Editing ' + label,
+            style: Theme.of(context).textTheme.headline2,
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const DottedDivider(),
+              Padding(
+                padding: const EdgeInsets.only(top: 8, right: 48),
+                child: Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    style: Theme.of(context).textTheme.subtitle1,
+                    autofocus: true,
+                    controller: _textEditingController,
+                    validator: (value) {
+                      return value!.isNotEmpty ? null : "Invalid";
+                    },
+                    decoration: InputDecoration(
+                      icon: Icon(iconData),
+                      hintText: "Enter Text",
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            Center(
+              child: OutlinedButton(
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 32),
+                  child: Text(
+                    'Save',
+                  ),
+                ),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    Navigator.of(context).pop();
+                  }
+                },
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           Expanded(
@@ -60,7 +139,14 @@ class ProfilePage extends StatelessWidget {
                           Align(
                             alignment: Alignment.bottomRight,
                             child: IconButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                await _showEditDialog(
+                                  iconData: Icons.edit,
+                                  context: context,
+                                  label: 'Baby Name',
+                                  value: 'Osbaldo Waldo',
+                                );
+                              },
                               color: Colors.white,
                               icon: const Icon(Icons.edit),
                             ),
@@ -106,13 +192,22 @@ class ProfilePage extends StatelessWidget {
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      children: const [
+                                      children: [
                                         IconInformation(
                                           iconData: Icons.male,
                                           topText: 'Male',
                                           bottomText: 'Gender',
+                                          enabled: editMode,
+                                          onTap: () async {
+                                            await _showEditDialog(
+                                              iconData: Icons.male,
+                                              context: context,
+                                              label: 'Gender',
+                                              value: 'Male',
+                                            );
+                                          },
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 32,
                                         ),
                                         IconInformation(
@@ -120,6 +215,16 @@ class ProfilePage extends StatelessWidget {
                                               Icons.monitor_weight_outlined,
                                           topText: '20 pounds',
                                           bottomText: 'Weight',
+                                          enabled: editMode,
+                                          onTap: () async {
+                                            await _showEditDialog(
+                                              iconData:
+                                                  Icons.monitor_weight_outlined,
+                                              context: context,
+                                              label: 'Weight',
+                                              value: '20 pounds',
+                                            );
+                                          },
                                         ),
                                       ],
                                     ),
@@ -127,19 +232,37 @@ class ProfilePage extends StatelessWidget {
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      children: const [
+                                      children: [
                                         IconInformation(
                                           iconData: Icons.calendar_today,
                                           topText: '14 months old',
                                           bottomText: 'Age',
+                                          enabled: editMode,
+                                          onTap: () async {
+                                            await _showEditDialog(
+                                              iconData: Icons.calendar_today,
+                                              context: context,
+                                              label: 'Age',
+                                              value: '14 months old',
+                                            );
+                                          },
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 32,
                                         ),
                                         IconInformation(
                                           iconData: Icons.straighten,
                                           topText: '2\'5"',
                                           bottomText: 'Height',
+                                          enabled: editMode,
+                                          onTap: () async {
+                                            await _showEditDialog(
+                                              iconData: Icons.straighten,
+                                              context: context,
+                                              label: 'Height',
+                                              value: '2\'5"',
+                                            );
+                                          },
                                         )
                                       ],
                                     ),
@@ -166,19 +289,38 @@ class ProfilePage extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 16),
                                 child: Column(
-                                  children: const [
+                                  children: [
                                     IconInformation(
                                       iconData: Icons.medical_services_outlined,
                                       topText: 'Al Zeimers',
                                       bottomText: 'Doctor',
+                                      enabled: editMode,
+                                      onTap: () async {
+                                        await _showEditDialog(
+                                          iconData:
+                                              Icons.medical_services_outlined,
+                                          context: context,
+                                          label: 'Doctor',
+                                          value: 'Al Zeimers',
+                                        );
+                                      },
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 32,
                                     ),
                                     IconInformation(
                                       iconData: Icons.contacts_outlined,
                                       topText: '(555)-555-5555',
                                       bottomText: 'Phone',
+                                      enabled: editMode,
+                                      onTap: () async {
+                                        await _showEditDialog(
+                                          iconData: Icons.contacts_outlined,
+                                          context: context,
+                                          label: 'Phone',
+                                          value: '(555)-555-5555',
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),
@@ -261,7 +403,21 @@ class ProfilePage extends StatelessWidget {
                               LabeledIconButton(
                                 icon: const Icon(Icons.edit),
                                 label: 'Edit Info',
-                                onPressed: () {},
+                                onPressed: () => setState(() {
+                                  editMode = !editMode;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 24, vertical: 12),
+                                      behavior: SnackBarBehavior.floating,
+                                      duration:
+                                          const Duration(milliseconds: 1250),
+                                      content: Text(editMode
+                                          ? 'Editing Enabled'
+                                          : 'Editing Disabled'),
+                                    ),
+                                  );
+                                }),
                               ),
                               const Spacer(),
                               LabeledIconButton(
