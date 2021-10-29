@@ -1,10 +1,10 @@
 import 'package:client/services/auth_service.dart';
 import 'package:client/widgets/dotted_divider.dart';
 import 'package:client/widgets/icon_information.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tinycolor2/tinycolor2.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -397,7 +397,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               LabeledIconButton(
                                 icon: const Icon(Icons.phone),
                                 label: 'Pediatrician',
-                                onPressed: () {},
+                                onPressed: () async {
+                                  launch('tel://5555555555');
+                                },
                               ),
                               const Spacer(),
                               LabeledIconButton(
