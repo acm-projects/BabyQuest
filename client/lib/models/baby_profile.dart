@@ -45,6 +45,7 @@ class BabyProfile {
 
   String get name => _name ?? '';
 
+  int get genderRaw => _gender ?? 0;
   String get gender {
     switch (_gender) {
       case 0:
@@ -136,5 +137,9 @@ class BabyProfile {
     // _diaperChanges = profileData['diaper_changes'];
     // _sleep = profileData['sleep'];
     // _feedings = profileData['feedings'];
+  }
+
+  void updateData(Map<String, dynamic> data) {
+    DataService.updateProfileData(uid, data);
   }
 }
