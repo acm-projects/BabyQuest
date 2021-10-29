@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:client/models/baby_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 import 'package:image_picker/image_picker.dart';
@@ -83,23 +84,30 @@ class EditProfileWidgets {
 
     return StatefulBuilder(
       builder: (context, setState) {
-        return DropdownButton(
-          value: items[int.parse(genderController.text) + 1],
-          icon: const Icon(Icons.keyboard_arrow_down),
-          items: items.map((String items) {
-            return DropdownMenuItem(value: items, child: Text(items));
-          }).toList(),
-          onChanged: (newValue) {
-            setState(() => genderController.text =
-                (items.indexOf(newValue.toString()) - 1).toString());
-          },
+        return Row(
+          children: [
+            Icon(BabyProfile.getGenderIcon(int.parse(genderController.text))),
+            DropdownButton(
+              value: items[int.parse(genderController.text) + 1],
+              icon: const Icon(Icons.keyboard_arrow_down),
+              items: items.map((String items) {
+                return DropdownMenuItem(value: items, child: Text(items));
+              }).toList(),
+              onChanged: (newValue) {
+                setState(() => genderController.text =
+                    (items.indexOf(newValue.toString()) - 1).toString());
+              },
+            ),
+          ],
         );
       },
     );
   }
 
   static Widget height(TextEditingController heightController) {
-    return SizedBox(width: 100, child: TextFormField(
+    return SizedBox(
+      width: 100,
+      child: TextFormField(
         keyboardType: TextInputType.number,
         controller: heightController,
         validator: (value) {
@@ -118,7 +126,9 @@ class EditProfileWidgets {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        SizedBox(width: 100, child: TextFormField(
+        SizedBox(
+          width: 100,
+          child: TextFormField(
             keyboardType: TextInputType.number,
             controller: weightLbController,
             validator: (value) {
@@ -132,7 +142,9 @@ class EditProfileWidgets {
         ),
         const Text('lbs'),
         const SizedBox(width: 24),
-        SizedBox(width: 100, child: TextFormField(
+        SizedBox(
+          width: 100,
+          child: TextFormField(
             keyboardType: TextInputType.number,
             controller: weightOzController,
             validator: (value) {

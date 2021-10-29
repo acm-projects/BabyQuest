@@ -52,6 +52,7 @@ class BabyProfile {
   String get name => _name ?? '';
 
   int get genderRaw => _gender ?? 0;
+  IconData get genderIcon => getGenderIcon(_gender ?? 0);
   String get gender {
     switch (_gender) {
       case 0:
@@ -60,17 +61,6 @@ class BabyProfile {
         return "Female";
       default:
         return "Other";
-    }
-  }
-
-  IconData get genderIcon {
-    switch (_gender) {
-      case 0:
-        return Icons.male;
-      case 1:
-        return Icons.female;
-      default:
-        return Icons.transgender;
     }
   }
 
@@ -145,6 +135,17 @@ class BabyProfile {
     // _feedings = profileData['feedings'];
 
     _streamController.add(currentProfile);
+  }
+
+  static IconData getGenderIcon(int genderRaw) {
+    switch (genderRaw) {
+      case 0:
+        return Icons.male;
+      case 1:
+        return Icons.female;
+      default:
+        return Icons.transgender;
+    }
   }
 
   void updateData(Map<String, dynamic> data) {
