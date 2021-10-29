@@ -6,13 +6,21 @@ import 'package:image_picker/image_picker.dart';
 
 class EditProfileWidgets {
   static Widget name(TextEditingController nameController) {
-    return TextFormField(
-      controller: nameController,
-      validator: (value) {
-        return (value == null || value.isEmpty) ? 'Enter the full name' : null;
-      },
-      decoration:
-          const InputDecoration(icon: Icon(Icons.edit), hintText: 'Full Name'),
+    return Padding(
+      padding: const EdgeInsets.only(right: 48),
+      child: TextFormField(
+        autofocus: true,
+        controller: nameController,
+        validator: (value) {
+          return (value == null || value.isEmpty)
+              ? 'Enter the full name'
+              : null;
+        },
+        decoration: const InputDecoration(
+          icon: Icon(Icons.edit),
+          hintText: 'Full Name',
+        ),
+      ),
     );
   }
 
@@ -83,33 +91,47 @@ class EditProfileWidgets {
 
     return StatefulBuilder(
       builder: (context, setState) {
-        return DropdownButton(
-          value: items[int.parse(genderController.text) + 1],
-          icon: const Icon(Icons.keyboard_arrow_down),
-          items: items.map((String items) {
-            return DropdownMenuItem(value: items, child: Text(items));
-          }).toList(),
-          onChanged: (newValue) {
-            setState(() => genderController.text =
-                (items.indexOf(newValue.toString()) - 1).toString());
-          },
+        return Row(
+          children: [
+            DropdownButton(
+              style: Theme.of(context).textTheme.subtitle1,
+              autofocus: true,
+              value: items[int.parse(genderController.text) + 1],
+              icon: const Icon(Icons.keyboard_arrow_down),
+              items: items.map((String items) {
+                return DropdownMenuItem(value: items, child: Text(items));
+              }).toList(),
+              onChanged: (newValue) {
+                setState(() => genderController.text =
+                    (items.indexOf(newValue.toString()) - 1).toString());
+              },
+            ),
+          ],
         );
       },
     );
   }
 
   static Widget height(TextEditingController heightController) {
-    return SizedBox(width: 100, child: TextFormField(
-        keyboardType: TextInputType.number,
-        controller: heightController,
-        validator: (value) {
-          return (value == null || value.isEmpty)
-              ? 'Enter the height (in)'
-              : null;
-        },
-        decoration: const InputDecoration(
-            icon: Icon(Icons.straighten), hintText: 'Inches'),
-      ),
+    return Row(
+      children: [
+        SizedBox(
+          width: 96,
+          child: TextFormField(
+            autofocus: true,
+            keyboardType: TextInputType.number,
+            controller: heightController,
+            validator: (value) {
+              return (value == null || value.isEmpty)
+                  ? 'Enter the height (in)'
+                  : null;
+            },
+            decoration: const InputDecoration(
+                icon: Icon(Icons.straighten), hintText: 'Inches'),
+          ),
+        ),
+        const Text('in'),
+      ],
     );
   }
 
@@ -118,7 +140,10 @@ class EditProfileWidgets {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        SizedBox(width: 100, child: TextFormField(
+        SizedBox(
+          width: 96,
+          child: TextFormField(
+            autofocus: true,
             keyboardType: TextInputType.number,
             controller: weightLbController,
             validator: (value) {
@@ -130,9 +155,13 @@ class EditProfileWidgets {
                 icon: Icon(Icons.monitor_weight_outlined), hintText: 'Pounds'),
           ),
         ),
-        const Text('lbs'),
-        const SizedBox(width: 24),
-        SizedBox(width: 100, child: TextFormField(
+        const Padding(
+          padding: EdgeInsets.only(right: 16.0),
+          child: Text('lbs'),
+        ),
+        SizedBox(
+          width: 96,
+          child: TextFormField(
             keyboardType: TextInputType.number,
             controller: weightOzController,
             validator: (value) {
@@ -140,7 +169,12 @@ class EditProfileWidgets {
                   ? 'Enter the weight (oz)'
                   : null;
             },
-            decoration: const InputDecoration(hintText: 'Ounces'),
+            decoration: const InputDecoration(
+                icon: Icon(
+                  Icons.monitor_weight_outlined,
+                  color: Colors.transparent,
+                ),
+                hintText: 'Ounces'),
           ),
         ),
         const Text('oz'),
@@ -206,39 +240,47 @@ class EditProfileWidgets {
   }
 
   static Widget pediatrician(TextEditingController pedController) {
-    return TextFormField(
-      controller: pedController,
-      validator: (value) {
-        return (value == null || value.isEmpty)
-            ? 'Enter your pediatrician\'s name'
-            : null;
-      },
-      decoration: const InputDecoration(
-          icon: Icon(Icons.medical_services_outlined),
-          hintText: 'Name of Pediatrician'),
+    return Padding(
+      padding: const EdgeInsets.only(right: 48),
+      child: TextFormField(
+        autofocus: true,
+        controller: pedController,
+        validator: (value) {
+          return (value == null || value.isEmpty)
+              ? 'Enter your pediatrician\'s name'
+              : null;
+        },
+        decoration: const InputDecoration(
+            icon: Icon(Icons.medical_services_outlined),
+            hintText: 'Name of Pediatrician'),
+      ),
     );
   }
 
   static Widget pediatricianPhone(TextEditingController pedPhoneController) {
-    return TextFormField(
-      keyboardType: TextInputType.phone,
-      controller: pedPhoneController,
-      validator: (value) {
-        return (value == null || value.length != 12)
-            ? 'Enter a valid phone number'
-            : null;
-      },
-      decoration: const InputDecoration(
-        icon: Icon(Icons.contacts_outlined),
-        hintText: 'Pediatrician Contact Information',
-      ),
-      inputFormatters: [
-        LibPhonenumberTextFormatter(
-          country: const CountryWithPhoneCode.us(),
-          inputContainsCountryCode: false,
-          additionalDigits: 0,
+    return Padding(
+      padding: const EdgeInsets.only(right: 48),
+      child: TextFormField(
+        autofocus: true,
+        keyboardType: TextInputType.phone,
+        controller: pedPhoneController,
+        validator: (value) {
+          return (value == null || value.length != 12)
+              ? 'Enter a valid phone number'
+              : null;
+        },
+        decoration: const InputDecoration(
+          icon: Icon(Icons.contacts_outlined),
+          hintText: 'Pediatrician\'s Phone Number',
         ),
-      ],
+        inputFormatters: [
+          LibPhonenumberTextFormatter(
+            country: const CountryWithPhoneCode.us(),
+            inputContainsCountryCode: false,
+            additionalDigits: 0,
+          ),
+        ],
+      ),
     );
   }
 

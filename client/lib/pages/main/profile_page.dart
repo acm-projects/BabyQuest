@@ -19,7 +19,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   BabyProfile currentBby = BabyProfile.currentProfile;
-  bool editMode = false;
+  bool editMode = true;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +76,6 @@ class _ProfilePageState extends State<ProfilePage> {
                               onPressed: () async {
                                 final name = TextEditingController(
                                     text: currentBby.name);
-
                                 await _showEditDialog(
                                   context: context,
                                   label: 'Baby Name',
@@ -141,7 +140,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 TextEditingController(
                                                     text: currentBby.genderRaw
                                                         .toString());
-
                                             await _showEditDialog(
                                               context: context,
                                               label: 'Gender',
@@ -214,8 +212,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         context, birthDate),
                                                 updateData: () => currentBby
                                                         .updateData({
-                                                      'birth_date':
-                                                          birthDate.text.split(' ').first
+                                                      'birth_date': birthDate
+                                                          .text
+                                                          .split(' ')
+                                                          .first
                                                     }));
                                           },
                                         ),
@@ -437,7 +437,8 @@ class _ProfilePageState extends State<ProfilePage> {
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           titlePadding: const EdgeInsets.only(left: 16, top: 16, bottom: 8),
           contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-          actionsPadding: const EdgeInsets.symmetric(vertical: 16),
+          actionsPadding:
+              const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           title: Text(
             'Editing ' + label,
             style: Theme.of(context).textTheme.headline2,
@@ -447,39 +448,59 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               const DottedDivider(),
               Padding(
-                padding: const EdgeInsets.only(top: 8, right: 48),
-                child: Form(
-                  key: _formKey,
-                  child: field,
+                padding: const EdgeInsets.only(top: 8),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Form(
+                    key: _formKey,
+                    child: field,
+                  ),
                 ),
               ),
             ],
           ),
           actions: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextButton(
-                    child: const Text('Cancel'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    }),
-                const SizedBox(width: 50),
-                OutlinedButton(
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 32),
+            OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                backgroundColor: Colors.transparent,
+              ),
+              child: SizedBox(
+                width: 96,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Center(
+                    child: Text(
+                      'Cancel',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline2!
+                          .copyWith(fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            OutlinedButton(
+              child: const SizedBox(
+                width: 96,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  child: Center(
                     child: Text(
                       'Save',
                     ),
                   ),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      updateData();
-                      Navigator.of(context).pop();
-                    }
-                  },
                 ),
-              ],
+              ),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  updateData();
+                  Navigator.of(context).pop();
+                }
+              },
             ),
           ],
         );
