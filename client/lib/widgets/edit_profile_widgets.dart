@@ -14,7 +14,7 @@ class EditProfileWidgets {
         controller: nameController,
         validator: (value) {
           return (value == null || value.isEmpty)
-              ? 'Enter the baby\'s full name'
+              ? 'Enter baby\'s full name'
               : null;
         },
         decoration: const InputDecoration(
@@ -64,71 +64,75 @@ class EditProfileWidgets {
 
     return StatefulBuilder(
       builder: (context, setState) {
-        return GestureDetector(
-          child: SizedBox(
-            width: 256,
-            child: TextFormField(
-              controller: viewController,
-              enabled: false,
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                icon: Icon(Icons.calendar_today),
-              ),
+        return SizedBox(
+          width: 256,
+          child: TextFormField(
+            controller: viewController,
+            readOnly: true,
+            validator: (value) {
+              return (value == null ||
+                      value.isEmpty ||
+                      value == 'Select Date of Birth')
+                  ? 'Select baby\'s date of birth'
+                  : null;
+            },
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              icon: Icon(Icons.calendar_today),
             ),
+            onTap: () async {
+              await _selectDate(birthDateController, context);
+              setState(() =>
+                  viewController.text = _getFormattedDate(birthDateController));
+            },
           ),
-          onTap: () async {
-            await _selectDate(birthDateController, context);
-            setState(() =>
-                viewController.text = _getFormattedDate(birthDateController));
-          },
         );
       },
     );
   }
 
-  static Widget gender(TextEditingController genderController) {
-    var items = ['Select Gender', 'Male', 'Female', 'Other'];
+  static Widget gender(
+      BuildContext context, TextEditingController genderController) {
+    var items = ['Male', 'Female', 'Other'];
 
-    if (genderController.text.isEmpty) {
-      genderController.text = '-1';
-    }
-
-    return StatefulBuilder(
-      builder: (context, setState) {
-        return Row(
-          children: [
-            Icon(
-              BabyProfile.getGenderIcon(
-                int.parse(genderController.text),
-              ),
-              color: const Color(0xFF8C8161),
-              size: 17,
+    return Row(
+      children: [
+        Icon(
+          BabyProfile.getGenderIcon(
+            int.tryParse(genderController.text) ?? 3,
+          ),
+          color: const Color(0xFF8C8161),
+          size: 17,
+        ),
+        const SizedBox(
+          width: 16,
+        ),
+        SizedBox(
+          width: 120,
+          child: DropdownButtonFormField(
+            hint: const Text('Gender'),
+            value: (int.tryParse(genderController.text) != null)
+                ? items[int.parse(genderController.text)]
+                : null,
+            style: Theme.of(context).textTheme.subtitle1,
+            autofocus: true,
+            icon: const Icon(
+              Icons.keyboard_arrow_down,
+              color: Color(0xFF8C8161),
             ),
-            const SizedBox(
-              width: 16,
-            ),
-            DropdownButton(
-              hint: const Text('Select Gender'),
-              isDense: true,
-              underline: Container(),
-              style: Theme.of(context).textTheme.subtitle1,
-              autofocus: true,
-              icon: const Icon(
-                Icons.keyboard_arrow_down,
-                color: Color(0xFF8C8161),
-              ),
-              value: items[int.parse(genderController.text) + 1],
-              items: items.map((String items) {
-                return DropdownMenuItem(value: items, child: Text(items));
-              }).toList(),
-              onChanged: (newValue) {
-                setState(() => genderController.text =
-                    (items.indexOf(newValue.toString()) - 1).toString());
-              },
-            ),
-          ],
-        );
-      },
+            items: items.map((String items) {
+              return DropdownMenuItem(value: items, child: Text(items));
+            }).toList(),
+            onChanged: (newValue) {
+              genderController.text =
+                  items.indexOf(newValue.toString()).toString();
+            },
+            validator: (value) {
+              return (value == null) ? 'Select baby\'s gender' : null;
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -146,7 +150,7 @@ class EditProfileWidgets {
             },
             decoration: const InputDecoration(
               icon: Icon(Icons.straighten),
-              labelText: 'Height',
+              hintText: '24',
               isDense: true,
               contentPadding: EdgeInsets.only(bottom: 6),
             ),
@@ -173,7 +177,7 @@ class EditProfileWidgets {
             },
             decoration: const InputDecoration(
               icon: Icon(Icons.monitor_weight_outlined),
-              hintText: '19',
+              hintText: '12',
               contentPadding: EdgeInsets.only(bottom: 6),
             ),
           ),
@@ -207,35 +211,56 @@ class EditProfileWidgets {
 
   static Widget _allergyField(int index, List<String> allergyNames,
       List<int> allergySeverities, Function setState) {
-    var items = ['Select', 'Mild', 'Moderate', 'Severe'];
+    var items = ['Mild', 'Moderate', 'Severe'];
 
     return Row(
       children: [
+        IconButton(
+          iconSize: 16,
+          padding: const EdgeInsets.all(2.0),
+          icon: const Icon(Icons.close),
+          onPressed: () {
+            setState(() {
+              allergyNames.removeAt(index);
+              allergySeverities.removeAt(index);
+            });
+          },
+        ),
         SizedBox(
-          width: 200,
+          width: 140,
           child: TextFormField(
-            initialValue: allergyNames[index],
-            decoration: const InputDecoration(
-                labelText: 'Allergy',
-                isDense: true,
-                contentPadding: EdgeInsets.zero),
-            onChanged: (newValue) {
-              allergyNames[index] = newValue.toString();
-            },
-          ),
+              initialValue: allergyNames[index],
+              decoration: const InputDecoration(
+                  labelText: 'Allergy',
+                  isDense: true,
+                  contentPadding: EdgeInsets.zero),
+              onChanged: (newValue) {
+                allergyNames[index] = newValue.toString();
+              },
+              validator: (value) {
+                return (value == null || value.isEmpty)
+                    ? 'Enter allergy, or delete field'
+                    : null;
+              }),
         ),
         const SizedBox(width: 16),
-        DropdownButton(
-          underline: Container(),
-          value: items[allergySeverities[index] + 1],
-          icon: const Icon(Icons.keyboard_arrow_down),
-          items: items.map((String items) {
-            return DropdownMenuItem(value: items, child: Text(items));
-          }).toList(),
-          onChanged: (newValue) {
-            setState(() => allergySeverities[index] =
-                items.indexOf(newValue.toString()) - 1);
-          },
+        SizedBox(
+          width: 88,
+          child: DropdownButtonFormField(
+              hint: const Text('Severity'),
+              value: (allergySeverities[index] != -1)
+                  ? items[allergySeverities[index]]
+                  : null,
+              icon: const Icon(Icons.keyboard_arrow_down),
+              items: items.map((String items) {
+                return DropdownMenuItem(value: items, child: Text(items));
+              }).toList(),
+              onChanged: (newValue) {
+                allergySeverities[index] = items.indexOf(newValue.toString());
+              },
+              validator: (value) {
+                return (value == null) ? 'Select severity' : null;
+              }),
         ),
       ],
     );

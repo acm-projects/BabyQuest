@@ -165,7 +165,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   label: 'Gender',
                                                   field:
                                                       EditProfileWidgets.gender(
-                                                          gender),
+                                                          context, gender),
                                                   updateData: () => currentBby
                                                       .updateData({
                                                     'gender':
@@ -557,6 +557,19 @@ class _ProfilePageState extends State<ProfilePage> {
           iconData: Icons.warning_amber_outlined,
           topText: allergy,
           bottomText: severities[severity],
+          enabled: editMode,
+          onTap: () async {
+            List<String> allergyNames = currentBby.allergies.keys.toList();
+            List<int> allergySeverities = currentBby.allergies.values.toList();
+
+            await _showEditDialog(
+              context: context,
+              label: 'Allergies',
+              field: EditProfileWidgets.allergies(allergyNames, allergySeverities),
+              updateData: () =>
+                  currentBby.updateData({'allergies': Map.fromIterables(allergyNames, allergySeverities)}),
+            );
+          },
         ),
       );
 
