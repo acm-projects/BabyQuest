@@ -336,10 +336,15 @@ class EditProfileWidgets {
     );
   }
 
-  static List<Widget> _getLocalImage(TextEditingController imageController) {
-    return imageController.text.isNotEmpty
-        ? [Image.file(File(imageController.text))]
-        : [];
+  static List<Widget> _getImage(TextEditingController imageController) {
+    if (imageController.text.isEmpty) return [];
+
+    File imageFile = File(imageController.text);
+    if (imageFile.existsSync()) {
+      return [Image.file(File(imageController.text))];
+    }
+
+    return [Image.network(imageController.text)];
   }
 
   static Future _pickImage(
@@ -357,7 +362,7 @@ class EditProfileWidgets {
       builder: (context, setState) {
         return Column(
           children: [
-            ..._getLocalImage(imageController),
+            ..._getImage(imageController),
             ElevatedButton(
               onPressed: () => _pickImage(imageController, setState),
               child: Padding(
