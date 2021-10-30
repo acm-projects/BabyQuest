@@ -212,10 +212,12 @@ class EditProfileWidgets {
       List<int> allergySeverities, Function setState) {
     var items = ['Mild', 'Moderate', 'Severe'];
 
+    bool removed = false;
+
     return Padding(
       padding: const EdgeInsets.only(right: 48),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           IconButton(
             iconSize: 16,
@@ -233,7 +235,7 @@ class EditProfileWidgets {
                 decoration: const InputDecoration(
                     labelText: 'Allergy',
                     isDense: true,
-                    contentPadding: EdgeInsets.zero),
+                    contentPadding: EdgeInsets.only(bottom: 6)),
                 onChanged: (newValue) {
                   allergyNames[index] = newValue.toString();
                 },
@@ -243,6 +245,7 @@ class EditProfileWidgets {
                     setState(() {
                       allergyNames.removeAt(index);
                       allergySeverities.removeAt(index);
+                      removed = true;
                     });
                     return null;
                   }
@@ -252,23 +255,32 @@ class EditProfileWidgets {
                 }),
           ),
           const SizedBox(width: 16),
-          SizedBox(
-            width: 88,
-            child: DropdownButtonFormField(
-                hint: const Text('Severity'),
-                value: (allergySeverities[index] != -1)
-                    ? items[allergySeverities[index]]
-                    : null,
-                icon: const Icon(Icons.keyboard_arrow_down),
-                items: items.map((String items) {
-                  return DropdownMenuItem(value: items, child: Text(items));
-                }).toList(),
-                onChanged: (newValue) {
-                  allergySeverities[index] = items.indexOf(newValue.toString());
-                },
-                validator: (value) {
-                  return (value == null) ? 'Select Severity' : null;
-                }),
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: SizedBox(
+              width: 88,
+              child: DropdownButtonFormField(
+                  hint: const Text('Severity'),
+                  decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.only(bottom: 8)),
+                  value: (allergySeverities[index] != -1)
+                      ? items[allergySeverities[index]]
+                      : null,
+                  icon: const Icon(Icons.keyboard_arrow_down),
+                  items: items.map((String items) {
+                    return DropdownMenuItem(value: items, child: Text(items));
+                  }).toList(),
+                  onChanged: (newValue) {
+                    allergySeverities[index] =
+                        items.indexOf(newValue.toString());
+                  },
+                  validator: (value) {
+                    if (removed) {
+                      return null;
+                    }
+                    return (value == null) ? 'Select Severity' : null;
+                  }),
+            ),
           ),
         ],
       ),
