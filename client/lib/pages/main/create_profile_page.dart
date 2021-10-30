@@ -1,3 +1,4 @@
+import 'package:client/widgets/dotted_divider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -22,6 +23,11 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
   ];
 
   int _currentStep = 0;
+  final _titles = [
+    'General Information',
+    'Medical Information',
+    'Profile Picture'
+  ];
 
   //text editing controllers
   final name = TextEditingController();
@@ -40,103 +46,133 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text('Profile Data Input'),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Stepper(
-              type: StepperType.vertical,
-              physics: const ScrollPhysics(),
-              currentStep: _currentStep,
-              onStepTapped: (step) => tapped(step),
-              onStepContinue: continued,
-              onStepCancel: cancel,
-              controlsBuilder: (context, {onStepContinue, onStepCancel}) {
-                return Container(
-                  margin: const EdgeInsets.only(top: 30),
-                  child: Row(
-                    children: [
-                      if (_currentStep != 0)
-                        Expanded(
-                          child: ElevatedButton(
-                            child: const Text('Back'),
-                            onPressed: onStepCancel,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 48, bottom: 16),
+              child: Text(
+                _titles[_currentStep],
+                style: Theme.of(context).textTheme.headline1,
+              ),
+            ),
+            const DottedDivider(),
+            Expanded(
+              child: Theme(
+                data:
+                    Theme.of(context).copyWith(canvasColor: Colors.transparent),
+                child: Stepper(
+                  elevation: 0,
+                  type: StepperType.horizontal,
+                  physics: const ScrollPhysics(),
+                  currentStep: _currentStep,
+                  onStepTapped: (step) => tapped(step),
+                  onStepContinue: continued,
+                  onStepCancel: cancel,
+                  controlsBuilder: (context, {onStepContinue, onStepCancel}) {
+                    return Container(
+                      margin: const EdgeInsets.only(top: 64),
+                      child: Row(
+                        children: [
+                          if (_currentStep != 0)
+                            Expanded(
+                              child: ElevatedButton(
+                                child: const Text('Back'),
+                                onPressed: onStepCancel,
+                              ),
+                            ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: ElevatedButton(
+                              child: Text(
+                                  _currentStep == 2 ? 'Submit' : 'Continue'),
+                              onPressed: onStepContinue,
+                            ),
                           ),
-                        ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: ElevatedButton(
-                          child:
-                              Text(_currentStep == 2 ? 'Submit' : 'Continue'),
-                          onPressed: onStepContinue,
+                        ],
+                      ),
+                    );
+                  },
+                  steps: [
+                    Step(
+                      title: Text(
+                        '',
+                        style: Theme.of(context).textTheme.headline2,
+                      ),
+                      content: Form(
+                        key: _formKeys[0],
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            EditProfileWidgets.name(name),
+                            const SizedBox(height: 32),
+                            EditProfileWidgets.birthDate(context, birthDate),
+                            const SizedBox(height: 32),
+                            Theme(
+                                data: Theme.of(context).copyWith(
+                                    canvasColor: Colors.amber.shade100),
+                                child: EditProfileWidgets.gender(gender)),
+                            const SizedBox(height: 32),
+                            EditProfileWidgets.height(heightIn),
+                            const SizedBox(height: 32),
+                            EditProfileWidgets.weight(weightLb, weightOz),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                );
-              },
-              steps: [
-                Step(
-                  title: const Text('General Information'),
-                  content: Form(
-                    key: _formKeys[0],
-                    child: Column(
-                      children: [
-                        EditProfileWidgets.name(name),
-                        const SizedBox(height: 12),
-                        EditProfileWidgets.birthDate(
-                            context, birthDate),
-                        const SizedBox(height: 12),
-                        EditProfileWidgets.gender(gender),
-                        const SizedBox(height: 12),
-                        EditProfileWidgets.height(heightIn),
-                        const SizedBox(height: 12),
-                        EditProfileWidgets.weight(weightLb, weightOz),
-                      ],
+                      isActive: _currentStep >= 0,
+                      state: _currentStep >= 0
+                          ? StepState.complete
+                          : StepState.disabled,
                     ),
-                  ),
-                  isActive: _currentStep >= 0,
-                  state: _currentStep >= 0
-                      ? StepState.complete
-                      : StepState.disabled,
-                ),
-                Step(
-                  title: const Text('Medical Information'),
-                  content: Form(
-                    key: _formKeys[1],
-                    child: Column(
-                      children: [
-                        EditProfileWidgets.allergies(
-                            allergyNames, allergySeverities),
-                        EditProfileWidgets.pediatrician(pedName),
-                        EditProfileWidgets.pediatricianPhone(pedPhone),
-                      ],
+                    Step(
+                      title: Text(
+                        '',
+                        style: Theme.of(context).textTheme.headline2,
+                      ),
+                      content: Form(
+                        key: _formKeys[1],
+                        child: Column(
+                          children: [
+                            Theme(
+                              data: Theme.of(context)
+                                  .copyWith(canvasColor: Colors.amber.shade100),
+                              child: EditProfileWidgets.allergies(
+                                  allergyNames, allergySeverities),
+                            ),
+                            const SizedBox(height: 32),
+                            EditProfileWidgets.pediatrician(pedName),
+                            const SizedBox(height: 32),
+                            EditProfileWidgets.pediatricianPhone(pedPhone),
+                          ],
+                        ),
+                      ),
+                      isActive: _currentStep >= 0,
+                      state: _currentStep >= 1
+                          ? StepState.complete
+                          : StepState.disabled,
                     ),
-                  ),
-                  isActive: _currentStep >= 0,
-                  state: _currentStep >= 1
-                      ? StepState.complete
-                      : StepState.disabled,
+                    Step(
+                      title: Text(
+                        '',
+                        style: Theme.of(context).textTheme.headline2,
+                      ),
+                      content: Form(
+                        key: _formKeys[2],
+                        child: EditProfileWidgets.profilePicture(image),
+                      ),
+                      isActive: _currentStep >= 0,
+                      state: _currentStep >= 2
+                          ? StepState.complete
+                          : StepState.disabled,
+                    ),
+                  ],
                 ),
-                Step(
-                  title: const Text('Profile Picture'),
-                  content: Form(
-                    key: _formKeys[2],
-                    child: EditProfileWidgets.profilePicture(image),
-                  ),
-                  isActive: _currentStep >= 0,
-                  state: _currentStep >= 2
-                      ? StepState.complete
-                      : StepState.disabled,
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

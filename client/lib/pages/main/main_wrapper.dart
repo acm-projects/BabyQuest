@@ -16,11 +16,12 @@ class MainWrapper extends StatefulWidget {
 }
 
 class _MainWrapperState extends State<MainWrapper> {
-  bool creatingProfile = false;
+  bool creatingProfile = true;
   PageController pageController = PageController(initialPage: 1);
-  
+
   _MainWrapperState() {
-    if (AppUser.currentUser != null && AppUser.currentUser!.ownedProfiles.isEmpty) {
+    if (AppUser.currentUser != null &&
+        AppUser.currentUser!.ownedProfiles.isEmpty) {
       creatingProfile = true;
     }
   }
