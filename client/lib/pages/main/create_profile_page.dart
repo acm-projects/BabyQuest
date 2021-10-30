@@ -112,8 +112,9 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                             const SizedBox(height: 32),
                             Theme(
                                 data: Theme.of(context).copyWith(
-                                    canvasColor: Colors.amber.shade100),
-                                child: EditProfileWidgets.gender(context, gender)),
+                                    canvasColor: Colors.green.shade200),
+                                child:
+                                    EditProfileWidgets.gender(context, gender)),
                             const SizedBox(height: 32),
                             EditProfileWidgets.height(heightIn),
                             const SizedBox(height: 32),
@@ -137,7 +138,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                           children: [
                             Theme(
                               data: Theme.of(context)
-                                  .copyWith(canvasColor: Colors.amber.shade100),
+                                  .copyWith(canvasColor: Colors.green.shade200),
                               child: EditProfileWidgets.allergies(
                                   allergyNames, allergySeverities),
                             ),
