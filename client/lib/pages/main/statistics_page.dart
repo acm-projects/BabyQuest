@@ -11,13 +11,11 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
-  final int _currentDate = 23;
-  final ValueNotifier<int> _pageIndex = ValueNotifier<int>(0);
-  final ValueNotifier<int> _selectedIndex = ValueNotifier<int>(0);
+  final int _currentDateIndex = 55;
 
-  PageController pageController = PageController(
-    viewportFraction: 1,
-  );
+  late final ValueNotifier<int> _pageIndex;
+  late final ValueNotifier<int> _selectedIndex;
+  late PageController pageController;
 
   final List<String> days = [
     'Sunday',
@@ -41,14 +39,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
     )
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    //Go to current date on start up
-    WidgetsBinding.instance!
-        .addPostFrameCallback((timeStamp) => _jumpToIndex(_currentDate));
-  }
-
   void _jumpToIndex(int index) {
     _selectedIndex.value = index;
     pageController.jumpToPage(index ~/ 7);
@@ -58,6 +48,15 @@ class _StatisticsPageState extends State<StatisticsPage> {
     _selectedIndex.value = index;
     pageController.animateToPage((index ~/ 7),
         duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+  }
+
+  _StatisticsPageState() {
+    _pageIndex = ValueNotifier<int>(_currentDateIndex ~/ 7);
+    _selectedIndex = ValueNotifier<int>(_currentDateIndex);
+    pageController = PageController(
+      viewportFraction: 1,
+      initialPage: (_pageIndex.value),
+    );
   }
 
   @override
@@ -109,7 +108,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                           color: Theme.of(context).colorScheme.secondary,
                         ),
                         onPressed: () {
-                          _animateToIndex(_currentDate);
+                          _animateToIndex(_currentDateIndex);
                         },
                       ),
                     ],
@@ -291,7 +290,8 @@ class MainDayCircle extends StatelessWidget {
                 tween: Tween<double>(begin: 0, end: value % 10),
                 duration: const Duration(milliseconds: 500),
                 curve: Curves.decelerate,
-                builder: (BuildContext context, double progress, Widget? child) {
+                builder:
+                    (BuildContext context, double progress, Widget? child) {
                   return FractionCircle(
                     backgroundCircleColor: Colors.black12,
                     fraction: progress / 10,
