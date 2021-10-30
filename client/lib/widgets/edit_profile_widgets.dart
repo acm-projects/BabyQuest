@@ -232,10 +232,10 @@ class EditProfileWidgets {
           Expanded(
             child: TextFormField(
                 initialValue: allergyNames[index],
-                decoration: const InputDecoration(
-                    labelText: 'Allergy',
+                decoration: InputDecoration(
+                    labelText: 'Allergy ${index + 1}',
                     isDense: true,
-                    contentPadding: EdgeInsets.only(bottom: 6)),
+                    contentPadding: const EdgeInsets.only(bottom: 6)),
                 onChanged: (newValue) {
                   allergyNames[index] = newValue.toString();
                 },
