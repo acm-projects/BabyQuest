@@ -90,7 +90,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                         field: Column(
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
-                                            EditProfileWidgets.name(name),
+                                            EditProfileWidgets.name(
+                                                name, false),
                                             const SizedBox(
                                               height: 16,
                                             ),

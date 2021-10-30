@@ -106,7 +106,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            EditProfileWidgets.name(name),
+                            EditProfileWidgets.name(name, true),
                             const SizedBox(height: 32),
                             EditProfileWidgets.birthDate(context, birthDate),
                             const SizedBox(height: 32),
@@ -135,17 +135,19 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                       content: Form(
                         key: _formKeys[1],
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            EditProfileWidgets.pediatrician(pedName),
+                            const SizedBox(height: 32),
+                            EditProfileWidgets.pediatricianPhone(pedPhone),
+                            const SizedBox(height: 64),
                             Theme(
                               data: Theme.of(context)
                                   .copyWith(canvasColor: Colors.green.shade200),
                               child: EditProfileWidgets.allergies(
                                   allergyNames, allergySeverities),
                             ),
-                            const SizedBox(height: 32),
-                            EditProfileWidgets.pediatrician(pedName),
-                            const SizedBox(height: 32),
-                            EditProfileWidgets.pediatricianPhone(pedPhone),
                           ],
                         ),
                       ),

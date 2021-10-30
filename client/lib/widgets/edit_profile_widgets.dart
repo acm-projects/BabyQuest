@@ -6,14 +6,15 @@ import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditProfileWidgets {
-  static Widget name(TextEditingController nameController) {
+  static Widget name(TextEditingController nameController, bool autofocus) {
     return Padding(
       padding: const EdgeInsets.only(right: 48),
       child: TextFormField(
+        autofocus: autofocus,
         controller: nameController,
         validator: (value) {
           return (value == null || value.isEmpty)
-              ? 'Enter baby\'s full name'
+              ? 'Enter Baby\'s Full Name'
               : null;
         },
         decoration: const InputDecoration(
@@ -72,7 +73,7 @@ class EditProfileWidgets {
               return (value == null ||
                       value.isEmpty ||
                       value == 'Select Date of Birth')
-                  ? 'Select baby\'s date of birth'
+                  ? 'Select Baby\'s Date of birth'
                   : null;
             },
             decoration: const InputDecoration(
@@ -114,7 +115,6 @@ class EditProfileWidgets {
                 ? items[int.parse(genderController.text)]
                 : null,
             style: Theme.of(context).textTheme.subtitle1,
-            autofocus: true,
             icon: const Icon(
               Icons.keyboard_arrow_down,
               color: Color(0xFF8C8161),
@@ -127,7 +127,7 @@ class EditProfileWidgets {
                   items.indexOf(newValue.toString()).toString();
             },
             validator: (value) {
-              return (value == null) ? 'Select baby\'s gender' : null;
+              return (value == null) ? 'Select Baby\'s Gender' : null;
             },
           ),
         ),
@@ -212,56 +212,66 @@ class EditProfileWidgets {
       List<int> allergySeverities, Function setState) {
     var items = ['Mild', 'Moderate', 'Severe'];
 
-    return Row(
-      children: [
-        IconButton(
-          iconSize: 16,
-          padding: const EdgeInsets.all(2.0),
-          icon: const Icon(Icons.close),
-          onPressed: () {
-            setState(() {
-              allergyNames.removeAt(index);
-              allergySeverities.removeAt(index);
-            });
-          },
-        ),
-        SizedBox(
-          width: 140,
-          child: TextFormField(
-              initialValue: allergyNames[index],
-              decoration: const InputDecoration(
-                  labelText: 'Allergy',
-                  isDense: true,
-                  contentPadding: EdgeInsets.zero),
-              onChanged: (newValue) {
-                allergyNames[index] = newValue.toString();
-              },
-              validator: (value) {
-                return (value == null || value.isEmpty)
-                    ? 'Enter allergy, or delete field'
-                    : null;
-              }),
-        ),
-        const SizedBox(width: 16),
-        SizedBox(
-          width: 88,
-          child: DropdownButtonFormField(
-              hint: const Text('Severity'),
-              value: (allergySeverities[index] != -1)
-                  ? items[allergySeverities[index]]
-                  : null,
-              icon: const Icon(Icons.keyboard_arrow_down),
-              items: items.map((String items) {
-                return DropdownMenuItem(value: items, child: Text(items));
-              }).toList(),
-              onChanged: (newValue) {
-                allergySeverities[index] = items.indexOf(newValue.toString());
-              },
-              validator: (value) {
-                return (value == null) ? 'Select severity' : null;
-              }),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(right: 48),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            iconSize: 16,
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              setState(() {
+                allergyNames.removeAt(index);
+                allergySeverities.removeAt(index);
+              });
+            },
+          ),
+          Expanded(
+            child: TextFormField(
+                initialValue: allergyNames[index],
+                decoration: const InputDecoration(
+                    labelText: 'Allergy',
+                    isDense: true,
+                    contentPadding: EdgeInsets.zero),
+                onChanged: (newValue) {
+                  allergyNames[index] = newValue.toString();
+                },
+                validator: (value) {
+                  if ((value == null || value.isEmpty) &&
+                      allergySeverities[index] == -1) {
+                    setState(() {
+                      allergyNames.removeAt(index);
+                      allergySeverities.removeAt(index);
+                    });
+                    return null;
+                  }
+                  return (value == null || value.isEmpty)
+                      ? 'Enter Allergy or Delete'
+                      : null;
+                }),
+          ),
+          const SizedBox(width: 16),
+          SizedBox(
+            width: 88,
+            child: DropdownButtonFormField(
+                hint: const Text('Severity'),
+                value: (allergySeverities[index] != -1)
+                    ? items[allergySeverities[index]]
+                    : null,
+                icon: const Icon(Icons.keyboard_arrow_down),
+                items: items.map((String items) {
+                  return DropdownMenuItem(value: items, child: Text(items));
+                }).toList(),
+                onChanged: (newValue) {
+                  allergySeverities[index] = items.indexOf(newValue.toString());
+                },
+                validator: (value) {
+                  return (value == null) ? 'Select Severity' : null;
+                }),
+          ),
+        ],
+      ),
     );
   }
 
@@ -275,17 +285,34 @@ class EditProfileWidgets {
               index, allergyNames, allergySeverities, setState);
         });
 
-        allergyFields.add(ElevatedButton(
-          child: const Text('Add another allergy'),
-          onPressed: () {
-            setState(() {
-              allergyNames.add('');
-              allergySeverities.add(-1);
-            });
-          },
-        ));
+        allergyFields.add(
+          Align(
+            alignment: Alignment.centerRight,
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  allergyNames.add('');
+                  allergySeverities.add(-1);
+                });
+              },
+              splashColor: Theme.of(context).colorScheme.secondary,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 48, top: 12),
+                child: Text(
+                  'Add Allergy',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
+                ),
+              ),
+            ),
+          ),
+        );
 
-        return Column(children: allergyFields);
+        return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: allergyFields);
       },
     );
   }
@@ -298,7 +325,7 @@ class EditProfileWidgets {
         controller: pedController,
         validator: (value) {
           return (value == null || value.isEmpty)
-              ? 'Enter your pediatrician\'s name'
+              ? 'Enter Your Pediatrician\'s Name'
               : null;
         },
         decoration: const InputDecoration(
@@ -317,7 +344,7 @@ class EditProfileWidgets {
         controller: pedPhoneController,
         validator: (value) {
           return (value == null || value.length != 12)
-              ? 'Enter a valid phone number'
+              ? 'Enter a Valid Phone Number'
               : null;
         },
         decoration: const InputDecoration(
@@ -370,7 +397,7 @@ class EditProfileWidgets {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'Select profile picture',
+                  'Select Profile Picture',
                   style: Theme.of(context).textTheme.headline2,
                 ),
               ),
