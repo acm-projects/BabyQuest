@@ -54,7 +54,7 @@ class EditProfileWidgets {
       return '${unformattedDate.month}/${unformattedDate.day}/${unformattedDate.year}';
     }
 
-    return 'Select Date of Birth';
+    return '';
   }
 
   static Widget birthDate(
@@ -65,7 +65,7 @@ class EditProfileWidgets {
     return StatefulBuilder(
       builder: (context, setState) {
         return SizedBox(
-          width: 256,
+          width: (viewController.text.isEmpty) ? 168 : 120,
           child: TextFormField(
             controller: viewController,
             readOnly: true,
@@ -77,7 +77,7 @@ class EditProfileWidgets {
                   : null;
             },
             decoration: const InputDecoration(
-              border: InputBorder.none,
+              hintText: 'Baby\'s Date of Birth',
               icon: Icon(Icons.calendar_today),
             ),
             onTap: () async {
@@ -108,9 +108,12 @@ class EditProfileWidgets {
           width: 16,
         ),
         SizedBox(
-          width: 120,
+          width: 88,
           child: DropdownButtonFormField(
-            hint: const Text('Gender'),
+            decoration: const InputDecoration(
+              contentPadding: EdgeInsets.zero,
+              label: Text('Gender'),
+            ),
             value: (int.tryParse(genderController.text) != null)
                 ? items[int.parse(genderController.text)]
                 : null,
