@@ -153,7 +153,8 @@ class BabyProfile {
     DataService.updateProfileData(uid, data);
   }
 
-  void updateProfileImage(File imageFile) async {
+  void updateProfileImage(String imagePath) async {
+    File imageFile = File(imagePath);
     String imageUrl = await DataService.uploadProfileImage(uid, imageFile);
     updateData({'profile_pic': imageUrl});
   }
