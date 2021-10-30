@@ -87,7 +87,7 @@ class _MyAppState extends State<MyApp> {
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 elevation: 0,
                 primary: Colors.green.shade200,

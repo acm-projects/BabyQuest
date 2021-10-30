@@ -56,8 +56,12 @@ class DataService {
     _userListener = null;
   }
 
-  static Future uploadProfileImage(String uid, File imageFile) async {
+  static Future uploadProfileImage(String uid, File imageFile, {String? currentImageUrl}) async {
     String imageUrl = '';
+
+    if (currentImageUrl != null) {
+      await _profilePics.child(imageUrl).delete();
+    }
 
     Reference imageRef =
         _profilePics.child(uid + '.' + imageFile.path.split('.').last);

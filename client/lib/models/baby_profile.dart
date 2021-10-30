@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
@@ -150,5 +151,11 @@ class BabyProfile {
 
   void updateData(Map<String, dynamic> data) {
     DataService.updateProfileData(uid, data);
+  }
+
+  void updateProfileImage(String imagePath) async {
+    File imageFile = File(imagePath);
+    String imageUrl = await DataService.uploadProfileImage(uid, imageFile, currentImageUrl: _profilePic);
+    updateData({'profile_pic': imageUrl});
   }
 }

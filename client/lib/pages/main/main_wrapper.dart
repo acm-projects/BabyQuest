@@ -16,7 +16,7 @@ class MainWrapper extends StatefulWidget {
 }
 
 class _MainWrapperState extends State<MainWrapper> {
-  bool creatingProfile = true;
+  bool creatingProfile = false;
   PageController pageController = PageController(initialPage: 1);
 
   _MainWrapperState() {
