@@ -148,7 +148,7 @@ class EditProfileWidgets {
               icon: Icon(Icons.straighten),
               labelText: 'Height',
               isDense: true,
-              contentPadding: EdgeInsets.zero,
+              contentPadding: EdgeInsets.only(bottom: 6),
             ),
           ),
         ),
