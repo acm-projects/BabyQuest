@@ -374,13 +374,6 @@ class EditProfileWidgets {
                   style: Theme.of(context).textTheme.headline2,
                 ),
               ),
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  elevation: 0,
-                  primary: Theme.of(context).colorScheme.primary,
-                  onPrimary: Theme.of(context).colorScheme.onPrimary),
             ),
           ],
         );
