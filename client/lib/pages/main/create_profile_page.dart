@@ -82,7 +82,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                                 onPressed: onStepCancel,
                               ),
                             ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: 16),
                           Expanded(
                             child: ElevatedButton(
                               child: Text(

@@ -333,6 +333,9 @@ class EditProfileWidgets {
         return Column(
           children: [
             ..._getLocalImage(imageController),
+            const SizedBox(
+              height: 16,
+            ),
             ElevatedButton(
               onPressed: () => _pickImage(imageController, setState),
               child: Padding(

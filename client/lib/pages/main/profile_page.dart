@@ -74,25 +74,37 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                               ),
                               const Spacer(),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: IconButton(
-                                  onPressed: () async {
-                                    final name = TextEditingController(
-                                        text: currentBby.name);
+                              if (editMode)
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: IconButton(
+                                    onPressed: () async {
+                                      final name = TextEditingController(
+                                          text: currentBby.name);
+                                      final image = TextEditingController(
+                                          text: currentBby.profilePic);
 
-                                    await _showEditDialog(
-                                      context: context,
-                                      label: 'Baby Name',
-                                      field: EditProfileWidgets.name(name),
-                                      updateData: () => currentBby
-                                          .updateData({'name': name.text}),
-                                    );
-                                  },
-                                  color: Colors.white,
-                                  icon: const Icon(Icons.edit),
+                                      await _showEditDialog(
+                                        context: context,
+                                        label: 'Baby Name',
+                                        field: Column(
+                                          children: [
+                                            EditProfileWidgets.name(name),
+                                            const SizedBox(
+                                              height: 16,
+                                            ),
+                                            EditProfileWidgets.profilePicture(
+                                                image),
+                                          ],
+                                        ),
+                                        updateData: () => currentBby
+                                            .updateData({'name': name.text}),
+                                      );
+                                    },
+                                    color: Colors.white,
+                                    icon: const Icon(Icons.edit),
+                                  ),
                                 ),
-                              ),
                             ],
                           )
                         ],
