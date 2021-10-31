@@ -522,16 +522,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 backgroundColor: Colors.transparent,
               ),
               child: SizedBox(
-                width: 96,
+                width: 64,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Center(
                     child: Text(
                       'Cancel',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline2!
-                          .copyWith(fontWeight: FontWeight.w400),
+                      style: Theme.of(context).textTheme.headline3,
                     ),
                   ),
                 ),
@@ -540,14 +537,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.of(context).pop();
               },
             ),
+            const SizedBox(
+              width: 16,
+            ),
             OutlinedButton(
-              child: const SizedBox(
-                width: 96,
+              child: SizedBox(
+                width: 64,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Center(
                     child: Text(
                       'Save',
+                      style: Theme.of(context).textTheme.headline3,
                     ),
                   ),
                 ),
