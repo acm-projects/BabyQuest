@@ -42,7 +42,7 @@ class _MainWrapperState extends State<MainWrapper> {
           TabItem(icon: Icons.account_circle, title: 'Profile'),
           TabItem(icon: Icons.home, title: 'Home'),
           TabItem(icon: Icons.bar_chart, title: 'Statistics'),
-          TabItem(icon: Icons.shopping_cart, title: 'Shopping'),
+          TabItem(icon: Icons.view_list_rounded, title: 'Todos'),
         ],
         onTap: (index) => pageController.jumpToPage(index),
       ),
