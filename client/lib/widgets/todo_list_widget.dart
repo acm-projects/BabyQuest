@@ -13,11 +13,35 @@ class TodoListWidget extends StatefulWidget {
 }
 
 class _TodoListWidgetState extends State<TodoListWidget> {
-  AppUser? _currentUser = AppUser.currentUser;
+  //AppUser? _currentUser = AppUser.currentUser;
 
   @override
   Widget build(BuildContext context) {
-    List<Todo> todos = _currentUser!.toDoList;
+    List<Todo> todos = [
+      Todo(
+        createdTime: DateTime.now(),
+        title: 'Buy Food 😋',
+        description: '''- Eggs
+- Milk
+- Bread
+- Water''',
+      ),
+      Todo(
+        createdTime: DateTime.now(),
+        title: 'Plan family trip to Norway',
+        description: '''- Rent some hotels
+- Rent a car
+- Pack suitcase''',
+      ),
+      Todo(
+        createdTime: DateTime.now(),
+        title: 'Walk the Dog 🐕',
+      ),
+      Todo(
+        createdTime: DateTime.now(),
+        title: 'Plan Jacobs birthday party 🎉🥳',
+      ),
+    ];
 
     return todos.isEmpty
       ? Center(
