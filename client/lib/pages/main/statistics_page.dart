@@ -65,6 +65,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
     'December',
   ];
 
+  DateTime _getSelectedDateTime() {
+    return _startDate.add(Duration(days: _selectedIndex));
+  }
+
   void _jumpToIndex(int index) {
     _selectedIndex = index;
     pageController.jumpToPage(index ~/ 7);
@@ -115,17 +119,13 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                                text: days[_startDate
-                                        .add(Duration(days: _selectedIndex))
-                                        .weekday -
-                                    1],
+                                text: days[_getSelectedDateTime().weekday - 1],
                                 style: Theme.of(context).textTheme.headline1),
                             const TextSpan(
                               text: '  ',
                             ),
                             TextSpan(
-                                text:
-                                    '${_startDate.add(Duration(days: _selectedIndex)).day}',
+                                text: '${_getSelectedDateTime().day}',
                                 style: Theme.of(context).textTheme.headline2),
                             const TextSpan(
                               text: '  ',
@@ -141,17 +141,14 @@ class _StatisticsPageState extends State<StatisticsPage> {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                  text: months[_startDate
-                                          .add(Duration(days: _selectedIndex))
-                                          .month -
-                                      1],
+                                  text:
+                                      months[_getSelectedDateTime().month - 1],
                                   style: Theme.of(context).textTheme.headline3),
                               const TextSpan(
                                 text: ' ',
                               ),
                               TextSpan(
-                                  text:
-                                      '${_startDate.add(Duration(days: _selectedIndex)).year}',
+                                  text: '${_getSelectedDateTime().year}',
                                   style: Theme.of(context).textTheme.subtitle1),
                             ],
                           ),
