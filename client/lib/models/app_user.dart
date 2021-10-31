@@ -35,7 +35,8 @@ class AppUser {
   List<Todo> get todos {
     List<Todo> tasks = [];
 
-    _todoList?.forEach((key, value) {tasks.add(
+    _todoList?.forEach((key, value) {
+      tasks.add(
         Todo(
           title: value[0],
           description: value[1],
@@ -55,9 +56,8 @@ class AppUser {
       _todoList = {};
     }
     _todoList![_todoList!.length] = todo.fields();
-    print(_todoList);
 
-    DataService.updateUserData(uid, {'to_do_list': _todoList});
+    DataService.updateUserData(uid, {'to_do_list': _todoList?.map((key, value) => MapEntry(key.toString(), value))});
   }
 
   AppUser(this.uid);

@@ -248,7 +248,6 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       qodMessage = qodData[1];
       qodAuthor = qodData[2];
-      qodImage = qodData[3];
     });
   }
 }
