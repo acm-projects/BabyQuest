@@ -47,18 +47,17 @@ class _SignInFormState extends State<SignInForm> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
           decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
             color: Colors.red.shade100,
             border: Border.all(color: Colors.red.shade900),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                error,
-                style: TextStyle(
-                  color: Colors.red.shade900,
-                )
-              ),
+              Text(error,
+                  style: TextStyle(
+                    color: Colors.red.shade900,
+                  )),
               IconButton(
                 icon: const Icon(Icons.close),
                 color: Colors.red.shade900,
@@ -90,9 +89,7 @@ class _SignInFormState extends State<SignInForm> {
         prefixIcon: const Icon(Icons.email),
       ),
       validator: (value) {
-        return (value == null || value.isEmpty)
-            ? 'Enter an email address'
-            : null;
+        return (value == null || value.isEmpty) ? '' : null;
       },
       onChanged: (value) => setState(() => email = value),
     );
@@ -111,9 +108,7 @@ class _SignInFormState extends State<SignInForm> {
         prefixIcon: const Icon(Icons.lock),
       ),
       validator: (value) {
-        return (value == null || value.length < 6)
-            ? 'Password must be at least 6 characters long'
-            : null;
+        return (value == null || value.length < 6) ? '' : null;
       },
       onChanged: (value) => setState(() => password = value),
     );
