@@ -21,6 +21,7 @@ class _SignInFormState extends State<SignInForm> {
   String name = '';
   String email = '';
   String password = '';
+  String error = '';
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +29,7 @@ class _SignInFormState extends State<SignInForm> {
       key: _formKey,
       child: Column(
         children: [
+          ..._buildErrorField(),
           _buildEmailAddressField(),
           const SizedBox(height: 20.0),
           _buildPasswordField(),
@@ -37,6 +39,43 @@ class _SignInFormState extends State<SignInForm> {
         ],
       ),
     );
+  }
+
+  List<Widget> _buildErrorField() {
+    if (error.isNotEmpty) {
+      return [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          decoration: BoxDecoration(
+            color: Colors.red.shade100,
+            border: Border.all(color: Colors.red.shade900),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                error,
+                style: TextStyle(
+                  color: Colors.red.shade900,
+                )
+              ),
+              IconButton(
+                icon: const Icon(Icons.close),
+                color: Colors.red.shade900,
+                onPressed: () {
+                  _setError(null);
+                },
+              )
+            ],
+          ),
+        ),
+        const SizedBox(height: 30.0),
+      ];
+    }
+
+    return [
+      const SizedBox(height: 20.0),
+    ];
   }
 
   Widget _buildEmailAddressField() {
@@ -92,7 +131,8 @@ class _SignInFormState extends State<SignInForm> {
           if (widget.register) {
             provider.registerWithEmailAndPassword(email, password);
           } else {
-            provider.signInWithEmailAndPassword(email, password);
+            provider.signInWithEmailAndPassword(email, password,
+                setError: _setError);
           }
         }
       },
@@ -140,5 +180,9 @@ class _SignInFormState extends State<SignInForm> {
         ],
       );
     }
+  }
+
+  void _setError(String? errorMessage) {
+    setState(() => error = errorMessage ?? '');
   }
 }

@@ -209,70 +209,85 @@ class EditProfileWidgets {
   }
 
   static Widget _allergyField(int index, List<String> allergyNames,
-      List<int> allergySeverities, Function setState) {
+      List<int> allergySeverities, List<int> remove, Function setState) {
     var items = ['Mild', 'Moderate', 'Severe'];
 
-    return Row(
-      children: [
-        IconButton(
-          iconSize: 16,
-          padding: const EdgeInsets.all(2.0),
-          icon: const Icon(Icons.close),
-          onPressed: () {
-            setState(() {
-              allergyNames.removeAt(index);
-              allergySeverities.removeAt(index);
-            });
-          },
-        ),
-        SizedBox(
-          width: 140,
-          child: TextFormField(
-              initialValue: allergyNames[index],
-              decoration: const InputDecoration(
-                  labelText: 'Allergy',
-                  isDense: true,
-                  contentPadding: EdgeInsets.zero),
-              onChanged: (newValue) {
-                allergyNames[index] = newValue.toString();
-              },
-              validator: (value) {
-                return (value == null || value.isEmpty)
-                    ? 'Enter allergy, or delete field'
-                    : null;
-              }),
-        ),
-        const SizedBox(width: 16),
-        SizedBox(
-          width: 88,
-          child: DropdownButtonFormField(
-              hint: const Text('Severity'),
-              value: (allergySeverities[index] != -1)
-                  ? items[allergySeverities[index]]
-                  : null,
-              icon: const Icon(Icons.keyboard_arrow_down),
-              items: items.map((String items) {
-                return DropdownMenuItem(value: items, child: Text(items));
-              }).toList(),
-              onChanged: (newValue) {
-                allergySeverities[index] = items.indexOf(newValue.toString());
-              },
-              validator: (value) {
-                return (value == null) ? 'Select severity' : null;
-              }),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(right: 48),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          IconButton(
+            iconSize: 16,
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              setState(() {
+                allergyNames.removeAt(index);
+                allergySeverities.removeAt(index);
+              });
+            },
+          ),
+          Expanded(
+            child: TextFormField(
+                initialValue: allergyNames[index],
+                decoration: InputDecoration(
+                    labelText: 'Allergy ${index + 1}',
+                    isDense: true,
+                    contentPadding: const EdgeInsets.only(bottom: 6)),
+                onChanged: (newValue) {
+                  allergyNames[index] = newValue.toString();
+                },
+                validator: (value) {
+                  if ((value == null || value.isEmpty) &&
+                      allergySeverities[index] == -1) {
+                    remove.add(index);
+                    return null;
+                  }
+                  return (value == null || value.isEmpty)
+                      ? 'Enter Allergy or Delete'
+                      : null;
+                }),
+          ),
+          const SizedBox(width: 16),
+          Padding(
+            padding: const EdgeInsets.only(top: 6),
+            child: SizedBox(
+              width: 88,
+              child: DropdownButtonFormField(
+                  hint: const Text('Severity'),
+                  decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.only(bottom: 8)),
+                  value: (allergySeverities[index] != -1)
+                      ? items[allergySeverities[index]]
+                      : null,
+                  icon: const Icon(Icons.keyboard_arrow_down),
+                  items: items.map((String items) {
+                    return DropdownMenuItem(value: items, child: Text(items));
+                  }).toList(),
+                  onChanged: (newValue) {
+                    allergySeverities[index] =
+                        items.indexOf(newValue.toString());
+                  },
+                  validator: (value) {
+                    return (value != null || remove.contains(index))
+                        ? null
+                        : 'Select Severity';
+                  }),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  static Widget allergies(
-      List<String> allergyNames, List<int> allergySeverities) {
+  static Widget allergies(List<String> allergyNames,
+      List<int> allergySeverities, List<int> remove) {
     return StatefulBuilder(
       builder: (context, setState) {
         List<Widget> allergyFields =
             List.generate(allergyNames.length, (int index) {
           return _allergyField(
-              index, allergyNames, allergySeverities, setState);
+              index, allergyNames, allergySeverities, remove, setState);
         });
 
         allergyFields.add(ElevatedButton(

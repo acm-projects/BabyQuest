@@ -42,6 +42,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
 
   List<String> allergyNames = [''];
   List<int> allergySeverities = [-1];
+  List<int> removeAllergyFields = [];
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +140,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                               data: Theme.of(context)
                                   .copyWith(canvasColor: Colors.amber.shade100),
                               child: EditProfileWidgets.allergies(
-                                  allergyNames, allergySeverities),
+                                  allergyNames, allergySeverities, removeAllergyFields),
                             ),
                             const SizedBox(height: 32),
                             EditProfileWidgets.pediatrician(pedName),
@@ -186,6 +187,11 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
 
     if (_currentStep == 2) {
       if (AppUser.currentUser != null) {
+        for (var index in removeAllergyFields.reversed) {
+          allergyNames.removeAt(index);
+          allergySeverities.removeAt(index);
+        }
+
         AppUser.currentUser!.createNewProfile(
           name: name.text,
           birthDate: DateTime.parse(birthDate.text),

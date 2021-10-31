@@ -142,7 +142,7 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.only(top: 48, bottom: 16),
                 child: Text(
-                  'Welcome Back Oscar!',
+                  'Welcome Back Parent!',
                   style: Theme.of(context)
                       .textTheme
                       .headline1!
