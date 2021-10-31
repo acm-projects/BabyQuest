@@ -211,10 +211,8 @@ class EditProfileWidgets {
   }
 
   static Widget _allergyField(int index, List<String> allergyNames,
-      List<int> allergySeverities, Function setState) {
+      List<int> allergySeverities, List<int> remove, Function setState) {
     var items = ['Mild', 'Moderate', 'Severe'];
-
-    bool removed = false;
 
     return Padding(
       padding: const EdgeInsets.only(right: 48),
@@ -244,11 +242,7 @@ class EditProfileWidgets {
                 validator: (value) {
                   if ((value == null || value.isEmpty) &&
                       allergySeverities[index] == -1) {
-                    setState(() {
-                      allergyNames.removeAt(index);
-                      allergySeverities.removeAt(index);
-                      removed = true;
-                    });
+                    remove.add(index);
                     return null;
                   }
                   return (value == null || value.isEmpty)
@@ -277,10 +271,9 @@ class EditProfileWidgets {
                         items.indexOf(newValue.toString());
                   },
                   validator: (value) {
-                    if (removed) {
-                      return null;
-                    }
-                    return (value == null) ? 'Select Severity' : null;
+                    return (value != null || remove.contains(index))
+                        ? null
+                        : 'Select Severity';
                   }),
             ),
           ),
@@ -289,14 +282,14 @@ class EditProfileWidgets {
     );
   }
 
-  static Widget allergies(
-      List<String> allergyNames, List<int> allergySeverities) {
+  static Widget allergies(List<String> allergyNames,
+      List<int> allergySeverities, List<int> remove) {
     return StatefulBuilder(
       builder: (context, setState) {
         List<Widget> allergyFields =
             List.generate(allergyNames.length, (int index) {
           return _allergyField(
-              index, allergyNames, allergySeverities, setState);
+              index, allergyNames, allergySeverities, remove, setState);
         });
 
         allergyFields.add(

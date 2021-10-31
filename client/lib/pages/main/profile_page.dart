@@ -579,15 +579,24 @@ class _ProfilePageState extends State<ProfilePage> {
           onTap: () async {
             List<String> allergyNames = currentBby.allergies.keys.toList();
             List<int> allergySeverities = currentBby.allergies.values.toList();
+            List<int> remove = [];
 
             await _showEditDialog(
               context: context,
               label: 'Allergies',
-              field:
-                  EditProfileWidgets.allergies(allergyNames, allergySeverities),
-              updateData: () => currentBby.updateData({
-                'allergies': Map.fromIterables(allergyNames, allergySeverities)
-              }),
+              field: EditProfileWidgets.allergies(
+                  allergyNames, allergySeverities, remove),
+              updateData: () {
+                for (var index in remove.reversed) {
+                  allergyNames.removeAt(index);
+                  allergySeverities.removeAt(index);
+                }
+
+                currentBby.updateData({
+                  'allergies':
+                      Map.fromIterables(allergyNames, allergySeverities)
+                });
+              },
             );
           },
         ),
