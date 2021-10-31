@@ -53,10 +53,10 @@ class _HomePageState extends State<HomePage> {
 
     if (_sleepDays > 0) {
       if (_sleepDays == 1) {
-        sleepMessage += '1 Day';
+        sleepMessage += '1d';
         unitCount++;
       } else {
-        sleepMessage += '$_sleepDays Days';
+        sleepMessage += '${_sleepDays}d';
         unitCount++;
       }
     }
@@ -65,10 +65,10 @@ class _HomePageState extends State<HomePage> {
         sleepMessage += ' and ';
       }
       if (_sleepHours == 1) {
-        sleepMessage += '1 Hr';
+        sleepMessage += '1h';
         unitCount++;
       } else {
-        sleepMessage += '$_sleepHours Hrs';
+        sleepMessage += '${_sleepHours}h';
         unitCount++;
       }
     }
@@ -77,10 +77,10 @@ class _HomePageState extends State<HomePage> {
         sleepMessage += ' and ';
       }
       if (_sleepMins == 1) {
-        sleepMessage += '1 Min';
+        sleepMessage += '1m';
         unitCount++;
       } else {
-        sleepMessage += '$_sleepMins Mins';
+        sleepMessage += '${_sleepMins}m';
         unitCount++;
       }
     }

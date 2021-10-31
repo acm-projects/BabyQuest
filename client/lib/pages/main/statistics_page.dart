@@ -13,6 +13,24 @@ class StatisticsPage extends StatefulWidget {
 class _StatisticsPageState extends State<StatisticsPage> {
   final int _currentDateIndex = 55;
 
+  int _feedingCount = 0;
+  int _diaperCount = 0;
+
+  int _sleepHours = 0;
+  int _sleepMins = 0;
+
+  final List<SleepInformation> sleepSessions = [
+    const SleepInformation(
+      startTime: '1:50 AM',
+      endTime: '10:18 PM',
+      isFirst: true,
+    ),
+    const SleepInformation(
+      startTime: '3:03 AM',
+      endTime: '5:26 PM',
+    )
+  ];
+
   late final ValueNotifier<int> _pageIndex;
   late final ValueNotifier<int> _selectedIndex;
   late PageController pageController;
@@ -25,18 +43,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
     'Thursday',
     'Friday',
     'Saturday'
-  ];
-
-  final List<SleepInformation> sleepSessions = [
-    const SleepInformation(
-      startTime: '1:50 AM',
-      endTime: '10:18 PM',
-      isFirst: true,
-    ),
-    const SleepInformation(
-      startTime: '3:03 AM',
-      endTime: '5:26 PM',
-    )
   ];
 
   void _jumpToIndex(int index) {
