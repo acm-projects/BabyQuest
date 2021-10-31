@@ -94,47 +94,38 @@ class EditProfileWidgets {
       BuildContext context, TextEditingController genderController) {
     var items = ['Male', 'Female', 'Other'];
 
-    return Row(
-      children: [
-        Icon(
-          BabyProfile.getGenderIcon(
-            int.tryParse(genderController.text) ?? 3,
+    return StatefulBuilder(builder: (context, setState) {
+      return SizedBox(
+        width: 120,
+        child: DropdownButtonFormField(
+          decoration: InputDecoration(
+            icon: Icon(BabyProfile.getGenderIcon(
+              int.tryParse(genderController.text) ?? 3,
+            )),
+            contentPadding: EdgeInsets.zero,
+            label: const Text('Gender'),
           ),
-          color: const Color(0xFF8C8161),
-          size: 17,
-        ),
-        const SizedBox(
-          width: 16,
-        ),
-        SizedBox(
-          width: 88,
-          child: DropdownButtonFormField(
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.zero,
-              label: Text('Gender'),
-            ),
-            value: (int.tryParse(genderController.text) != null)
-                ? items[int.parse(genderController.text)]
-                : null,
-            style: Theme.of(context).textTheme.subtitle1,
-            icon: const Icon(
-              Icons.keyboard_arrow_down,
-              color: Color(0xFF8C8161),
-            ),
-            items: items.map((String items) {
-              return DropdownMenuItem(value: items, child: Text(items));
-            }).toList(),
-            onChanged: (newValue) {
-              genderController.text =
-                  items.indexOf(newValue.toString()).toString();
-            },
-            validator: (value) {
-              return (value == null) ? 'Select Baby\'s Gender' : null;
-            },
+          value: (int.tryParse(genderController.text) != null)
+              ? items[int.parse(genderController.text)]
+              : null,
+          style: Theme.of(context).textTheme.subtitle1,
+          icon: const Icon(
+            Icons.keyboard_arrow_down,
+            color: Colors.black45,
           ),
+          items: items.map((String items) {
+            return DropdownMenuItem(value: items, child: Text(items));
+          }).toList(),
+          onChanged: (newValue) {
+            setState(() => genderController.text =
+                items.indexOf(newValue.toString()).toString());
+          },
+          validator: (value) {
+            return (value == null) ? 'Select Baby\'s Gender' : null;
+          },
         ),
-      ],
-    );
+      );
+    });
   }
 
   static Widget height(TextEditingController heightController) {
