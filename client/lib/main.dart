@@ -103,7 +103,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         home: isLoaded
             ? const Wrapper()
-            : SplashPage("Waking up from a nap...",
+            : SplashPage("Waking Up From A Nap...",
                 completed: _completeLoading),
       ),
     );
