@@ -13,13 +13,12 @@ class EditProfileWidgets {
         autofocus: autofocus,
         controller: nameController,
         validator: (value) {
-          return (value == null || value.isEmpty)
-              ? 'Enter Baby\'s Full Name'
-              : null;
+          return (value == null || value.isEmpty) ? '' : null;
         },
         decoration: const InputDecoration(
           icon: Icon(Icons.edit),
           labelText: 'Baby\'s Full Name',
+          errorStyle: TextStyle(height: 0),
         ),
       ),
     );
@@ -259,13 +258,13 @@ class EditProfileWidgets {
           ),
           const SizedBox(width: 16),
           Padding(
-            padding: const EdgeInsets.only(top: 6),
+            padding: const EdgeInsets.only(top: 13),
             child: SizedBox(
               width: 88,
               child: DropdownButtonFormField(
                   hint: const Text('Severity'),
                   decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.only(bottom: 8)),
+                      contentPadding: EdgeInsets.only(bottom: 2)),
                   value: (allergySeverities[index] != -1)
                       ? items[allergySeverities[index]]
                       : null,
@@ -312,7 +311,7 @@ class EditProfileWidgets {
               },
               splashColor: Theme.of(context).colorScheme.secondary,
               child: Padding(
-                padding: const EdgeInsets.only(right: 48, top: 12),
+                padding: const EdgeInsets.only(right: 48, top: 16),
                 child: Text(
                   'Add Allergy',
                   style:
@@ -339,9 +338,7 @@ class EditProfileWidgets {
         autofocus: true,
         controller: pedController,
         validator: (value) {
-          return (value == null || value.isEmpty)
-              ? 'Enter Your Pediatrician\'s Name'
-              : null;
+          return (value == null || value.isEmpty) ? '' : null;
         },
         decoration: const InputDecoration(
             icon: Icon(Icons.medical_services_outlined),
@@ -358,9 +355,7 @@ class EditProfileWidgets {
         keyboardType: TextInputType.phone,
         controller: pedPhoneController,
         validator: (value) {
-          return (value == null || value.length != 12)
-              ? 'Enter a Valid Phone Number'
-              : null;
+          return (value == null || value.length != 12) ? '' : null;
         },
         decoration: const InputDecoration(
           icon: Icon(Icons.contacts_outlined),

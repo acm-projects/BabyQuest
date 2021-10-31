@@ -43,6 +43,7 @@ class _MyAppState extends State<MyApp> {
           textTheme: const TextTheme(
             headline1: TextStyle(fontWeight: FontWeight.w800, fontSize: 30),
             headline2: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+            headline3: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
             subtitle1: TextStyle(fontWeight: FontWeight.w300, fontSize: 15),
           ),
           canvasColor: Colors.green.shade200,
@@ -96,6 +97,7 @@ class _MyAppState extends State<MyApp> {
           inputDecorationTheme: const InputDecorationTheme(
             isDense: true,
             contentPadding: EdgeInsets.symmetric(vertical: 4),
+            errorStyle: TextStyle(height: 0),
           ),
         ),
         debugShowCheckedModeBanner: false,
