@@ -21,7 +21,7 @@ class DataService {
   static const _defaultUserData = {
     'profiles': [],
     'shared_profiles': [],
-    'to_do_list': [],
+    'to_do_list': {},
   };
 
   static updateUserData(String uid, Map<String, dynamic> fields) async {
