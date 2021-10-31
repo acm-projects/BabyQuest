@@ -21,7 +21,7 @@ class _MainWrapperState extends State<MainWrapper> {
     const ProfilePage(),
     const HomePage(),
     const StatisticsPage(),
-    const ShoppingPage(),
+   // const ShoppingPage(),
     const DataInput()
   ];
 

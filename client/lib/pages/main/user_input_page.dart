@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+
 
 class DataInput extends StatefulWidget {
   const DataInput({Key? key}) : super(key: key);
@@ -13,9 +17,20 @@ class _DataInputState extends State<DataInput> {
   int _currentStep = 0;
   StepperType stepperType = StepperType.vertical;
   DateTime selectedDate = DateTime.now();
-  String dropdownValue = 'Choose';
-  var genderValue = ['Choose','Male','Female','Other'];
-  String newValue = 'Choose';
+  String dropdownValueGender = 'Choose';
+  String dropdownValueAllergy = 'Choose';
+  var genderItems = ['Choose', 'Male', 'Female', 'Other'];
+  var allergyItems = ['Choose', 'Mild', 'Severe'];
+
+  ImagePicker picker = ImagePicker();
+
+  Future pickImage() asynch{
+
+}
+  final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+  // Capture a photo
+  final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +39,7 @@ class _DataInputState extends State<DataInput> {
         automaticallyImplyLeading: false,
         title: Text('User Data Input'),
         centerTitle: true,
+        backgroundColor: Colors.deepPurple.shade300,
       ),
       body: Container(
         child: Column(
@@ -47,24 +63,28 @@ class _DataInputState extends State<DataInput> {
                         TextFormField(
                           decoration: InputDecoration(labelText: 'Last Name'),
                         ),
-                        Text('Select Gender of child:'),
+                        Container(
+                          child: Text('Select Gender of Child',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
                         DropdownButton(
-                          value: dropdownValue,
+                          value: dropdownValueGender,
                           icon: Icon(Icons.keyboard_arrow_down),
-                          items: genderValue.map((String items) {
+                          items: genderItems.map((String genderItems) {
                             return DropdownMenuItem(
-                                value: genderValue,
-                                child: Text(genderValue)
-                            );
-                          }
-                          ).toList(),
-                          onChanged: (newValue){
+                                value: genderItems, child: Text(genderItems));
+                          }).toList(),
+                          onChanged: (newValue) {
                             setState(() {
-                              dropdownValue = newValue.toString();
+                              dropdownValueGender = newValue.toString();
                             });
                           },
                         ),
-                        Text('Height'),
+                        Container(
+                          height: 20,
+                          child: Text('Height of child',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
                         TextFormField(
                           decoration: InputDecoration(labelText: 'Feet'),
                         ),
@@ -77,11 +97,11 @@ class _DataInputState extends State<DataInput> {
                           child: Text(
                             'Select Date of Birth',
                             style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           ),
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.lightBlueAccent,
+                            primary: Colors.deepPurple.shade300,
                           ),
                         ),
                       ],
@@ -94,36 +114,42 @@ class _DataInputState extends State<DataInput> {
                   Step(
                     title: new Text('Medical Information'),
                     content: Column(
-                      children: <Widget>[
+                      children: [
+                        Text('Allergies and Severity',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
                         Row(
                           children: [
-                            TextFormField(
-                                decoration: InputDecoration(labelText: 'Allergies:'),
+                            Container(
+                              width: 200,
+                              child: TextFormField(
+                                decoration:
+                                    InputDecoration(labelText: 'Allergies'),
+                              ),
                             ),
                             DropdownButton(
-                              value: dropdownValue,
+                              value: dropdownValueAllergy,
                               icon: Icon(Icons.keyboard_arrow_down),
-                              items:items.map((String items) {
+                              items: allergyItems.map((String allergyItems) {
                                 return DropdownMenuItem(
-                                    value: items,
-                                    child: Text(items)
-                                );
-                              }
-                              ).toList(),
-                              onChanged: (newValue){
+                                    value: allergyItems,
+                                    child: Text(allergyItems));
+                              }).toList(),
+                              onChanged: (newValue) {
                                 setState(() {
-                                  dropdownValue = newValue.toString();
+                                  dropdownValueAllergy = newValue.toString();
                                 });
                               },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.add),
+                              tooltip: 'Add another allergy',
+                              onPressed: () {},
                             ),
                           ],
                         ),
                         TextFormField(
-                          decoration: InputDecoration(labelText: 'Allergies'),
-                        ),
-                        TextFormField(
                           decoration:
-                          InputDecoration(labelText: 'Name of Doctor'),
+                              InputDecoration(labelText: 'Name of Doctor'),
                         ),
                         TextFormField(
                           decoration: InputDecoration(
@@ -140,10 +166,9 @@ class _DataInputState extends State<DataInput> {
                     title: new Text('Profile Picture'),
                     content: Column(
                       children: <Widget>[
-                        TextFormField(
-                          decoration:
-                          InputDecoration(labelText: 'Mobile Number'),
-                        ),
+                        Text('Select Profile Picture'),
+                        FloatingActionButton(
+                            onPressed: () => pickImage())
                       ],
                     ),
                     isActive: _currentStep >= 0,
@@ -159,7 +184,6 @@ class _DataInputState extends State<DataInput> {
       ),
     );
   }
-
 
   tapped(int step) {
     setState(() => _currentStep = step);
