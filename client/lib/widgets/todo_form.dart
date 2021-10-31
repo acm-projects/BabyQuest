@@ -58,12 +58,6 @@ class TodoFormWidget extends StatelessWidget {
         labelText: 'Description',
       ),
       onChanged: onChangedDescription,
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'description cannot be empty';
-        }
-        return null;
-      },
     );
   }
 

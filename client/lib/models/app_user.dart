@@ -1,4 +1,5 @@
 import 'package:client/models/baby_profile.dart';
+import 'package:client/models/todo.dart';
 import 'package:client/services/data_service.dart';
 
 class AppUser {
@@ -8,7 +9,7 @@ class AppUser {
   bool _isLoaded = false;
   List<String>? _profiles;
   List<String>? _sharedProfiles;
-  List<String>? _toDoList;
+  List<Todo>? _todoList;
 
   // public properties
   final String uid;
@@ -28,7 +29,14 @@ class AppUser {
   bool get isLoaded => _isLoaded;
   List<String> get ownedProfiles => _profiles ?? [];
   List<String> get sharedProfiles => _sharedProfiles ?? [];
-  List<String> get toDoList => _toDoList ?? [];
+  List<Todo> get toDoList => _todoList ?? [];
+
+  //methods for todo
+  List<Todo> get todos => _todoList!.where((todo) => todo.isDone == false).toList();
+  List<Todo> get todosCompleted => _todoList!.where((todo) => todo.isDone == true).toList();
+  void addTodo(Todo todo) {
+    _todoList!.add(todo);
+  }
 
   AppUser(this.uid);
 
@@ -47,8 +55,8 @@ class AppUser {
     _sharedProfiles = (userData['shared_profiles'] as List)
         .map((item) => item as String)
         .toList();
-    _toDoList =
-        (userData['to_do_list'] as List).map((item) => item as String).toList();
+    _todoList =
+        (userData['to_do_list'] as List).map((item) => item as Todo).toList();
 
     if (ownedProfiles.isNotEmpty) {
       setCurrentProfile(ownedProfiles[0]);

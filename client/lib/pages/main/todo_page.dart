@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:client/widgets/add_todo_dialog_widget.dart';
+import 'package:client/widgets/todo_list_widget.dart';
 
 class ToDoPage extends StatefulWidget {
   const ToDoPage({Key? key}) : super(key: key);
@@ -32,7 +33,7 @@ class _ToDoPageState extends State<ToDoPage> {
           ),
           body: TabBarView(
             children: [
-              Container(),
+              TodoListWidget(),
               Container(),
             ],
           ),
