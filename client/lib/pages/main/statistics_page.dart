@@ -13,11 +13,11 @@ class StatisticsPage extends StatefulWidget {
 class _StatisticsPageState extends State<StatisticsPage> {
   final int _currentDateIndex = 55;
 
-  int _feedingCount = 0;
-  int _diaperCount = 0;
+  int _feedingCount = 3;
+  int _diaperCount = 2;
 
-  int _sleepHours = 0;
-  int _sleepMins = 0;
+  int _sleepHours = 8;
+  int _sleepMins = 27;
 
   final List<SleepInformation> sleepSessions = [
     const SleepInformation(
@@ -31,8 +31,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
     )
   ];
 
-  late final ValueNotifier<int> _pageIndex;
-  late final ValueNotifier<int> _selectedIndex;
+  late int _pageIndex;
+  late int _selectedIndex;
   late PageController pageController;
 
   final List<String> days = [
@@ -46,22 +46,24 @@ class _StatisticsPageState extends State<StatisticsPage> {
   ];
 
   void _jumpToIndex(int index) {
-    _selectedIndex.value = index;
+    _selectedIndex = index;
     pageController.jumpToPage(index ~/ 7);
   }
 
   void _animateToIndex(int index) {
-    _selectedIndex.value = index;
-    pageController.animateToPage((index ~/ 7),
-        duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+    setState(() {
+      _selectedIndex = index;
+      pageController.animateToPage((index ~/ 7),
+          duration: const Duration(milliseconds: 1000), curve: Curves.ease);
+    });
   }
 
   _StatisticsPageState() {
-    _pageIndex = ValueNotifier<int>(_currentDateIndex ~/ 7);
-    _selectedIndex = ValueNotifier<int>(_currentDateIndex);
+    _pageIndex = _currentDateIndex ~/ 7;
+    _selectedIndex = _currentDateIndex;
     pageController = PageController(
       viewportFraction: 1,
-      initialPage: (_pageIndex.value),
+      initialPage: (_pageIndex),
     );
   }
 
@@ -86,27 +88,20 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      ValueListenableBuilder<int>(
-                        valueListenable: _selectedIndex,
-                        builder: (BuildContext context, value, Widget? child) {
-                          return RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                    text: days[value % 7],
-                                    style:
-                                        Theme.of(context).textTheme.headline1),
-                                const TextSpan(
-                                  text: '  ',
-                                ),
-                                TextSpan(
-                                    text: '${_selectedIndex.value} October',
-                                    style:
-                                        Theme.of(context).textTheme.subtitle1),
-                              ],
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                                text: days[_selectedIndex % 7],
+                                style: Theme.of(context).textTheme.headline1),
+                            const TextSpan(
+                              text: '  ',
                             ),
-                          );
-                        },
+                            TextSpan(
+                                text: '$_selectedIndex October',
+                                style: Theme.of(context).textTheme.subtitle1),
+                          ],
+                        ),
                       ),
                       IconButton(
                         icon: Icon(
@@ -126,10 +121,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   child: PageView.builder(
                     itemCount: null,
                     controller: pageController,
-                    onPageChanged: (int index) => _pageIndex.value = index,
+                    onPageChanged: (int index) => _pageIndex = index,
                     itemBuilder: (context, index) {
                       return Transform.scale(
-                        scale: index == _pageIndex.value ? 1 : .97,
+                        scale: index == _pageIndex ? 1 : .97,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           child: Row(
@@ -139,7 +134,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                 date: '${index * 7 + 0}',
                                 day: 'S',
                                 onTap: () {
-                                  _selectedIndex.value = index * 7 + 0;
+                                  setState(() {
+                                    _selectedIndex = index * 7 + 0;
+                                  });
                                 },
                               ),
                               const Spacer(),
@@ -148,7 +145,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                 date: '${index * 7 + 1}',
                                 day: 'M',
                                 onTap: () {
-                                  _selectedIndex.value = index * 7 + 1;
+                                  setState(() {
+                                    _selectedIndex = index * 7 + 1;
+                                  });
                                 },
                               ),
                               const Spacer(),
@@ -157,7 +156,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                 date: '${index * 7 + 2}',
                                 day: 'T',
                                 onTap: () {
-                                  _selectedIndex.value = index * 7 + 2;
+                                  setState(() {
+                                    _selectedIndex = index * 7 + 2;
+                                  });
                                 },
                               ),
                               const Spacer(),
@@ -166,7 +167,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                 date: '${index * 7 + 3}',
                                 day: 'W',
                                 onTap: () {
-                                  _selectedIndex.value = index * 7 + 3;
+                                  setState(() {
+                                    _selectedIndex = index * 7 + 3;
+                                  });
                                 },
                               ),
                               const Spacer(),
@@ -175,7 +178,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                 date: '${index * 7 + 4}',
                                 day: 'T',
                                 onTap: () {
-                                  _selectedIndex.value = index * 7 + 4;
+                                  setState(() {
+                                    _selectedIndex = index * 7 + 4;
+                                  });
                                 },
                               ),
                               const Spacer(),
@@ -184,7 +189,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                 date: '${index * 7 + 5}',
                                 day: 'F',
                                 onTap: () {
-                                  _selectedIndex.value = index * 7 + 5;
+                                  setState(() {
+                                    _selectedIndex = index * 7 + 5;
+                                  });
                                 },
                               ),
                               const Spacer(),
@@ -193,7 +200,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                 date: '${index * 7 + 6}',
                                 day: 'S',
                                 onTap: () {
-                                  _selectedIndex.value = index * 7 + 6;
+                                  setState(() {
+                                    _selectedIndex = index * 7 + 6;
+                                  });
                                 },
                               ),
                             ],
@@ -206,7 +215,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 const DottedDivider(),
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: MainDayCircle(selectedIndex: _selectedIndex),
+                  child: MainDayCircle(
+                    selectedIndex: _selectedIndex,
+                    sleepHours: _sleepHours,
+                    sleepMins: _sleepMins,
+                  ),
                 ),
                 const DottedDivider(),
                 Padding(
@@ -227,18 +240,18 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: const [
+                    children: [
                       IconInformation(
                         iconData: Icons.restaurant_outlined,
-                        topText: '3',
+                        topText: '$_feedingCount',
                         bottomText: 'Feedings',
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 32,
                       ),
                       IconInformation(
                         iconData: Icons.delete,
-                        topText: '2',
+                        topText: '$_diaperCount',
                         bottomText: 'Diaper changes',
                       ),
                     ],
@@ -272,11 +285,14 @@ class _StatisticsPageState extends State<StatisticsPage> {
 class MainDayCircle extends StatelessWidget {
   const MainDayCircle({
     Key? key,
-    required ValueNotifier<int> selectedIndex,
-  })  : _selectedIndex = selectedIndex,
-        super(key: key);
+    required this.selectedIndex,
+    required this.sleepHours,
+    required this.sleepMins,
+  }) : super(key: key);
 
-  final ValueNotifier<int> _selectedIndex;
+  final int selectedIndex;
+  final int sleepHours;
+  final int sleepMins;
 
   @override
   Widget build(BuildContext context) {
@@ -289,31 +305,25 @@ class MainDayCircle extends StatelessWidget {
           height: 150,
           width: 150,
           padding: const EdgeInsets.all(16),
-          child: ValueListenableBuilder<int>(
-            valueListenable: _selectedIndex,
-            builder: (BuildContext context, value, Widget? child) {
-              return TweenAnimationBuilder<double>(
-                tween: Tween<double>(begin: 0, end: value % 10),
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.decelerate,
-                builder:
-                    (BuildContext context, double progress, Widget? child) {
-                  return FractionCircle(
-                    backgroundCircleColor: Colors.black12,
-                    fraction: progress / 10,
-                    strokeWidth: 13,
-                    child: Text(
-                      '${(progress * 10).round()}%',
-                      style: TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.w900,
-                          color: Theme.of(context).colorScheme.onBackground),
-                    ),
-                  );
-                },
-                child: const Icon(Icons.aspect_ratio),
+          child: TweenAnimationBuilder<double>(
+            tween: Tween<double>(begin: 0, end: selectedIndex % 10),
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.decelerate,
+            builder: (BuildContext context, double progress, Widget? child) {
+              return FractionCircle(
+                backgroundCircleColor: Colors.black12,
+                fraction: progress / 10,
+                strokeWidth: 13,
+                child: Text(
+                  '${(progress * 10).round()}%',
+                  style: TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.w900,
+                      color: Theme.of(context).colorScheme.onBackground),
+                ),
               );
             },
+            child: const Icon(Icons.aspect_ratio),
           ),
         ),
         const SizedBox(
@@ -323,7 +333,7 @@ class MainDayCircle extends StatelessWidget {
           text: TextSpan(
             children: [
               TextSpan(
-                text: '8h 27m',
+                text: '${sleepHours}h ${sleepMins}m',
                 style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w800,
