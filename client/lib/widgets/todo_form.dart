@@ -35,7 +35,7 @@ class TodoFormWidget extends StatelessWidget {
   Widget buildTitle() {
     return TextFormField(
       initialValue: title,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'Title',
       ),
@@ -53,7 +53,7 @@ class TodoFormWidget extends StatelessWidget {
     return TextFormField(
       maxLines: 3,
       initialValue: description,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'Description',
       ),
@@ -66,9 +66,9 @@ class TodoFormWidget extends StatelessWidget {
       width: double.infinity,
       child: MaterialButton(
         onPressed: onSavedTodo,
-        shape: StadiumBorder(),
+        shape: const StadiumBorder(),
         color: Colors.deepPurple.shade300,
-        child: Text('Save'),
+        child: const Text('Save'),
       ),
     );
   }

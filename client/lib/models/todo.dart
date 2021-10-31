@@ -1,23 +1,8 @@
 import 'package:flutter/material.dart';
 
-class TodoList {
-  List<Todo> allTodos = [];
+/*class TodoList {
 
-  List<Todo> get listTodos {
-    return allTodos;
-  }
-
-  Map<int, List<dynamic>> get toMap {
-    Map<int, List<dynamic>> todoMap = {};
-    for (int idx = 0; idx < allTodos.length; idx += 1) {
-      Todo current = allTodos[idx];
-      List<dynamic> fields = [current.title, current.description, current.id, current.time, current.isDone];
-      todoMap[idx] = fields;
-    }
-
-    return todoMap;
-  }
-}
+}*/
 
 class Todo {
   String title;
@@ -35,4 +20,20 @@ class Todo {
   });
 
   String get time => createdTime.toString();
+
+  List<dynamic> fields() {
+    List<dynamic> fields = [title, description, id, time, isDone];
+    return fields;
+  }
+
+  /*Map<int, List<dynamic>> get toMap {
+    Map<int, List<dynamic>> todoMap = {};
+    for (int idx = 0; idx < allTodos.length; idx += 1) {
+      Todo current = allTodos[idx];
+      List<dynamic> fields = [current.title, current.description, current.id, current.time, current.isDone];
+      todoMap[idx] = fields;
+    }
+
+    return todoMap;
+  }*/
 }

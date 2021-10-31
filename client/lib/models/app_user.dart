@@ -35,7 +35,7 @@ class AppUser {
   List<Todo> get todos {
     List<Todo> tasks = [];
 
-    _todoList!.forEach((key, value) {tasks.add(
+    _todoList?.forEach((key, value) {tasks.add(
         Todo(
           title: value[0],
           description: value[1],
@@ -51,8 +51,13 @@ class AppUser {
   List<Todo> get todosCompleted => todos.where((todo) => todo.isDone == true).toList();
 
   void addTodo(Todo todo) {
-    List<dynamic> newTodo = [todo.title, todo.description, todo.id, todo.time, todo.isDone];
-    _todoList![_todoList!.length] = newTodo;
+    if (_todoList == null) {
+      _todoList = {};
+    }
+    _todoList![_todoList!.length] = todo.fields();
+    print(_todoList);
+
+    DataService.updateUserData(uid, {'to_do_list': _todoList});
   }
 
   AppUser(this.uid);
@@ -72,7 +77,9 @@ class AppUser {
     _sharedProfiles = (userData['shared_profiles'] as List)
         .map((item) => item as String)
         .toList();
-    _todoList = (userData['to_do_list'] as Map).map(TodoList.toMap);
+    _todoList = (userData['to_do_list'] as Map).map((key, value) {
+      return MapEntry(int.parse(key), value as List);
+    });
     if (ownedProfiles.isNotEmpty) {
       setCurrentProfile(ownedProfiles[0]);
     }

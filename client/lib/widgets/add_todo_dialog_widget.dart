@@ -11,7 +11,6 @@ class AddTodoDialogWidget extends StatefulWidget {
 }
 
 class _AddTodoDialogWidgetState extends State<AddTodoDialogWidget> {
-  AppUser? _currentUser = AppUser.currentUser;
   final _formKey = GlobalKey<FormState>();
   String title = '';
   String description = '';
@@ -25,7 +24,7 @@ class _AddTodoDialogWidgetState extends State<AddTodoDialogWidget> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Add Todo',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -57,7 +56,7 @@ class _AddTodoDialogWidgetState extends State<AddTodoDialogWidget> {
         createdTime: DateTime.now(),
       );
 
-      _currentUser!.addTodo(todo);
+      AppUser.currentUser!.addTodo(todo);
 
       Navigator.of(context).pop();
     }

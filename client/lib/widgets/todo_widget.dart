@@ -42,7 +42,7 @@ class TodoWidget extends StatelessWidget {
   Widget buildTodo(BuildContext context) {
     return Container(
       color: Colors.white,
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: Row(
         children: [
           Checkbox(
