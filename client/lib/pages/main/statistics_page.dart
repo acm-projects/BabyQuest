@@ -11,7 +11,12 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
-  final int _currentDateIndex = 55;
+  //var registrationDate = DateTime.now().add(const Duration(days: 0));
+
+  //Date the user registers for the app
+  var registrationDate = DateTime.parse("2021-10-11 20:18:04Z");
+  late var _startDate;
+  late final int _currentDateIndex;
 
   int _feedingCount = 3;
   int _diaperCount = 2;
@@ -36,13 +41,28 @@ class _StatisticsPageState extends State<StatisticsPage> {
   late PageController pageController;
 
   final List<String> days = [
-    'Sunday',
     'Monday',
     'Tuesday',
     'Wednesday',
     'Thursday',
     'Friday',
-    'Saturday'
+    'Saturday',
+    'Sunday',
+  ];
+
+  final List<String> months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
 
   void _jumpToIndex(int index) {
@@ -59,6 +79,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   _StatisticsPageState() {
+    //Always Starts On A Sunday
+    _startDate = registrationDate
+        .subtract(Duration(days: registrationDate.weekday + 7 * 100));
+    _currentDateIndex = DateTime.now().difference(_startDate).inDays;
     _pageIndex = _currentDateIndex ~/ 7;
     _selectedIndex = _currentDateIndex;
     pageController = PageController(
@@ -86,21 +110,51 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 48),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       RichText(
                         text: TextSpan(
                           children: [
                             TextSpan(
-                                text: days[_selectedIndex % 7],
+                                text: days[_startDate
+                                        .add(Duration(days: _selectedIndex))
+                                        .weekday -
+                                    1],
                                 style: Theme.of(context).textTheme.headline1),
                             const TextSpan(
                               text: '  ',
                             ),
                             TextSpan(
-                                text: '$_selectedIndex October',
-                                style: Theme.of(context).textTheme.subtitle1),
+                                text:
+                                    '${_startDate.add(Duration(days: _selectedIndex)).day}',
+                                style: Theme.of(context).textTheme.headline2),
+                            const TextSpan(
+                              text: '  ',
+                            ),
                           ],
+                        ),
+                      ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: RichText(
+                          textAlign: TextAlign.right,
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: months[_startDate
+                                          .add(Duration(days: _selectedIndex))
+                                          .month -
+                                      1],
+                                  style: Theme.of(context).textTheme.headline3),
+                              const TextSpan(
+                                text: ' ',
+                              ),
+                              TextSpan(
+                                  text:
+                                      '${_startDate.add(Duration(days: _selectedIndex)).year}',
+                                  style: Theme.of(context).textTheme.subtitle1),
+                            ],
+                          ),
                         ),
                       ),
                       IconButton(
@@ -124,89 +178,29 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     onPageChanged: (int index) => _pageIndex = index,
                     itemBuilder: (context, index) {
                       return Transform.scale(
-                        scale: index == _pageIndex ? 1 : .97,
+                        scale: index == _pageIndex ? 1 : 1,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           child: Row(
-                            children: [
-                              DayCircle(
-                                fraction: ((index * 7 + 0) % 10) / 10,
-                                date: '${index * 7 + 0}',
-                                day: 'S',
-                                onTap: () {
-                                  setState(() {
-                                    _selectedIndex = index * 7 + 0;
-                                  });
-                                },
-                              ),
-                              const Spacer(),
-                              DayCircle(
-                                fraction: ((index * 7 + 1) % 10) / 10,
-                                date: '${index * 7 + 1}',
-                                day: 'M',
-                                onTap: () {
-                                  setState(() {
-                                    _selectedIndex = index * 7 + 1;
-                                  });
-                                },
-                              ),
-                              const Spacer(),
-                              DayCircle(
-                                fraction: ((index * 7 + 2) % 10) / 10,
-                                date: '${index * 7 + 2}',
-                                day: 'T',
-                                onTap: () {
-                                  setState(() {
-                                    _selectedIndex = index * 7 + 2;
-                                  });
-                                },
-                              ),
-                              const Spacer(),
-                              DayCircle(
-                                fraction: ((index * 7 + 3) % 10) / 10,
-                                date: '${index * 7 + 3}',
-                                day: 'W',
-                                onTap: () {
-                                  setState(() {
-                                    _selectedIndex = index * 7 + 3;
-                                  });
-                                },
-                              ),
-                              const Spacer(),
-                              DayCircle(
-                                fraction: ((index * 7 + 4) % 10) / 10,
-                                date: '${index * 7 + 4}',
-                                day: 'T',
-                                onTap: () {
-                                  setState(() {
-                                    _selectedIndex = index * 7 + 4;
-                                  });
-                                },
-                              ),
-                              const Spacer(),
-                              DayCircle(
-                                fraction: ((index * 7 + 5) % 10) / 10,
-                                date: '${index * 7 + 5}',
-                                day: 'F',
-                                onTap: () {
-                                  setState(() {
-                                    _selectedIndex = index * 7 + 5;
-                                  });
-                                },
-                              ),
-                              const Spacer(),
-                              DayCircle(
-                                fraction: ((index * 7 + 6) % 10) / 10,
-                                date: '${index * 7 + 6}',
-                                day: 'S',
-                                onTap: () {
-                                  setState(() {
-                                    _selectedIndex = index * 7 + 6;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: List.generate(7, (int listIndex) {
+                                return DayCircle(
+                                  fraction: ((index * 7 + listIndex) % 10) / 10,
+                                  date:
+                                      '${_startDate.add(Duration(days: index * 7 + listIndex)).day}',
+                                  day: days[_startDate
+                                              .add(Duration(
+                                                  days: index * 7 + listIndex))
+                                              .weekday -
+                                          1]
+                                      .substring(0, 1),
+                                  onTap: () {
+                                    setState(() {
+                                      _selectedIndex = index * 7 + listIndex;
+                                    });
+                                  },
+                                );
+                              })),
                         ),
                       );
                     },
