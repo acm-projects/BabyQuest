@@ -90,7 +90,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                         field: Column(
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
-                                            EditProfileWidgets.name(name),
+                                            EditProfileWidgets.name(
+                                                name, false),
                                             const SizedBox(
                                               height: 16,
                                             ),
@@ -352,8 +353,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                             final pedPhone =
                                                 TextEditingController(
                                                     text: currentBby
-                                                        .pediatricianPhone);
-
+                                                        .formattedPedPhone
+                                                        .replaceAll('(', '')
+                                                        .replaceAll(') ', '-'));
                                             await _showEditDialog(
                                                 context: context,
                                                 label: 'Pediatrician Phone',

@@ -6,14 +6,15 @@ import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditProfileWidgets {
-  static Widget name(TextEditingController nameController) {
+  static Widget name(TextEditingController nameController, bool autofocus) {
     return Padding(
       padding: const EdgeInsets.only(right: 48),
       child: TextFormField(
+        autofocus: autofocus,
         controller: nameController,
         validator: (value) {
           return (value == null || value.isEmpty)
-              ? 'Enter baby\'s full name'
+              ? 'Enter Baby\'s Full Name'
               : null;
         },
         decoration: const InputDecoration(
@@ -53,7 +54,7 @@ class EditProfileWidgets {
       return '${unformattedDate.month}/${unformattedDate.day}/${unformattedDate.year}';
     }
 
-    return 'Select Date of Birth';
+    return '';
   }
 
   static Widget birthDate(
@@ -64,7 +65,7 @@ class EditProfileWidgets {
     return StatefulBuilder(
       builder: (context, setState) {
         return SizedBox(
-          width: 256,
+          width: (viewController.text.isEmpty) ? 168 : 120,
           child: TextFormField(
             controller: viewController,
             readOnly: true,
@@ -72,11 +73,11 @@ class EditProfileWidgets {
               return (value == null ||
                       value.isEmpty ||
                       value == 'Select Date of Birth')
-                  ? 'Select baby\'s date of birth'
+                  ? 'Select Baby\'s Date of birth'
                   : null;
             },
             decoration: const InputDecoration(
-              border: InputBorder.none,
+              hintText: 'Baby\'s Date of Birth',
               icon: Icon(Icons.calendar_today),
             ),
             onTap: () async {
@@ -107,14 +108,16 @@ class EditProfileWidgets {
           width: 16,
         ),
         SizedBox(
-          width: 120,
+          width: 88,
           child: DropdownButtonFormField(
-            hint: const Text('Gender'),
+            decoration: const InputDecoration(
+              contentPadding: EdgeInsets.zero,
+              label: Text('Gender'),
+            ),
             value: (int.tryParse(genderController.text) != null)
                 ? items[int.parse(genderController.text)]
                 : null,
             style: Theme.of(context).textTheme.subtitle1,
-            autofocus: true,
             icon: const Icon(
               Icons.keyboard_arrow_down,
               color: Color(0xFF8C8161),
@@ -127,7 +130,7 @@ class EditProfileWidgets {
                   items.indexOf(newValue.toString()).toString();
             },
             validator: (value) {
-              return (value == null) ? 'Select baby\'s gender' : null;
+              return (value == null) ? 'Select Baby\'s Gender' : null;
             },
           ),
         ),
@@ -290,17 +293,34 @@ class EditProfileWidgets {
               index, allergyNames, allergySeverities, remove, setState);
         });
 
-        allergyFields.add(ElevatedButton(
-          child: const Text('Add another allergy'),
-          onPressed: () {
-            setState(() {
-              allergyNames.add('');
-              allergySeverities.add(-1);
-            });
-          },
-        ));
+        allergyFields.add(
+          Align(
+            alignment: Alignment.centerRight,
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  allergyNames.add('');
+                  allergySeverities.add(-1);
+                });
+              },
+              splashColor: Theme.of(context).colorScheme.secondary,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 48, top: 12),
+                child: Text(
+                  'Add Allergy',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
+                ),
+              ),
+            ),
+          ),
+        );
 
-        return Column(children: allergyFields);
+        return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: allergyFields);
       },
     );
   }
@@ -313,7 +333,7 @@ class EditProfileWidgets {
         controller: pedController,
         validator: (value) {
           return (value == null || value.isEmpty)
-              ? 'Enter your pediatrician\'s name'
+              ? 'Enter Your Pediatrician\'s Name'
               : null;
         },
         decoration: const InputDecoration(
@@ -332,7 +352,7 @@ class EditProfileWidgets {
         controller: pedPhoneController,
         validator: (value) {
           return (value == null || value.length != 12)
-              ? 'Enter a valid phone number'
+              ? 'Enter a Valid Phone Number'
               : null;
         },
         decoration: const InputDecoration(
@@ -385,7 +405,7 @@ class EditProfileWidgets {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'Select profile picture',
+                  'Select Profile Picture',
                   style: Theme.of(context).textTheme.headline2,
                 ),
               ),

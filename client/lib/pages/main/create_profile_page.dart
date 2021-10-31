@@ -107,14 +107,15 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            EditProfileWidgets.name(name),
+                            EditProfileWidgets.name(name, true),
                             const SizedBox(height: 32),
                             EditProfileWidgets.birthDate(context, birthDate),
                             const SizedBox(height: 32),
                             Theme(
                                 data: Theme.of(context).copyWith(
-                                    canvasColor: Colors.amber.shade100),
-                                child: EditProfileWidgets.gender(context, gender)),
+                                    canvasColor: Colors.green.shade200),
+                                child:
+                                    EditProfileWidgets.gender(context, gender)),
                             const SizedBox(height: 32),
                             EditProfileWidgets.height(heightIn),
                             const SizedBox(height: 32),
@@ -135,17 +136,19 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                       content: Form(
                         key: _formKeys[1],
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Theme(
-                              data: Theme.of(context)
-                                  .copyWith(canvasColor: Colors.amber.shade100),
-                              child: EditProfileWidgets.allergies(
-                                  allergyNames, allergySeverities, removeAllergyFields),
-                            ),
-                            const SizedBox(height: 32),
                             EditProfileWidgets.pediatrician(pedName),
                             const SizedBox(height: 32),
                             EditProfileWidgets.pediatricianPhone(pedPhone),
+                            const SizedBox(height: 64),
+                            Theme(
+                              data: Theme.of(context)
+                                  .copyWith(canvasColor: Colors.green.shade200),
+                              child: EditProfileWidgets.allergies(
+                                  allergyNames, allergySeverities, removeAllergyFields),
+                            ),
                           ],
                         ),
                       ),
