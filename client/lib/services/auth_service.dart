@@ -53,7 +53,7 @@ class AuthService extends ChangeNotifier {
               setError!('Your password is incorrect.');
               break;
             default:
-              setError!('Something went wrong! Pleas try again.');
+              setError!('Something went wrong! Please try again.');
           }
         }
       });
