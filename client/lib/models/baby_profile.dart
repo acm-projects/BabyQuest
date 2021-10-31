@@ -127,7 +127,8 @@ class BabyProfile {
 
     _pediatrician = profileData['pediatrician'];
     _pediatricianPhone = profileData['pediatrician_phone'];
-   _formattedPedPhone = (await FlutterLibphonenumber().format(pediatricianPhone, 'US'))['formatted'];
+    _formattedPedPhone = (await FlutterLibphonenumber()
+        .format(pediatricianPhone, 'US'))['formatted'];
 
     _profilePic = profileData['profile_pic'] as String;
 
@@ -155,7 +156,19 @@ class BabyProfile {
 
   void updateProfileImage(String imagePath) async {
     File imageFile = File(imagePath);
-    String imageUrl = await DataService.uploadProfileImage(uid, imageFile, currentImageUrl: _profilePic);
+    String imageUrl = await DataService.uploadProfileImage(uid, imageFile,
+        currentImageUrl: _profilePic);
     updateData({'profile_pic': imageUrl});
+  }
+
+  void updatePermissions(
+      Map<String, String> newUsers, List<String> removedUsers) {
+    for (var userId in newUsers.keys) {
+      DataService.updateUserPermissions(userId, add: uid);
+    }
+
+    for (var userId in removedUsers) {
+      DataService.updateUserPermissions(userId, remove: uid);
+    }
   }
 }

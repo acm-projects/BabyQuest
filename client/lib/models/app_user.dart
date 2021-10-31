@@ -6,12 +6,15 @@ class AppUser {
 
   // private properties
   bool _isLoaded = false;
+  String? _lastProfile;
   List<String>? _profiles;
   List<String>? _sharedProfiles;
+  Map<String, String>? _profileNames;
   List<String>? _toDoList;
 
   // public properties
   final String uid;
+  final String email;
 
   // static accessors
   static AppUser? get currentUser => _currentUser;
@@ -28,13 +31,14 @@ class AppUser {
   bool get isLoaded => _isLoaded;
   List<String> get ownedProfiles => _profiles ?? [];
   List<String> get sharedProfiles => _sharedProfiles ?? [];
+  Map<String, String> get profileNames => _profileNames ?? {};
   List<String> get toDoList => _toDoList ?? [];
 
-  AppUser(this.uid);
+  AppUser(this.uid, this.email);
 
   // private methods
   void _setDataSync() async {
-    DataService.setUserDataSync(uid, _updateData);
+    DataService.setUserDataSync(uid, email, _updateData);
   }
 
   void _removeDataSync() async {
@@ -42,15 +46,21 @@ class AppUser {
   }
 
   Future _updateData(Map<String, dynamic> userData) async {
+    _lastProfile = userData['last_profile'] as String?;
     _profiles =
         (userData['profiles'] as List).map((item) => item as String).toList();
     _sharedProfiles = (userData['shared_profiles'] as List)
         .map((item) => item as String)
         .toList();
+    _profileNames = await DataService.getProfileNames(ownedProfiles, sharedProfiles);
     _toDoList =
         (userData['to_do_list'] as List).map((item) => item as String).toList();
 
-    if (ownedProfiles.isNotEmpty) {
+    if (_lastProfile != null &&
+        (ownedProfiles.contains(_lastProfile) ||
+            sharedProfiles.contains(_lastProfile))) {
+      setCurrentProfile(_lastProfile!);
+    } else if (ownedProfiles.isNotEmpty) {
       setCurrentProfile(ownedProfiles[0]);
     }
 
@@ -58,10 +68,14 @@ class AppUser {
   }
 
   // Switches the currently displayed BabyProfile based on the provided uid
-  void setCurrentProfile(String uid) {
+  void setCurrentProfile(String profileUid) {
     if (this != _currentUser) return;
 
-    BabyProfile.currentProfile = BabyProfile(uid);
+    BabyProfile.currentProfile = BabyProfile(profileUid);
+
+    if (_lastProfile != profileUid) {
+      DataService.updateUserData(uid, {'last_profile': profileUid});
+    }
   }
 
   void createNewProfile({

@@ -15,7 +15,7 @@ class AuthService extends ChangeNotifier {
 
   // create AppUser object from firebase user
   static AppUser? _appUserFromUser(User? user) {
-    AppUser.currentUser = user != null ? AppUser(user.uid) : null;
+    AppUser.currentUser = user != null ? AppUser(user.uid, user.email!) : null;
 
     if (AppUser.currentUser == null) {
       BabyProfile.currentProfile = null;

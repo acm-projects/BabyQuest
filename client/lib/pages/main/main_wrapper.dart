@@ -9,7 +9,9 @@ import 'package:client/pages/main/statistics_page.dart';
 import 'package:client/pages/main/create_profile_page.dart';
 
 class MainWrapper extends StatefulWidget {
-  const MainWrapper({Key? key}) : super(key: key);
+  final Function refresh;
+
+  const MainWrapper(this.refresh, {Key? key}) : super(key: key);
 
   @override
   _MainWrapperState createState() => _MainWrapperState();
@@ -26,17 +28,10 @@ class _MainWrapperState extends State<MainWrapper> {
     }
   }
 
-  final pages = [
-    const ProfilePage(),
-    const HomePage(),
-    const StatisticsPage(),
-    const ShoppingPage(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     if (creatingProfile) {
-      return CreateProfilePage(_completeDataInput);
+      return CreateProfilePage(_creatingNewProfile);
     } else {
       return _mainPage();
     }
@@ -48,7 +43,12 @@ class _MainWrapperState extends State<MainWrapper> {
       body: PageView(
         physics: const NeverScrollableScrollPhysics(),
         controller: pageController,
-        children: pages,
+        children: [
+          ProfilePage(_creatingNewProfile, widget.refresh),
+          const HomePage(),
+          const StatisticsPage(),
+          const ShoppingPage(),
+        ],
       ),
       bottomNavigationBar: ConvexAppBar(
         initialActiveIndex: 1,
@@ -66,7 +66,7 @@ class _MainWrapperState extends State<MainWrapper> {
     );
   }
 
-  void _completeDataInput() {
-    setState(() => creatingProfile = false);
+  void _creatingNewProfile({bool finished = true}) {
+    setState(() => creatingProfile = !finished);
   }
 }

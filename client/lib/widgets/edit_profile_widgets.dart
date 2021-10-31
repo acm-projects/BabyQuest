@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:client/models/baby_profile.dart';
+import 'package:client/services/data_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 import 'package:image_picker/image_picker.dart';
@@ -400,5 +401,97 @@ class EditProfileWidgets {
         );
       },
     );
+  }
+
+  static Widget _sharedUser(
+      String uid,
+      String email,
+      Map<String, String> newUsers,
+      List<String> removedUsers,
+      Function setState) {
+    return Row(
+      children: [
+        IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () {
+            if (newUsers.containsKey(uid)) {
+              setState(() => newUsers.remove(uid));
+            } else {
+              setState(() => removedUsers.add(uid));
+            }
+          },
+        ),
+        Text(email),
+      ],
+    );
+  }
+
+  static List<Widget> _sharedUsers(
+      Map<String, String> currentUsers,
+      Map<String, String> newUsers,
+      List<String> removedUsers,
+      Function setState) {
+    List<Widget> sharedUserWidgets = [];
+
+    newUsers.forEach((uid, name) {
+      sharedUserWidgets
+          .add(_sharedUser(uid, name, newUsers, removedUsers, setState));
+    });
+
+    currentUsers.forEach((uid, name) {
+      if (!removedUsers.contains(uid)) {
+        sharedUserWidgets
+            .add(_sharedUser(uid, name, newUsers, removedUsers, setState));
+      }
+    });
+
+    return sharedUserWidgets;
+  }
+
+  static Future shareProfile(String profileId, Map<String, String> newUsers,
+      List<String> removedUsers) async {
+    Map<String, String> currentUsers =
+        await DataService.getProfileSharedUsers(profileId);
+
+    final newUserEmail = TextEditingController();
+
+    return StatefulBuilder(builder: (context, setState) {
+      return Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Row(
+            children: [
+              SizedBox(
+                width: 150,
+                child: TextField(
+                  controller: newUserEmail,
+                ),
+              ),
+              TextButton(
+                child: const Text('Add User'),
+                onPressed: () async {
+                  if (currentUsers.containsValue(newUserEmail.text)) {
+                    debugPrint('Specified user doesn\'t exist');
+                    return;
+                  }
+
+                  final uid =
+                      await DataService.getUserFromEmail(newUserEmail.text);
+                  if (uid != null) {
+                    setState(() => newUsers[uid] = newUserEmail.text);
+                  } else {
+                    debugPrint('Specified user doesn\'t exist');
+                  }
+                },
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          ..._sharedUsers(currentUsers, newUsers, removedUsers, setState),
+        ],
+      );
+    });
   }
 }

@@ -10,7 +10,7 @@ class SplashPage extends StatefulWidget {
   final Function? completed;
 
   const SplashPage(this.label,
-      {this.timed = true, this.milliseconds = 3500, this.completed, Key? key})
+      {this.timed = true, this.milliseconds = 2500, this.completed, Key? key})
       : super(key: key);
 
   @override
