@@ -1,3 +1,5 @@
+import 'package:client/models/baby_profile.dart';
+import 'package:client/models/day_stats.dart';
 import 'package:client/widgets/dotted_divider.dart';
 import 'package:client/widgets/fraction_circle.dart';
 import 'package:client/widgets/icon_information.dart';
@@ -11,12 +13,12 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
-  //var registrationDate = DateTime.now().add(const Duration(days: 0));
+  BabyProfile currentBby = BabyProfile.currentProfile;
 
   //Date the user registers for the app
-  var registrationDate = DateTime.parse("2021-10-11 20:18:04Z");
-  late var _startDate;
+  late DateTime _startDate;
   late final int _currentDateIndex;
+  late final int _endDateIndex;
 
   int _feedingCount = 3;
   int _diaperCount = 2;
@@ -24,7 +26,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
   int _sleepHours = 8;
   int _sleepMins = 27;
 
-  final List<SleepInformation> sleepSessions = [
+  List<SleepInformation> sleepSessions = [
     const SleepInformation(
       startTime: '1:50 AM',
       endTime: '10:18 PM',
@@ -65,8 +67,38 @@ class _StatisticsPageState extends State<StatisticsPage> {
     'December',
   ];
 
+  String _getFormattedTime(DateTime time) {
+    int hour = (time.hour % 12 == 0) ? 12 : time.hour % 12;
+    return '$hour:${time.minute} ${time.hour >= 12 ? 'PM' : 'AM'}';
+  }
+
   DateTime _getSelectedDateTime() {
-    return _startDate.add(Duration(days: _selectedIndex));
+    DateTime day = _startDate.add(Duration(days: _selectedIndex));
+    DayStats stats = currentBby.getDayStats(day);
+    int totalSleepMins = 0;
+    bool isFirst = true;
+
+    sleepSessions = [];
+
+    stats.sleep.forEach((startTime, endTime) {
+      totalSleepMins += endTime.difference(startTime).inMinutes;
+      sleepSessions.add(
+        SleepInformation(
+          startTime: _getFormattedTime(startTime),
+          endTime: _getFormattedTime(endTime),
+          isFirst: isFirst,
+        ),
+      );
+
+      isFirst = false;
+    });
+
+    _feedingCount = stats.feedings.length;
+    _diaperCount = stats.diaperChanges.length;
+    _sleepHours = totalSleepMins ~/ 60;
+    _sleepMins = totalSleepMins % 60;
+
+    return day;
   }
 
   void _jumpToIndex(int index) {
@@ -84,9 +116,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   _StatisticsPageState() {
     //Always Starts On A Sunday
-    _startDate = registrationDate
-        .subtract(Duration(days: registrationDate.weekday + 7 * 100));
+    DateTime registrationDate = DateTime.parse("2021-10-11");
+    _startDate =
+        registrationDate.subtract(Duration(days: registrationDate.weekday % 7));
     _currentDateIndex = DateTime.now().difference(_startDate).inDays;
+    _endDateIndex = _currentDateIndex + (6 - _startDate.weekday).clamp(0, 6);
+
     _pageIndex = _currentDateIndex ~/ 7;
     _selectedIndex = _currentDateIndex;
     pageController = PageController(
@@ -170,7 +205,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 SizedBox(
                   height: 130,
                   child: PageView.builder(
-                    itemCount: null,
+                    itemCount: (_endDateIndex ~/ 7) + 1,
                     controller: pageController,
                     onPageChanged: (int index) => _pageIndex = index,
                     itemBuilder: (context, index) {

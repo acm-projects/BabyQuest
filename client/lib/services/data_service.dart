@@ -97,6 +97,9 @@ class DataService {
       'pediatrician': pediatrician,
       'pediatrician_phone': pediatricianPhone,
       'allergies': allergies,
+      'diaper_changes': {},
+      'feedings': {},
+      'sleep': {},
     }).then((document) async {
       documentId = document.id;
 

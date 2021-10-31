@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:client/models/day_stats.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 
@@ -25,9 +26,9 @@ class BabyProfile {
 
   String? _profilePic;
 
-  Map<String, int>? _diaperChanges;
-  List<Map<DateTime, DateTime>>? _sleep;
-  Map<String, int>? _feedings;
+  Map<DateTime, List<DateTime>>? _diaperChanges;
+  Map<DateTime, List<DateTime>>? _feedings;
+  Map<DateTime, Map<DateTime, DateTime>>? _sleep;
 
   // public properties
   final String uid;
@@ -120,20 +121,42 @@ class BabyProfile {
     _weightLb = profileData['weightLb'] as double;
     _weightOz = profileData['weightOz'] as double;
     _birthDate = DateTime.parse(profileData['birth_date'] as String);
-    _allergies = (profileData['allergies'] as Map<String, dynamic>)
-        .map((String key, dynamic value) {
+    _allergies =
+        (profileData['allergies'] as Map<String, dynamic>).map((key, value) {
       return MapEntry(key, value as int);
     });
 
     _pediatrician = profileData['pediatrician'];
     _pediatricianPhone = profileData['pediatrician_phone'];
-   _formattedPedPhone = (await FlutterLibphonenumber().format(pediatricianPhone, 'US'))['formatted'];
+    _formattedPedPhone = (await FlutterLibphonenumber()
+        .format(pediatricianPhone, 'US'))['formatted'];
 
     _profilePic = profileData['profile_pic'] as String;
 
-    // _diaperChanges = profileData['diaper_changes'];
-    // _sleep = profileData['sleep'];
-    // _feedings = profileData['feedings'];
+    _diaperChanges = (profileData['diaper_changes'] as Map<String, dynamic>)
+        .map((key, value) {
+      return MapEntry(
+          DateTime.parse(key),
+          (value as List)
+              .map((item) => DateTime.parse(item as String))
+              .toList());
+    });
+    _feedings =
+        (profileData['feedings'] as Map<String, dynamic>).map((key, value) {
+      return MapEntry(
+          DateTime.parse(key),
+          (value as List)
+              .map((item) => DateTime.parse(item as String))
+              .toList());
+    });
+    _sleep = (profileData['sleep'] as Map<String, dynamic>).map((key, value) {
+      return MapEntry(
+          DateTime.parse(key),
+          (value as Map<String, dynamic>).map((key, value) {
+            return MapEntry(
+                DateTime.parse(key), DateTime.parse(value as String));
+          }));
+    });
 
     _streamController.add(currentProfile);
   }
@@ -149,13 +172,23 @@ class BabyProfile {
     }
   }
 
+  DayStats getDayStats(DateTime date) {
+    return DayStats(
+      date: date,
+      diaperChanges: _diaperChanges?[date] ?? [],
+      feedings: _feedings?[date] ?? [],
+      sleep: _sleep?[date] ?? {},
+    );
+  }
+
   void updateData(Map<String, dynamic> data) {
     DataService.updateProfileData(uid, data);
   }
 
   void updateProfileImage(String imagePath) async {
     File imageFile = File(imagePath);
-    String imageUrl = await DataService.uploadProfileImage(uid, imageFile, currentImageUrl: _profilePic);
+    String imageUrl = await DataService.uploadProfileImage(uid, imageFile,
+        currentImageUrl: _profilePic);
     updateData({'profile_pic': imageUrl});
   }
 }
