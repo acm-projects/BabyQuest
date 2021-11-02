@@ -21,18 +21,28 @@ class Todo {
     this.removed = false,
   });
 
+  String get name => title;
+  String get descrip => description;
   String get time => createdTime.toString();
+  bool get gone => removed;
+
+  //setter methods
+  set setTitle(String newTitle) {
+    title = newTitle;
+  }
+  set setDescrip(String newDescription) {
+    description = newDescription;
+  }
+  void toggleDone() {
+    isDone = !isDone;
+  }
+  void removing() {
+    removed = !removed;
+  }
 
   //returns all object fields - passed to map key
   List<dynamic> fields() {
     List<dynamic> fields = [title, description, id, time, isDone, removed];
     return fields;
   }
-
-  List<dynamic> removing() {
-    List<dynamic> fields = [title, description, id, time, isDone, !removed];
-    return fields;
-  }
-
-
 }

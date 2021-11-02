@@ -74,13 +74,25 @@ class AppUser {
     _todoList![todo.id] = todo.fields();
 
     DataService.updateUserData(uid, {'to_do_list': _todoList?.map((key, value) => MapEntry(key, value))});
-  }
+  } //creates empty map if null, else returns fields of object
   void removeTodo(Todo todo) {
-    _todoList![todo.id] = todo.removing();
-    //_todoList.update(todo.id, List<dynamic> val[5] => true);
+    todo.removing();
+    _todoList![todo.id] = todo.fields();
 
     DataService.updateUserData(uid, {'to_do_list': _todoList?.map((key, value) => MapEntry(key, value))});
+  } //call removing method - changes removed value to true
+  bool toggleTodoStatus(Todo todo) {
+    todo.toggleDone();
+    _todoList![todo.id] = todo.fields();
+
+    DataService.updateUserData(uid, {'to_do_list': _todoList?.map((key, value) => MapEntry(key, value))});
+
+    return todo.gone;
   }
+  void edit(Todo todo) {
+
+    DataService.updateUserData(uid, {'to_do_list': _todoList?.map((key, value) => MapEntry(key, value))});
+  } //only change title and description value
 
   AppUser(this.uid);
 

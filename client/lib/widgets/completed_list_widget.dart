@@ -3,26 +3,28 @@ import 'package:client/models/todo.dart';
 import 'package:client/widgets/todo_widget.dart';
 import 'package:client/models/app_user.dart';
 
-class TodoListWidget extends StatefulWidget {
-  const TodoListWidget({Key? key}) : super(key: key);
+class CompletedListWidget extends StatefulWidget {
+  const CompletedListWidget({Key? key}) : super(key: key);
 
   @override
-  _TodoListWidgetState createState() => _TodoListWidgetState();
+  _CompletedListWidgetState createState() => _CompletedListWidgetState();
 }
 
-class _TodoListWidgetState extends State<TodoListWidget> {
-  List<Todo> todos = AppUser.currentUser?.todosInProgress ?? [];
+class _CompletedListWidgetState extends State<CompletedListWidget> {
+  List<Todo> todos = AppUser.currentUser?.todosCompleted ?? [];
 
   @override
   Widget build(BuildContext context) {
+
+
     return todos.isEmpty
-      ? const Center(
-          child: Text(
-            'No todos',
-            style: TextStyle(fontSize: 20),
-          ),
-        )
-      : ListView.separated(
+        ? const Center(
+      child: Text(
+        'No completed tasks',
+        style: TextStyle(fontSize: 20),
+      ),
+    )
+        : ListView.separated(
       physics: BouncingScrollPhysics(),
       padding: EdgeInsets.all(16),
       separatorBuilder: (context, index) => Container(height: 8),

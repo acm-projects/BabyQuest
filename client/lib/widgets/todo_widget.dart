@@ -51,7 +51,17 @@ class TodoWidget extends StatelessWidget {
             checkColor: Colors.white,
             value: todo.isDone,
             onChanged: (_) {
+              final isDone = AppUser.currentUser!.toggleTodoStatus(todo);
 
+              ScaffoldMessenger.of(context).removeCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    behavior: SnackBarBehavior.floating,
+                    duration: const Duration(milliseconds: 2000),
+                    content: Text(isDone ? 'Task Completed' : 'Task marked imcomplete'),
+                  )
+              );
             },
           ),
           Expanded(
