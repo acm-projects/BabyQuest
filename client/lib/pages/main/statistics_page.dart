@@ -120,9 +120,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
     //Always Starts On A Sunday
     final registrationDate = DateTime.parse("2021-10-11");
     final now = DateTime.now();
-
-    _startDate = registrationDate
-        .subtract(Duration(days: registrationDate.weekday % 7));
+    _startDate = DateTime(registrationDate.year, registrationDate.month,
+        registrationDate.day - registrationDate.weekday % 7);
     _currentDateIndex = now.difference(_startDate).inDays;
     _endDateIndex = _currentDateIndex + 7 - now.weekday;
 
