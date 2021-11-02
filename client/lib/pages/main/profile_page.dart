@@ -102,8 +102,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                         updateData: () {
                                           currentBby
                                               .updateData({'name': name.text});
-                                          currentBby
-                                              .updateProfileImage(image.text);
+                                          if (image.text !=
+                                              currentBby.profilePic) {
+                                            currentBby
+                                                .updateProfileImage(image.text);
+                                          }
                                         },
                                       );
                                     },
