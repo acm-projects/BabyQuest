@@ -78,7 +78,7 @@ class AppUser {
     }
   }
 
-  void createNewProfile({
+  Future createNewProfile({
     required String name,
     required DateTime birthDate,
     required int gender,

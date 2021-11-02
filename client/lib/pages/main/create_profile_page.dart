@@ -185,7 +185,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
     setState(() => _currentStep = step);
   }
 
-  continued() {
+  continued() async {
     if (!_formKeys[_currentStep].currentState!.validate()) return;
 
     if (_currentStep == 2) {
@@ -195,7 +195,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
           allergySeverities.removeAt(index);
         }
 
-        AppUser.currentUser!.createNewProfile(
+        await AppUser.currentUser!.createNewProfile(
           name: name.text,
           birthDate: DateTime.parse(birthDate.text),
           gender: int.parse(gender.text),
