@@ -10,6 +10,7 @@ class Todo {
   String description;
   DateTime createdTime;
   bool isDone;
+  bool removed;
 
   Todo({
     required this.title,
@@ -17,23 +18,19 @@ class Todo {
     this.id = '',
     required this.createdTime,
     this.isDone = false,
+    this.removed = false,
   });
 
   String get time => createdTime.toString();
 
+  //returns all object fields - passed to map key
   List<dynamic> fields() {
-    List<dynamic> fields = [title, description, id, time, isDone];
+    List<dynamic> fields = [title, description, id, time, isDone, removed];
     return fields;
   }
 
-  /*Map<int, List<dynamic>> get toMap {
-    Map<int, List<dynamic>> todoMap = {};
-    for (int idx = 0; idx < allTodos.length; idx += 1) {
-      Todo current = allTodos[idx];
-      List<dynamic> fields = [current.title, current.description, current.id, current.time, current.isDone];
-      todoMap[idx] = fields;
-    }
-
-    return todoMap;
-  }*/
+  List<dynamic> removing() {
+    List<dynamic> fields = [title, description, id, time, isDone, !removed];
+    return fields;
+  }
 }

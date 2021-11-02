@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:client/models/todo.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:client/models/app_user.dart';
 
 class TodoWidget extends StatelessWidget {
   final Todo todo;
@@ -28,8 +29,8 @@ class TodoWidget extends StatelessWidget {
         ],
         secondaryActions: [
           IconSlideAction(
+            onTap: () => deleteTodo(context, todo),
             color: Colors.red,
-            onTap: () {},
             caption: 'Delete',
             icon: Icons.delete,
           )
@@ -79,6 +80,20 @@ class TodoWidget extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void deleteTodo(BuildContext context, Todo todo) {
+    AppUser.currentUser!.removeTodo(todo);
+
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(milliseconds: 3000),
+          content: Text('Deleted the task'),
+        )
     );
   }
 }

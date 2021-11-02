@@ -9,7 +9,7 @@ class AppUser {
   bool _isLoaded = false;
   List<String>? _profiles;
   List<String>? _sharedProfiles;
-  Map<int, List<dynamic>>? _todoList;
+  Map<String, List<dynamic>>? _todoList;
 
   // public properties
   final String uid;
@@ -29,36 +29,63 @@ class AppUser {
   bool get isLoaded => _isLoaded;
   List<String> get ownedProfiles => _profiles ?? [];
   List<String> get sharedProfiles => _sharedProfiles ?? [];
-  Map<int, List<dynamic>> get toDoList => _todoList ?? {};
+  Map<String, List<dynamic>> get toDoList => _todoList ?? {};
 
   //methods for todo
-  List<Todo> get todos {
+  List<Todo> get todosInProgress {
     List<Todo> tasks = [];
-
     _todoList?.forEach((key, value) {
-      tasks.add(
-        Todo(
-          title: value[0],
-          description: value[1],
-          id: value[2],
-          createdTime: DateTime.parse(value[3]),
-          isDone: value[4],
-        ));
+      if (!value[4] && !value[5]) {
+        tasks.add(
+            Todo(
+              title: value[0],
+              description: value[1],
+              id: value[2],
+              createdTime: DateTime.parse(value[3]),
+              isDone: value[4],
+              removed: value[5],
+            ));
+      }
     });
 
     return tasks;
   }
-  List<Todo> get todosInProgress => todos.where((todo) => todo.isDone == false).toList();
-  List<Todo> get todosCompleted => todos.where((todo) => todo.isDone == true).toList();
+  List<Todo> get todosCompleted {
+    List<Todo> tasks = [];
+    _todoList?.forEach((key, value) {
+      if (value[4] && !value[5]) {
+        tasks.add(
+            Todo(
+              title: value[0],
+              description: value[1],
+              id: value[2],
+              createdTime: DateTime.parse(value[3]),
+              isDone: value[4],
+              removed: value[5],
+            ));
+      }
+    });
+
+    return tasks;
+  }
 
   void addTodo(Todo todo) {
-    if (_todoList == null) {
-      _todoList = {};
-    }
-    _todoList![_todoList!.length] = todo.fields();
+    _todoList ??= {};
+    _todoList![todo.id] = todo.fields();
 
-    DataService.updateUserData(uid, {'to_do_list': _todoList?.map((key, value) => MapEntry(key.toString(), value))});
+    DataService.updateUserData(uid, {'to_do_list': _todoList?.map((key, value) => MapEntry(key, value))});
   }
+  void removeTodo(Todo todo) {
+    _todoList![todo.id] = todo.removing();
+
+    DataService.updateUserData(uid, {'to_do_list': _todoList?.map((key, value) => MapEntry(key, value))});
+  }
+  void undoRemoveTodo(Todo todo) {
+    _todoList![todo.id] = todo.removing();
+
+    DataService.updateUserData(uid, {'to_do_list': _todoList?.map((key, value) => MapEntry(key, value))});
+  }
+
 
   AppUser(this.uid);
 
@@ -78,7 +105,7 @@ class AppUser {
         .map((item) => item as String)
         .toList();
     _todoList = (userData['to_do_list'] as Map).map((key, value) {
-      return MapEntry(int.parse(key), value as List);
+      return MapEntry(key, value as List);
     });
     if (ownedProfiles.isNotEmpty) {
       setCurrentProfile(ownedProfiles[0]);
