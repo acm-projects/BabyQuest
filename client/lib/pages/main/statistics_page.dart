@@ -358,7 +358,7 @@ class MainDayCircle extends StatelessWidget {
           text: TextSpan(
             children: [
               TextSpan(
-                text: '${sleepMins / 60}h ${sleepMins % 60}m',
+                text: '${sleepMins ~/ 60}h ${sleepMins % 60}m',
                 style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w800,

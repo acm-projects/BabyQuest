@@ -140,6 +140,7 @@ class _HomePageState extends State<HomePage> {
           DateTime today = DateTime(now.year, now.month, now.day);
 
           DayStats stats = currentBby.getDayStats(today);
+          _isSleeping = currentBby.startedSleep != null;
           _diaperCount = stats.diaperChanges.length;
           _feedingCount = stats.feedings.length;
 
@@ -222,19 +223,22 @@ class _HomePageState extends State<HomePage> {
                               : Theme.of(context).colorScheme.onSecondary,
                           text: _isSleeping ? 'Stop Sleep' : 'Start Sleep',
                           onPressed: () {
-                            Future.delayed(
-                                ButtonTheme.of(context)
-                                    .getAnimationDuration(MaterialButton(
-                                  onPressed: () {},
-                                )), () {
-                              setState(() {
-                                _isSleeping = !_isSleeping;
-                                //To Do
-                                _sleepHours = 7;
-                                _sleepMins = 36;
-                              });
-                              _showSleepStatus();
-                            });
+                            DateTime now = DateTime.now();
+                            if (_isSleeping) {
+                              _sleepDays = now
+                                  .difference(currentBby.startedSleep!)
+                                  .inDays;
+                              _sleepHours = now
+                                  .difference(currentBby.startedSleep!)
+                                  .inHours;
+                              _sleepMins = now
+                                  .difference(currentBby.startedSleep!)
+                                  .inMinutes;
+                            }
+
+                            currentBby.trackSleep(now);
+                            _isSleeping = !_isSleeping;
+                            _showSleepStatus();
                           },
                         ),
                         const SizedBox(

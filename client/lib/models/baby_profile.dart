@@ -28,6 +28,8 @@ class BabyProfile {
 
   String? _profilePic;
 
+  DateTime? _startedSleep;
+
   Map<DateTime, List<DateTime>>? _diaperChanges;
   Map<DateTime, List<DateTime>>? _feedings;
   Map<DateTime, Map<DateTime, DateTime>>? _sleep;
@@ -106,6 +108,8 @@ class BabyProfile {
 
   String get profilePic => _profilePic ?? '';
 
+  DateTime? get startedSleep => _startedSleep;
+
   BabyProfile(this.uid);
 
   // private methods
@@ -136,6 +140,10 @@ class BabyProfile {
         .format(pediatricianPhone, 'US'))['formatted'];
 
     _profilePic = profileData['profile_pic'] as String;
+
+    if (profileData['started_sleep'] != null) {
+      _startedSleep = DateTime.parse(profileData['started_sleep'] as String);
+    }
 
     _diaperChanges = (profileData['diaper_changes'] as Map<String, dynamic>)
         .map((key, value) {
@@ -255,6 +263,29 @@ class BabyProfile {
     });
 
     updateData({'feedings': databaseMap});
+  }
+
+  void trackSleep(DateTime time) {
+    if (_startedSleep == null) {
+      _startedSleep = time;
+      updateData({'started_sleep': time.toString()});
+    } else {
+      DateTime day = DateTime(time.year, time.month, time.day);
+      DateTime started = _startedSleep ?? DateTime.now();
+
+      _sleep ??= {};
+      _sleep![day] ??= {};
+      _sleep![day]![started] = time;
+      _startedSleep = null;
+
+      final databaseMap = _sleep!.map((key, value) {
+        return MapEntry(key.toString(), value.map((key, value) {
+          return MapEntry(key.toString(), value.toString());
+        }));
+      });
+
+      updateData({'started_sleep': null, 'sleep': databaseMap});
+    }
   }
 
   void updateProfileImage(String imagePath) async {
