@@ -7,8 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DataService {
   static final _database = FirebaseFirestore.instance;
-  static final _userCollection = _database.collection('users_test');
-  static final _profileCollection = _database.collection('profiles_test');
+  static final _userCollection = _database.collection('users');
+  static final _profileCollection = _database.collection('profiles');
 
   static final _storage = FirebaseStorage.instance;
   static final _profilePics = _storage.ref('profile_pics');
