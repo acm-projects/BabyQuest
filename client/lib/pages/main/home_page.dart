@@ -1,3 +1,5 @@
+import 'package:client/models/baby_profile.dart';
+import 'package:client/models/day_stats.dart';
 import 'package:client/widgets/dotted_divider.dart';
 import 'package:client/widgets/round_button.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  BabyProfile currentBby = BabyProfile.currentProfile;
+
   String _qodMessage = '';
   String _qodAuthor = '';
 
@@ -35,7 +39,7 @@ class _HomePageState extends State<HomePage> {
           ? const EdgeInsets.symmetric(horizontal: 16)
           : const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       behavior: SnackBarBehavior.floating,
-      duration: const Duration(milliseconds: 1250),
+      duration: const Duration(milliseconds: 1000),
       content: Text(text),
       action: (onPressed != null)
           ? SnackBarAction(
@@ -100,25 +104,27 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _recordFeeding() {
-    setState(() => _feedingCount++);
+    currentBby.incrementFeedings(DateTime.now());
+    _feedingCount += 1;
     ScaffoldMessenger.of(context).showSnackBar(
       _getSnackBar(
         text: _feedingCount > 1
             ? '$_feedingCount Feedings Recorded'
             : '$_feedingCount Feeding Recorded',
-        onPressed: () => setState(() => _feedingCount--),
+        onPressed: currentBby.removeLastFeeding,
       ),
     );
   }
 
   void _recordDiaper() {
-    setState(() => _diaperCount++);
+    currentBby.incrementDiaperChanges(DateTime.now());
+    _diaperCount += 1;
     ScaffoldMessenger.of(context).showSnackBar(
       _getSnackBar(
         text: _diaperCount > 1
             ? '$_diaperCount Diaper Changes Recorded'
             : '$_diaperCount Diaper Change Recorded',
-        onPressed: () => setState(() => _diaperCount--),
+        onPressed: currentBby.removeLastDiaperChange,
       ),
     );
   }
@@ -127,120 +133,132 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-              colorFilter:
-                  ColorFilter.mode(Color(0x25FFFFFF), BlendMode.dstATop),
-              image: AssetImage('assets/images/undraw_baby.png'),
-              fit: BoxFit.cover),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 48, bottom: 16),
-                child: Text(
-                  'Welcome Back Parent!',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline1!
-                      .copyWith(color: Theme.of(context).colorScheme.primary),
-                ),
-              ),
-              const DottedDivider(),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                child: InkWell(
-                  splashColor: Theme.of(context).colorScheme.primary,
-                  onTap: () {},
-                  onLongPress: () {
-                    Clipboard.setData(
-                      ClipboardData(text: '$_qodMessage - $_qodAuthor'),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      _getSnackBar(
-                        text: 'Quote Copied To Clipboard',
-                      ),
-                    );
-                  },
-                  child: Column(
-                    children: [
-                      Text(
-                        _qodMessage,
-                        style: Theme.of(context).textTheme.headline2,
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          '- ' + _qodAuthor,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline2!
-                              .copyWith(
-                                  color: Theme.of(context).colorScheme.primary),
-                        ),
-                      ),
-                    ],
+      body: StreamBuilder(
+        stream: BabyProfile.updateStream,
+        builder: (context, snapshot) {
+          DateTime now = DateTime.now();
+          DateTime today = DateTime(now.year, now.month, now.day);
+
+          DayStats stats = currentBby.getDayStats(today);
+          _diaperCount = stats.diaperChanges.length;
+          _feedingCount = stats.feedings.length;
+
+          return Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                  colorFilter:
+                      ColorFilter.mode(Color(0x25FFFFFF), BlendMode.dstATop),
+                  image: AssetImage('assets/images/undraw_baby.png'),
+                  fit: BoxFit.cover),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 48, bottom: 16),
+                    child: Text(
+                      'Welcome Back Parent!',
+                      style: Theme.of(context).textTheme.headline1!.copyWith(
+                          color: Theme.of(context).colorScheme.primary),
+                    ),
                   ),
-                ),
-              ),
-              const DottedDivider(),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 32, right: 32, bottom: 48, top: 16),
-                child: Column(
-                  children: [
-                    RoundButton(
-                      backgroundColor: _isSleeping
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.secondary,
-                      textColor: _isSleeping
-                          ? Theme.of(context).colorScheme.onPrimary
-                          : Theme.of(context).colorScheme.onSecondary,
-                      text: _isSleeping ? 'Stop Sleep' : 'Start Sleep',
-                      onPressed: () {
-                        Future.delayed(
-                            ButtonTheme.of(context)
-                                .getAnimationDuration(MaterialButton(
-                              onPressed: () {},
-                            )), () {
-                          setState(() {
-                            _isSleeping = !_isSleeping;
-                            //To Do
-                            _sleepHours = 7;
-                            _sleepMins = 36;
-                          });
-                          _showSleepStatus();
-                        });
+                  const DottedDivider(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 16),
+                    child: InkWell(
+                      splashColor: Theme.of(context).colorScheme.primary,
+                      onTap: () {},
+                      onLongPress: () {
+                        Clipboard.setData(
+                          ClipboardData(text: '$_qodMessage - $_qodAuthor'),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          _getSnackBar(
+                            text: 'Quote Copied To Clipboard',
+                          ),
+                        );
                       },
+                      child: Column(
+                        children: [
+                          Text(
+                            _qodMessage,
+                            style: Theme.of(context).textTheme.headline2,
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              '- ' + _qodAuthor,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline2!
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(
-                      height: 16,
+                  ),
+                  const DottedDivider(),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 32, right: 32, bottom: 48, top: 16),
+                    child: Column(
+                      children: [
+                        RoundButton(
+                          backgroundColor: _isSleeping
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.secondary,
+                          textColor: _isSleeping
+                              ? Theme.of(context).colorScheme.onPrimary
+                              : Theme.of(context).colorScheme.onSecondary,
+                          text: _isSleeping ? 'Stop Sleep' : 'Start Sleep',
+                          onPressed: () {
+                            Future.delayed(
+                                ButtonTheme.of(context)
+                                    .getAnimationDuration(MaterialButton(
+                                  onPressed: () {},
+                                )), () {
+                              setState(() {
+                                _isSleeping = !_isSleeping;
+                                //To Do
+                                _sleepHours = 7;
+                                _sleepMins = 36;
+                              });
+                              _showSleepStatus();
+                            });
+                          },
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        RoundButton(
+                          text: 'Record Feeding  |  $_feedingCount',
+                          onPressed: _recordFeeding,
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        RoundButton(
+                          text: 'Record Diaper Change  |  $_diaperCount',
+                          onPressed: _recordDiaper,
+                        ),
+                      ],
                     ),
-                    RoundButton(
-                      text: 'Record Feeding  |  $_feedingCount',
-                      onPressed: _recordFeeding,
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    RoundButton(
-                      text: 'Record Diaper Change  |  $_diaperCount',
-                      onPressed: _recordDiaper,
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

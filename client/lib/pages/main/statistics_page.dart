@@ -118,7 +118,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   _StatisticsPageState() {
     //Always Starts On A Sunday
-    final registrationDate = DateTime.parse("2021-10-11");
+    final registrationDate = currentBby.created;
     final now = DateTime.now();
     _startDate = DateTime(registrationDate.year, registrationDate.month,
         registrationDate.day - registrationDate.weekday % 7);

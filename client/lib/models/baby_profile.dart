@@ -12,6 +12,8 @@ class BabyProfile {
   static BabyProfile? _currentProfile;
 
   // private properties
+  DateTime? _created;
+
   String? _name;
   int? _gender;
   double? _height;
@@ -51,6 +53,7 @@ class BabyProfile {
   // public accessors
   bool get exists => uid.isNotEmpty;
 
+  DateTime get created => _created ?? DateTime.now();
   String get name => _name ?? '';
 
   int get genderRaw => _gender ?? 0;
@@ -115,6 +118,7 @@ class BabyProfile {
   }
 
   Future _setData(Map<String, dynamic> profileData) async {
+    _created = DateTime.parse(profileData['created'] as String);
     _name = profileData['name'] as String;
     _gender = profileData['gender'] as int;
     _height = profileData['height'] as double;
@@ -183,6 +187,74 @@ class BabyProfile {
 
   void updateData(Map<String, dynamic> data) {
     DataService.updateProfileData(uid, data);
+  }
+
+  void incrementDiaperChanges(DateTime time) {
+    DateTime day = DateTime(time.year, time.month, time.day);
+
+    _diaperChanges ??= {};
+    _diaperChanges![day] ??= [];
+    _diaperChanges![day]!.add(time);
+
+    final databaseMap = _diaperChanges!.map((key, value) {
+      return MapEntry(
+          key.toString(), value.map((time) => time.toString()).toList());
+    });
+
+    updateData({'diaper_changes': databaseMap});
+  }
+
+  void removeLastDiaperChange() {
+    DateTime now = DateTime.now();
+    DateTime day = DateTime(now.year, now.month, now.day);
+
+    _diaperChanges ??= {};
+    _diaperChanges![day] ??= [];
+
+    if (_diaperChanges![day]!.isNotEmpty) {
+      _diaperChanges![day]!.removeLast();
+    }
+
+    final databaseMap = _diaperChanges!.map((key, value) {
+      return MapEntry(
+          key.toString(), value.map((time) => time.toString()).toList());
+    });
+
+    updateData({'diaper_changes': databaseMap});
+  }
+
+  void incrementFeedings(DateTime time) {
+    DateTime day = DateTime(time.year, time.month, time.day);
+
+    _feedings ??= {};
+    _feedings![day] ??= [];
+    _feedings![day]!.add(time);
+
+    final databaseMap = _feedings!.map((key, value) {
+      return MapEntry(
+          key.toString(), value.map((time) => time.toString()).toList());
+    });
+
+    updateData({'feedings': databaseMap});
+  }
+
+  void removeLastFeeding() {
+    DateTime now = DateTime.now();
+    DateTime day = DateTime(now.year, now.month, now.day);
+
+    _feedings ??= {};
+    _feedings![day] ??= [];
+
+    if (_feedings![day]!.isNotEmpty) {
+      _feedings![day]!.removeLast();
+    }
+
+    final databaseMap = _feedings!.map((key, value) {
+      return MapEntry(
+          key.toString(), value.map((time) => time.toString()).toList());
+    });
+
+    updateData({'feedings': databaseMap});
   }
 
   void updateProfileImage(String imagePath) async {
