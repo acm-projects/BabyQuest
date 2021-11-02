@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:client/models/day_stats.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 
@@ -11,6 +12,8 @@ class BabyProfile {
   static BabyProfile? _currentProfile;
 
   // private properties
+  DateTime? _created;
+
   String? _name;
   int? _gender;
   double? _height;
@@ -25,9 +28,11 @@ class BabyProfile {
 
   String? _profilePic;
 
-  Map<String, int>? _diaperChanges;
-  List<Map<DateTime, DateTime>>? _sleep;
-  Map<String, int>? _feedings;
+  DateTime? _startedSleep;
+
+  Map<DateTime, List<DateTime>>? _diaperChanges;
+  Map<DateTime, List<DateTime>>? _feedings;
+  Map<DateTime, Map<DateTime, DateTime>>? _sleep;
 
   // public properties
   final String uid;
@@ -50,6 +55,7 @@ class BabyProfile {
   // public accessors
   bool get exists => uid.isNotEmpty;
 
+  DateTime get created => _created ?? DateTime.now();
   String get name => _name ?? '';
 
   int get genderRaw => _gender ?? 0;
@@ -102,6 +108,8 @@ class BabyProfile {
 
   String get profilePic => _profilePic ?? '';
 
+  DateTime? get startedSleep => _startedSleep;
+
   BabyProfile(this.uid);
 
   // private methods
@@ -114,14 +122,15 @@ class BabyProfile {
   }
 
   Future _setData(Map<String, dynamic> profileData) async {
+    _created = DateTime.parse(profileData['created'] as String);
     _name = profileData['name'] as String;
     _gender = profileData['gender'] as int;
     _height = profileData['height'] as double;
     _weightLb = profileData['weightLb'] as double;
     _weightOz = profileData['weightOz'] as double;
     _birthDate = DateTime.parse(profileData['birth_date'] as String);
-    _allergies = (profileData['allergies'] as Map<String, dynamic>)
-        .map((String key, dynamic value) {
+    _allergies =
+        (profileData['allergies'] as Map<String, dynamic>).map((key, value) {
       return MapEntry(key, value as int);
     });
 
@@ -132,9 +141,34 @@ class BabyProfile {
 
     _profilePic = profileData['profile_pic'] as String;
 
-    // _diaperChanges = profileData['diaper_changes'];
-    // _sleep = profileData['sleep'];
-    // _feedings = profileData['feedings'];
+    if (profileData['started_sleep'] != null) {
+      _startedSleep = DateTime.parse(profileData['started_sleep'] as String);
+    }
+
+    _diaperChanges = (profileData['diaper_changes'] as Map<String, dynamic>)
+        .map((key, value) {
+      return MapEntry(
+          DateTime.parse(key),
+          (value as List)
+              .map((item) => DateTime.parse(item as String))
+              .toList());
+    });
+    _feedings =
+        (profileData['feedings'] as Map<String, dynamic>).map((key, value) {
+      return MapEntry(
+          DateTime.parse(key),
+          (value as List)
+              .map((item) => DateTime.parse(item as String))
+              .toList());
+    });
+    _sleep = (profileData['sleep'] as Map<String, dynamic>).map((key, value) {
+      return MapEntry(
+          DateTime.parse(key),
+          (value as Map<String, dynamic>).map((key, value) {
+            return MapEntry(
+                DateTime.parse(key), DateTime.parse(value as String));
+          }));
+    });
 
     _streamController.add(currentProfile);
   }
@@ -150,8 +184,108 @@ class BabyProfile {
     }
   }
 
+  DayStats getDayStats(DateTime date) {
+    return DayStats(
+      date: date,
+      diaperChanges: _diaperChanges?[date] ?? [],
+      feedings: _feedings?[date] ?? [],
+      sleep: _sleep?[date] ?? {},
+    );
+  }
+
   void updateData(Map<String, dynamic> data) {
     DataService.updateProfileData(uid, data);
+  }
+
+  void incrementDiaperChanges(DateTime time) {
+    DateTime day = DateTime(time.year, time.month, time.day);
+
+    _diaperChanges ??= {};
+    _diaperChanges![day] ??= [];
+    _diaperChanges![day]!.add(time);
+
+    final databaseMap = _diaperChanges!.map((key, value) {
+      return MapEntry(
+          key.toString(), value.map((time) => time.toString()).toList());
+    });
+
+    updateData({'diaper_changes': databaseMap});
+  }
+
+  void removeLastDiaperChange() {
+    DateTime now = DateTime.now();
+    DateTime day = DateTime(now.year, now.month, now.day);
+
+    _diaperChanges ??= {};
+    _diaperChanges![day] ??= [];
+
+    if (_diaperChanges![day]!.isNotEmpty) {
+      _diaperChanges![day]!.removeLast();
+    }
+
+    final databaseMap = _diaperChanges!.map((key, value) {
+      return MapEntry(
+          key.toString(), value.map((time) => time.toString()).toList());
+    });
+
+    updateData({'diaper_changes': databaseMap});
+  }
+
+  void incrementFeedings(DateTime time) {
+    DateTime day = DateTime(time.year, time.month, time.day);
+
+    _feedings ??= {};
+    _feedings![day] ??= [];
+    _feedings![day]!.add(time);
+
+    final databaseMap = _feedings!.map((key, value) {
+      return MapEntry(
+          key.toString(), value.map((time) => time.toString()).toList());
+    });
+
+    updateData({'feedings': databaseMap});
+  }
+
+  void removeLastFeeding() {
+    DateTime now = DateTime.now();
+    DateTime day = DateTime(now.year, now.month, now.day);
+
+    _feedings ??= {};
+    _feedings![day] ??= [];
+
+    if (_feedings![day]!.isNotEmpty) {
+      _feedings![day]!.removeLast();
+    }
+
+    final databaseMap = _feedings!.map((key, value) {
+      return MapEntry(
+          key.toString(), value.map((time) => time.toString()).toList());
+    });
+
+    updateData({'feedings': databaseMap});
+  }
+
+  void trackSleep(DateTime time) {
+    if (_startedSleep == null) {
+      _startedSleep = time;
+      updateData({'started_sleep': time.toString()});
+    } else {
+      DateTime day = DateTime(time.year, time.month, time.day);
+      DateTime started = _startedSleep ?? DateTime.now();
+
+      _sleep ??= {};
+      _sleep![day] ??= {};
+      _sleep![day]![started] = time;
+      _startedSleep = null;
+
+      final databaseMap = _sleep!.map((key, value) {
+        return MapEntry(key.toString(), value.map((key, value) {
+          return MapEntry(key.toString(), value.toString());
+        }));
+      });
+
+      updateData({'started_sleep': null, 'sleep': databaseMap});
+    }
   }
 
   void updateProfileImage(String imagePath) async {

@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -114,7 +116,11 @@ class DataService {
     String imageUrl = '';
 
     if (currentImageUrl != null) {
-      await _profilePics.child(imageUrl).delete();
+      try {
+        await _profilePics.child(imageUrl).delete();
+      } catch (error) {
+        debugPrint(error.toString());
+      }
     }
 
     Reference imageRef =
@@ -142,6 +148,7 @@ class DataService {
     String documentId = '';
 
     await _profileCollection.add({
+      'created': DateTime.now().toString(),
       'name': name,
       'birth_date': birthDate.toString().split(' ').first,
       'gender': gender,
@@ -151,6 +158,9 @@ class DataService {
       'pediatrician': pediatrician,
       'pediatrician_phone': pediatricianPhone,
       'allergies': allergies,
+      'diaper_changes': {},
+      'feedings': {},
+      'sleep': {},
     }).then((document) async {
       documentId = document.id;
 
