@@ -181,29 +181,38 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       },
-                      child: Column(
-                        children: [
-                          Text(
-                            _qodMessage,
-                            style: Theme.of(context).textTheme.headline2,
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              '- ' + _qodAuthor,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline2!
-                                  .copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary),
-                            ),
-                          ),
-                        ],
+                      child: FutureBuilder(
+                        future: _setup(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Column(
+                              children: [
+                                Text(
+                                  _qodMessage,
+                                  style: Theme.of(context).textTheme.headline2,
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    '- ' + _qodAuthor,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary),
+                                  ),
+                                ),
+                              ],
+                            );
+                          } else {
+                            return const CircularProgressIndicator();
+                          }
+                        },
                       ),
                     ),
                   ),
@@ -274,5 +283,6 @@ class _HomePageState extends State<HomePage> {
       _qodMessage = qodData[1];
       _qodAuthor = qodData[2];
     });
+    return Future.value(qodData);
   }
 }
