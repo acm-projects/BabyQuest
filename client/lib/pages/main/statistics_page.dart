@@ -83,9 +83,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   _StatisticsPageState() {
-    //Always Starts On A Sunday
-    _startDate = registrationDate
-        .subtract(Duration(days: registrationDate.weekday + 7 * 100));
+    //Always Starts On A Sunday At Midnight
+    _startDate = DateTime(registrationDate.year, registrationDate.month,
+        registrationDate.day - registrationDate.weekday - 7 * 100);
     _currentDateIndex = DateTime.now().difference(_startDate).inDays;
     _pageIndex = _currentDateIndex ~/ 7;
     _selectedIndex = _currentDateIndex;
