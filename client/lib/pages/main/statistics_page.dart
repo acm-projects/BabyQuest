@@ -19,28 +19,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
   late DateTime _startDate;
   late final int _currentDateIndex;
   late final int _endDateIndex;
+  DateTime _currentDate = DateTime.now();
 
-  int _feedingCount = 3;
-  int _diaperCount = 2;
-
-  int _sleepHours = 8;
-  int _sleepMins = 27;
-
-  List<SleepInformation> sleepSessions = [
-    const SleepInformation(
-      startTime: '1:50 AM',
-      endTime: '10:18 PM',
-      isFirst: true,
-    ),
-    const SleepInformation(
-      startTime: '3:03 AM',
-      endTime: '5:26 PM',
-    )
-  ];
-
-  late int _pageIndex;
-  late int _selectedIndex;
-  late PageController pageController;
+  int _feedingCount = 0;
+  int _diaperCount = 0;
+  int _sleepMins = 0;
 
   final List<String> days = [
     'Monday',
@@ -67,21 +50,45 @@ class _StatisticsPageState extends State<StatisticsPage> {
     'December',
   ];
 
+  List<SleepInformation> sleepSessions = [];
+
+  late int _pageIndex;
+  late int _selectedIndex;
+  late PageController pageController;
+
   String _getFormattedTime(DateTime time) {
     int hour = (time.hour % 12 == 0) ? 12 : time.hour % 12;
-    return '$hour:${time.minute} ${time.hour >= 12 ? 'PM' : 'AM'}';
+    int minute = time.minute;
+    bool am = time.hour < 12;
+    return '$hour:$minute ${am ? 'AM' : 'PM'}';
   }
 
-  DateTime _getSelectedDateTime() {
-    DateTime day = _startDate.add(Duration(days: _selectedIndex));
-    DayStats stats = currentBby.getDayStats(day);
-    int totalSleepMins = 0;
+  int _getDaySleepMins(int dayIndex) {
+    DateTime _date = _startDate.add(Duration(days: dayIndex));
+    DayStats stats = currentBby.getDayStats(_date);
+
+    int sleepMins = 0;
+
+    stats.sleep.forEach((startTime, endTime) {
+      sleepMins += endTime.difference(startTime).inMinutes;
+    });
+
+    return sleepMins;
+  }
+
+  void _setSelectedDateTime() {
+    _currentDate = _startDate.add(Duration(days: _selectedIndex));
+    DayStats stats = currentBby.getDayStats(_currentDate);
     bool isFirst = true;
 
+    _feedingCount = stats.feedings.length;
+    _diaperCount = stats.diaperChanges.length;
+    _sleepMins = 0;
     sleepSessions = [];
 
     stats.sleep.forEach((startTime, endTime) {
-      totalSleepMins += endTime.difference(startTime).inMinutes;
+      _sleepMins += endTime.difference(startTime).inMinutes;
+
       sleepSessions.add(
         SleepInformation(
           startTime: _getFormattedTime(startTime),
@@ -93,34 +100,31 @@ class _StatisticsPageState extends State<StatisticsPage> {
       isFirst = false;
     });
 
-    _feedingCount = stats.feedings.length;
-    _diaperCount = stats.diaperChanges.length;
-    _sleepHours = totalSleepMins ~/ 60;
-    _sleepMins = totalSleepMins % 60;
-
-    return day;
+    setState(() {});
   }
 
   void _jumpToIndex(int index) {
     _selectedIndex = index;
+    _setSelectedDateTime();
     pageController.jumpToPage(index ~/ 7);
   }
 
   void _animateToIndex(int index) {
-    setState(() {
-      _selectedIndex = index;
-      pageController.animateToPage((index ~/ 7),
-          duration: const Duration(milliseconds: 1000), curve: Curves.ease);
-    });
+    _selectedIndex = index;
+    _setSelectedDateTime();
+    pageController.animateToPage((index ~/ 7),
+        duration: const Duration(milliseconds: 1000), curve: Curves.ease);
   }
 
   _StatisticsPageState() {
     //Always Starts On A Sunday
-    DateTime registrationDate = DateTime.parse("2021-10-11");
-    _startDate =
-        registrationDate.subtract(Duration(days: registrationDate.weekday % 7));
-    _currentDateIndex = DateTime.now().difference(_startDate).inDays;
-    _endDateIndex = _currentDateIndex + (6 - _startDate.weekday).clamp(0, 6);
+    final registrationDate = DateTime.parse("2021-10-11");
+    final now = DateTime.now();
+
+    _startDate = registrationDate
+        .subtract(Duration(days: registrationDate.weekday % 7));
+    _currentDateIndex = now.difference(_startDate).inDays;
+    _endDateIndex = _currentDateIndex + 7 - now.weekday;
 
     _pageIndex = _currentDateIndex ~/ 7;
     _selectedIndex = _currentDateIndex;
@@ -132,6 +136,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   @override
   Widget build(BuildContext context) {
+    _setSelectedDateTime();
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -154,13 +160,13 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                                text: days[_getSelectedDateTime().weekday - 1],
+                                text: days[_currentDate.weekday - 1],
                                 style: Theme.of(context).textTheme.headline1),
                             const TextSpan(
                               text: '  ',
                             ),
                             TextSpan(
-                                text: '${_getSelectedDateTime().day}',
+                                text: '${_currentDate.day}',
                                 style: Theme.of(context).textTheme.headline2),
                             const TextSpan(
                               text: '  ',
@@ -176,14 +182,13 @@ class _StatisticsPageState extends State<StatisticsPage> {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                  text:
-                                      months[_getSelectedDateTime().month - 1],
+                                  text: months[_currentDate.month - 1],
                                   style: Theme.of(context).textTheme.headline3),
                               const TextSpan(
                                 text: ' ',
                               ),
                               TextSpan(
-                                  text: '${_getSelectedDateTime().year}',
+                                  text: '${_currentDate.year}',
                                   style: Theme.of(context).textTheme.subtitle1),
                             ],
                           ),
@@ -205,7 +210,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 SizedBox(
                   height: 130,
                   child: PageView.builder(
-                    itemCount: (_endDateIndex ~/ 7) + 1,
+                    itemCount: _endDateIndex ~/ 7,
                     controller: pageController,
                     onPageChanged: (int index) => _pageIndex = index,
                     itemBuilder: (context, index) {
@@ -217,7 +222,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: List.generate(7, (int listIndex) {
                                 return DayCircle(
-                                  fraction: ((index * 7 + listIndex) % 10) / 10,
+                                  fraction: _getDaySleepMins(index * 7 + listIndex) / 1020,
                                   date:
                                       '${_startDate.add(Duration(days: index * 7 + listIndex)).day}',
                                   day: days[_startDate
@@ -227,9 +232,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                           1]
                                       .substring(0, 1),
                                   onTap: () {
-                                    setState(() {
-                                      _selectedIndex = index * 7 + listIndex;
-                                    });
+                                    _jumpToIndex(index * 7 + listIndex);
                                   },
                                 );
                               })),
@@ -243,7 +246,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: MainDayCircle(
                     selectedIndex: _selectedIndex,
-                    sleepHours: _sleepHours,
                     sleepMins: _sleepMins,
                   ),
                 ),
@@ -312,12 +314,10 @@ class MainDayCircle extends StatelessWidget {
   const MainDayCircle({
     Key? key,
     required this.selectedIndex,
-    required this.sleepHours,
     required this.sleepMins,
   }) : super(key: key);
 
   final int selectedIndex;
-  final int sleepHours;
   final int sleepMins;
 
   @override
@@ -332,7 +332,7 @@ class MainDayCircle extends StatelessWidget {
           width: 150,
           padding: const EdgeInsets.all(16),
           child: TweenAnimationBuilder<double>(
-            tween: Tween<double>(begin: 0, end: selectedIndex % 10),
+            tween: Tween<double>(begin: 0, end: sleepMins / 1020), // 17 hours
             duration: const Duration(milliseconds: 500),
             curve: Curves.decelerate,
             builder: (BuildContext context, double progress, Widget? child) {
@@ -359,7 +359,7 @@ class MainDayCircle extends StatelessWidget {
           text: TextSpan(
             children: [
               TextSpan(
-                text: '${sleepHours}h ${sleepMins}m',
+                text: '${sleepMins / 60}h ${sleepMins % 60}m',
                 style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w800,
