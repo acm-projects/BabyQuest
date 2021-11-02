@@ -154,41 +154,51 @@ class _HomePageState extends State<HomePage> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                 child: InkWell(
-                  splashColor: Theme.of(context).colorScheme.primary,
-                  onTap: () {},
-                  onLongPress: () {
-                    Clipboard.setData(
-                      ClipboardData(text: '$_qodMessage - $_qodAuthor'),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      _getSnackBar(
-                        text: 'Quote Copied To Clipboard',
-                      ),
-                    );
-                  },
-                  child: Column(
-                    children: [
-                      Text(
-                        _qodMessage,
-                        style: Theme.of(context).textTheme.headline2,
-                      ),
-                      const SizedBox(
-                        height: 16,
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          '- ' + _qodAuthor,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline2!
-                              .copyWith(
-                                  color: Theme.of(context).colorScheme.primary),
+                    splashColor: Theme.of(context).colorScheme.primary,
+                    onTap: () {},
+                    onLongPress: () {
+                      Clipboard.setData(
+                        ClipboardData(text: '$_qodMessage - $_qodAuthor'),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        _getSnackBar(
+                          text: 'Quote Copied To Clipboard',
                         ),
-                      ),
-                    ],
-                  ),
-                ),
+                      );
+                    },
+                    child: FutureBuilder(
+                      future: _setup(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Column(
+                            children: [
+                              Text(
+                                _qodMessage,
+                                style: Theme.of(context).textTheme.headline2,
+                              ),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  '- ' + _qodAuthor,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline2!
+                                      .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary),
+                                ),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      },
+                    )),
               ),
               const DottedDivider(),
               const Spacer(),
@@ -252,5 +262,6 @@ class _HomePageState extends State<HomePage> {
       _qodMessage = qodData[1];
       _qodAuthor = qodData[2];
     });
+    return Future.value(qodData);
   }
 }
