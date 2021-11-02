@@ -50,7 +50,9 @@ class TodoWidget extends StatelessWidget {
             activeColor: Theme.of(context).colorScheme.primary,
             checkColor: Colors.white,
             value: todo.isDone,
-            onChanged: (_) {},
+            onChanged: (_) {
+
+            },
           ),
           Expanded(
             child: Column(
@@ -91,7 +93,7 @@ class TodoWidget extends StatelessWidget {
         SnackBar(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           behavior: SnackBarBehavior.floating,
-          duration: const Duration(milliseconds: 3000),
+          duration: const Duration(milliseconds: 2000),
           content: Text('Deleted the task'),
         )
     );

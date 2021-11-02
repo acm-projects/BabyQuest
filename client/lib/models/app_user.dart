@@ -77,15 +77,10 @@ class AppUser {
   }
   void removeTodo(Todo todo) {
     _todoList![todo.id] = todo.removing();
+    //_todoList.update(todo.id, List<dynamic> val[5] => true);
 
     DataService.updateUserData(uid, {'to_do_list': _todoList?.map((key, value) => MapEntry(key, value))});
   }
-  void undoRemoveTodo(Todo todo) {
-    _todoList![todo.id] = todo.removing();
-
-    DataService.updateUserData(uid, {'to_do_list': _todoList?.map((key, value) => MapEntry(key, value))});
-  }
-
 
   AppUser(this.uid);
 
