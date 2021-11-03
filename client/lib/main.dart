@@ -47,12 +47,12 @@ class _MyAppState extends State<MyApp> {
             subtitle1: TextStyle(fontWeight: FontWeight.w300, fontSize: 15),
           ),
           canvasColor: Colors.green.shade200,
-          scaffoldBackgroundColor: Colors.amber.shade100,
+          scaffoldBackgroundColor: const Color(0xFFFFF2CC),
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: createMaterialColor(Colors.deepPurple.shade300),
           ).copyWith(
             onPrimary: Colors.white,
-            background: Colors.amber.shade100,
+            background:  const Color(0xFFFFF2CC),
             onBackground: Colors.grey.shade700,
             onSurface: Colors.grey.shade700,
             secondary: Colors.green.shade200,

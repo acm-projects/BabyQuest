@@ -58,7 +58,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   String _getFormattedTime(DateTime time) {
     int hour = (time.hour % 12 == 0) ? 12 : time.hour % 12;
-    int minute = time.minute;
+    String minute = time.minute.toString().padLeft(2, '0');
     bool am = time.hour < 12;
     return '$hour:$minute ${am ? 'AM' : 'PM'}';
   }
