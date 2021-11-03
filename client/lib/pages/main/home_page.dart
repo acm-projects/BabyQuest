@@ -1,5 +1,8 @@
+import 'package:client/widgets/dotted_divider.dart';
+import 'package:client/widgets/round_button.dart';
 import 'package:flutter/material.dart';
 import 'package:client/services/data_service.dart';
+import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -9,12 +12,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String qodMessage = '';
-  String qodAuthor = '';
-  String qodImage =
-      'https://www.muralswallpaper.co.uk/app/uploads/baby-clouds-and-moon-nursery-room-825x535.jpg';
+  String _qodMessage = '';
+  String _qodAuthor = '';
 
-  int buttonCase = 3;
+  bool _isSleeping = false;
+  int _feedingCount = 0;
+  int _diaperCount = 0;
+
+  int _sleepDays = 0;
+  int _sleepHours = 0;
+  int _sleepMins = 0;
 
   @override
   void initState() {
@@ -22,233 +29,228 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    String quoteOfTheDay = '"' + qodMessage + '" \n -' + qodAuthor;
+  SnackBar _getSnackBar({required String text, VoidCallback? onPressed}) {
+    return SnackBar(
+      padding: (onPressed != null)
+          ? const EdgeInsets.symmetric(horizontal: 16)
+          : const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(milliseconds: 1250),
+      content: Text(text),
+      action: (onPressed != null)
+          ? SnackBarAction(
+              label: 'Undo',
+              onPressed: onPressed,
+            )
+          : null,
+    );
+  }
 
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.grey,
-      ),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Center(
-            child: Text(
-              'Welcome <Baby Name>!',
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 30),
-            ),
-          ),
-        ),
-        body: ListView(
-          children: [
-            Center(
-              child: Stack(
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 60),
-                    alignment: Alignment.center,
-                    child: Image.network(
-                      qodImage,
-                      height: 251,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 50, horizontal: 60),
-                      alignment: Alignment.center,
-                      child: Text(
-                        quoteOfTheDay,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 22.0),
-                      )),
-                ],
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
-              child: SizedBox(
-                height: 80, //height of button
-                width: 200, //width of button
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      elevation: 3, //elevation of button
-                      shape: RoundedRectangleBorder(
-                          //to set border radius to button
-                          borderRadius: BorderRadius.circular(30)),
-                      padding: const EdgeInsets.all(
-                          20) //content padding inside button
+  //Builds the message. Only shows 2 units of time (Days, Minutes, Seconds)
+  String _getSleepMessage() {
+    String sleepMessage = '';
+    int unitCount = 0;
 
-                      ),
-                  onPressed: () {
-                    //code to execute when this button is pressed.
-                    buttonCase = 0;
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) =>
-                          _buildPopupDialog(context),
-                    );
-                  },
-                  child: const Text("Record Sleep"),
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
-              child: SizedBox(
-                height: 80, //height of button
-                width: 200, //width of button
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        elevation: 3, //elevation of button
-                        shape: RoundedRectangleBorder(
-                            //to set border radius to button
-                            borderRadius: BorderRadius.circular(30)),
-                        padding: const EdgeInsets.all(
-                            20) //content padding inside button
+    if (_sleepDays > 0) {
+      if (_sleepDays == 1) {
+        sleepMessage += '1 Day';
+        unitCount++;
+      } else {
+        sleepMessage += '$_sleepDays Days';
+        unitCount++;
+      }
+    }
+    if (_sleepHours > 0) {
+      if (sleepMessage.isNotEmpty) {
+        sleepMessage += ' and ';
+      }
+      if (_sleepHours == 1) {
+        sleepMessage += '1 Hr';
+        unitCount++;
+      } else {
+        sleepMessage += '$_sleepHours Hrs';
+        unitCount++;
+      }
+    }
+    if (_sleepMins > 0 && unitCount < 2) {
+      if (sleepMessage.isNotEmpty) {
+        sleepMessage += ' and ';
+      }
+      if (_sleepMins == 1) {
+        sleepMessage += '1 Min';
+        unitCount++;
+      } else {
+        sleepMessage += '$_sleepMins Mins';
+        unitCount++;
+      }
+    }
+    sleepMessage += ' of Sleep';
+    return 'Recorded ' + sleepMessage;
+  }
 
-                        ),
-                    onPressed: () {
-                      buttonCase = 1;
-                      //code to execute when this button is pressed.
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) =>
-                            _buildPopupDialog(context),
-                      );
-                    },
-                    child: const Text("Record Feedings")),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
-              child: SizedBox(
-                height: 80, //height of button
-                width: 200, //width of button
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      elevation: 3, //elevation of button
-                      shape: RoundedRectangleBorder(
-                          //to set border radius to button
-                          borderRadius: BorderRadius.circular(30)),
-                      padding: const EdgeInsets.all(
-                          20) //content padding inside button
-
-                      ),
-                  onPressed: () {
-                    buttonCase = 2;
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) =>
-                          _buildPopupDialog(context),
-                    );
-                  },
-                  child: const Text("Record Diaper Changes"),
-                ),
-              ),
-            ),
-          ],
-        ),
+  void _showSleepStatus() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(milliseconds: 1250),
+        content: Text(_isSleeping ? 'Starting Sleep...' : _getSleepMessage()),
       ),
     );
   }
 
-  Widget _buildPopupDialog(BuildContext context) {
-    int _feedingCounter = 0;
-    if (buttonCase == 0) {
-      return AlertDialog(
-        title: const Text('Record Sleep'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Text('Current Number of sleep: '),
-            Text('$_feedingCounter'),
-            ElevatedButton(
-              onPressed: () {
-                _feedingCounter++;
-              },
-              child: const Text('Add sleep'),
-            )
-          ],
+  void _recordFeeding() {
+    setState(() => _feedingCount++);
+    ScaffoldMessenger.of(context).showSnackBar(
+      _getSnackBar(
+        text: _feedingCount > 1
+            ? '$_feedingCount Feedings Recorded'
+            : '$_feedingCount Feeding Recorded',
+        onPressed: () => setState(() => _feedingCount--),
+      ),
+    );
+  }
+
+  void _recordDiaper() {
+    setState(() => _diaperCount++);
+    ScaffoldMessenger.of(context).showSnackBar(
+      _getSnackBar(
+        text: _diaperCount > 1
+            ? '$_diaperCount Diaper Changes Recorded'
+            : '$_diaperCount Diaper Change Recorded',
+        onPressed: () => setState(() => _diaperCount--),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+              colorFilter:
+                  ColorFilter.mode(Color(0x25FFFFFF), BlendMode.dstATop),
+              image: AssetImage('assets/images/undraw_baby.png'),
+              fit: BoxFit.cover),
         ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            //textColor: Theme.of(context).primaryColor,
-            child: const Text('Close'),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 48, bottom: 16),
+                child: Text(
+                  'Welcome Back Oscar!',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1!
+                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                ),
+              ),
+              const DottedDivider(),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                child: InkWell(
+                  splashColor: Theme.of(context).colorScheme.primary,
+                  onTap: () {},
+                  onLongPress: () {
+                    Clipboard.setData(
+                      ClipboardData(text: '$_qodMessage - $_qodAuthor'),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      _getSnackBar(
+                        text: 'Quote Copied To Clipboard',
+                      ),
+                    );
+                  },
+                  child: Column(
+                    children: [
+                      Text(
+                        _qodMessage,
+                        style: Theme.of(context).textTheme.headline2,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          '- ' + _qodAuthor,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline2!
+                              .copyWith(
+                                  color: Theme.of(context).colorScheme.primary),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const DottedDivider(),
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 32, right: 32, bottom: 48, top: 16),
+                child: Column(
+                  children: [
+                    RoundButton(
+                      backgroundColor: _isSleeping
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.secondary,
+                      textColor: _isSleeping
+                          ? Theme.of(context).colorScheme.onPrimary
+                          : Theme.of(context).colorScheme.onSecondary,
+                      text: _isSleeping ? 'Stop Sleep' : 'Start Sleep',
+                      onPressed: () {
+                        Future.delayed(
+                            ButtonTheme.of(context)
+                                .getAnimationDuration(MaterialButton(
+                              onPressed: () {},
+                            )), () {
+                          setState(() {
+                            _isSleeping = !_isSleeping;
+                            //To Do
+                            _sleepHours = 7;
+                            _sleepMins = 36;
+                          });
+                          _showSleepStatus();
+                        });
+                      },
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    RoundButton(
+                      text: 'Record Feeding  |  $_feedingCount',
+                      onPressed: _recordFeeding,
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    RoundButton(
+                      text: 'Record Diaper Change  |  $_diaperCount',
+                      onPressed: _recordDiaper,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      );
-    }
-    if (buttonCase == 1) {
-      return AlertDialog(
-        title: const Text('Record Feedings'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Text('Current Number of feedings: '),
-            Text('$_feedingCounter'),
-            ElevatedButton(
-              onPressed: () {
-                _feedingCounter++;
-              },
-              child: const Text('Add feedings'),
-            )
-          ],
         ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            //textColor: Theme.of(context).primaryColor,
-            child: const Text('Close'),
-          ),
-        ],
-      );
-    } else {
-      return AlertDialog(
-        title: const Text('Record Diaper Changes'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Text('Current Number of diaper changes: '),
-            Text('$_feedingCounter'),
-            ElevatedButton(
-              onPressed: () {
-                _feedingCounter++;
-              },
-              child: const Text('Add diaper changes'),
-            )
-          ],
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            //textColor: Theme.of(context).primaryColor,
-            child: const Text('Close'),
-          ),
-        ],
-      );
-    }
+      ),
+    );
   }
 
   Future _setup() async {
     List<String> qodData = await DataService.getQOD();
 
     setState(() {
-      qodMessage = qodData[1];
-      qodAuthor = qodData[2];
-      qodImage = qodData[3];
+      _qodMessage = qodData[1];
+      _qodAuthor = qodData[2];
     });
   }
 }

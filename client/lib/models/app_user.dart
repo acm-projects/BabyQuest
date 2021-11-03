@@ -5,8 +5,10 @@ class AppUser {
   static AppUser? _currentUser;
 
   // private properties
-  Map<String, String>? _profiles;
-  Map<String, String>? _sharedProfiles;
+  bool _isLoaded = false;
+  List<String>? _profiles;
+  List<String>? _sharedProfiles;
+  List<String>? _toDoList;
 
   // public properties
   final String uid;
@@ -15,7 +17,7 @@ class AppUser {
   static AppUser? get currentUser => _currentUser;
 
   static set currentUser(AppUser? user) {
-    if (user == currentUser) return;
+    if (user?.uid == currentUser?.uid) return;
     if (currentUser != null) currentUser!._removeDataSync();
     if (user != null) user._setDataSync();
 
@@ -23,16 +25,14 @@ class AppUser {
   }
 
   // public accessors
-  Map<String, String> get ownedProfiles {
-    return _profiles ?? {};
-  }
-
-  Map<String, String> get sharedProfiles {
-    return _sharedProfiles ?? {};
-  }
+  bool get isLoaded => _isLoaded;
+  List<String> get ownedProfiles => _profiles ?? [];
+  List<String> get sharedProfiles => _sharedProfiles ?? [];
+  List<String> get toDoList => _toDoList ?? [];
 
   AppUser(this.uid);
 
+  // private methods
   void _setDataSync() async {
     DataService.setUserDataSync(uid, _updateData);
   }
@@ -42,17 +42,57 @@ class AppUser {
   }
 
   Future _updateData(Map<String, dynamic> userData) async {
-    List<String> profiles = (userData['profiles'] as List).map((item) => item as String).toList();
-    List<String> sharedProfiles = (userData['sharedProfiles'] as List).map((item) => item as String).toList();
+    _profiles =
+        (userData['profiles'] as List).map((item) => item as String).toList();
+    _sharedProfiles = (userData['shared_profiles'] as List)
+        .map((item) => item as String)
+        .toList();
+    _toDoList =
+        (userData['to_do_list'] as List).map((item) => item as String).toList();
 
-    _profiles = await DataService.getProfileNames(profiles);
-    _sharedProfiles = await DataService.getProfileNames(sharedProfiles);
+    if (ownedProfiles.isNotEmpty) {
+      setCurrentProfile(ownedProfiles[0]);
+    }
+
+    _isLoaded = true;
   }
 
   // Switches the currently displayed BabyProfile based on the provided uid
   void setCurrentProfile(String uid) {
     if (this != _currentUser) return;
-    
+
     BabyProfile.currentProfile = BabyProfile(uid);
+  }
+
+  void createNewProfile({
+    required String name,
+    required DateTime birthDate,
+    required int gender,
+    required double height,
+    required double weightLb,
+    required double weightOz,
+    required String pediatrician,
+    required String pediatricianPhone,
+    required Map<String, int> allergies,
+    required String imagePath,
+  }) async {
+    String profileId = await DataService.createProfile(
+      name: name,
+      birthDate: birthDate,
+      gender: gender,
+      height: height,
+      weightLb: weightLb,
+      weightOz: weightOz,
+      pediatrician: pediatrician,
+      pediatricianPhone: pediatricianPhone,
+      allergies: allergies,
+      imagePath: imagePath,
+    );
+
+    List<String> newProfiles = ownedProfiles;
+    newProfiles.add(profileId);
+    await DataService.updateUserData(uid, {'profiles': newProfiles});
+
+    setCurrentProfile(profileId);
   }
 }

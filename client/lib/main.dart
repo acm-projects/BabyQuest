@@ -1,29 +1,37 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:client/services/auth_service.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:tinycolor2/tinycolor2.dart';
 
 import 'package:client/pages/splash_page.dart';
+import 'package:client/pages/wrapper.dart';
+import 'package:client/services/auth_service.dart';
 
 Future main() async {
-  // setup flutter and firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
   SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      systemNavigationBarIconBrightness: Brightness.dark,
+    SystemUiOverlayStyle(
+      statusBarColor: Colors.deepPurple.shade300,
+      systemNavigationBarIconBrightness: Brightness.light,
+      statusBarIconBrightness: Brightness.light,
     ),
   );
 
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool isLoaded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,23 +42,73 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
           textTheme: const TextTheme(
             headline1: TextStyle(fontWeight: FontWeight.w800, fontSize: 30),
-            headline2: TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
+            headline2: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
             subtitle1: TextStyle(fontWeight: FontWeight.w300, fontSize: 15),
           ),
+          canvasColor: Colors.green.shade200,
           scaffoldBackgroundColor: Colors.amber.shade100,
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: createMaterialColor(Colors.deepPurple.shade300),
           ).copyWith(
+            onPrimary: Colors.white,
+            background: Colors.amber.shade100,
             onBackground: Colors.grey.shade700,
             onSurface: Colors.grey.shade700,
             secondary: Colors.green.shade200,
-            onSecondary: const Color(0xFF668567),
+            onSecondary: Colors.green.shade200.darken(40).desaturate(25),
+          ),
+          snackBarTheme: SnackBarThemeData(
+            elevation: 0,
+            backgroundColor: Colors.green.shade200,
+            contentTextStyle: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 20,
+              color: Colors.green.shade200.darken(40).desaturate(25),
+            ),
+            actionTextColor: Colors.grey.shade700,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(100),
+            ),
+          ),
+          outlinedButtonTheme: OutlinedButtonThemeData(
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(style: BorderStyle.none),
+              primary: Colors.grey.shade700,
+              textStyle: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 20,
+              ),
+              backgroundColor: Colors.green.shade200,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                elevation: 0,
+                primary: Colors.green.shade200,
+                onPrimary: Colors.grey.shade700),
+          ),
+          inputDecorationTheme: const InputDecorationTheme(
+            isDense: true,
+            contentPadding: EdgeInsets.symmetric(vertical: 4),
           ),
         ),
         debugShowCheckedModeBanner: false,
-        home: const SplashPage(),
+        home: isLoaded
+            ? const Wrapper()
+            : SplashPage("Waking up from a nap...",
+                completed: _completeLoading),
       ),
     );
+  }
+
+  void _completeLoading() {
+    setState(() => isLoaded = true);
   }
 }
 
