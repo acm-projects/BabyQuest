@@ -73,13 +73,16 @@ class BabyProfile {
 
   double get heightIn => _height ?? 0;
   String get height {
-    return heightIn.toString() + '"';
+    return heightIn.toInt().toString() + '"';
   }
 
   double get weightLb => _weightLb ?? 0;
   double get weightOz => _weightOz ?? 0;
   String get weight {
-    return weightLb.toInt().toString() + 'lbs ' + weightOz.toString() + 'oz';
+    return weightLb.toInt().toString() +
+        'lbs ' +
+        weightOz.toInt().toString() +
+        'oz';
   }
 
   DateTime? get birthDate => _birthDate;

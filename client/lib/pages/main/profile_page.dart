@@ -13,7 +13,8 @@ class ProfilePage extends StatefulWidget {
   final Function creatingNewProfile;
   final Function refresh;
 
-  const ProfilePage(this.creatingNewProfile, this.refresh, {Key? key}) : super(key: key);
+  const ProfilePage(this.creatingNewProfile, this.refresh, {Key? key})
+      : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -394,33 +395,90 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 16),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  RichText(
-                                    text: TextSpan(
-                                      text: 'Allergies',
-                                      style:
-                                          Theme.of(context).textTheme.headline2,
+                            if (_buildAllergies().isNotEmpty || editMode)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 16),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    RichText(
+                                      text: TextSpan(
+                                        text: 'Allergies',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline2,
+                                      ),
                                     ),
-                                  ),
-                                  const DottedDivider(),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 16),
-                                    child: Column(
-                                      children: [
-                                        ..._buildAllergies(),
-                                      ],
+                                    const DottedDivider(),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 16),
+                                      child: Column(
+                                        children: [
+                                          ..._buildAllergies(),
+                                          if (_buildAllergies().isEmpty)
+                                            Center(
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  List<String> allergyNames =
+                                                      currentBby.allergies.keys
+                                                          .toList();
+                                                  List<int> allergySeverities =
+                                                      currentBby
+                                                          .allergies.values
+                                                          .toList();
+                                                  List<int> remove = [];
+
+                                                  await _showEditDialog(
+                                                    context: context,
+                                                    label: 'Allergies',
+                                                    field: EditProfileWidgets
+                                                        .allergies(
+                                                            allergyNames,
+                                                            allergySeverities,
+                                                            remove),
+                                                    updateData: () {
+                                                      for (var index
+                                                          in remove.reversed) {
+                                                        allergyNames
+                                                            .removeAt(index);
+                                                        allergySeverities
+                                                            .removeAt(index);
+                                                      }
+
+                                                      currentBby.updateData({
+                                                        'allergies':
+                                                            Map.fromIterables(
+                                                                allergyNames,
+                                                                allergySeverities)
+                                                      });
+                                                    },
+                                                  );
+                                                },
+                                                splashColor: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(12),
+                                                  child: Text(
+                                                    'Add Allergies',
+                                                    style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .primary),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
                             const DottedDivider(),
                             Padding(
                               padding: const EdgeInsets.only(

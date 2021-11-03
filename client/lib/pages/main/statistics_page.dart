@@ -4,6 +4,7 @@ import 'package:client/widgets/dotted_divider.dart';
 import 'package:client/widgets/fraction_circle.dart';
 import 'package:client/widgets/icon_information.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class StatisticsPage extends StatefulWidget {
   const StatisticsPage({Key? key}) : super(key: key);
@@ -221,7 +222,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: List.generate(7, (int listIndex) {
                                 return DayCircle(
-                                  fraction: _getDaySleepMins(index * 7 + listIndex) / 1020,
+                                  fraction:
+                                      _getDaySleepMins(index * 7 + listIndex) /
+                                          1020,
                                   date:
                                       '${_startDate.add(Duration(days: index * 7 + listIndex)).day}',
                                   day: days[_startDate
@@ -249,20 +252,21 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   ),
                 ),
                 const DottedDivider(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    physics: const ClampingScrollPhysics(),
-                    itemExtent: 64,
-                    itemCount: sleepSessions.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return sleepSessions[index];
-                    },
+                if (sleepSessions.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                      itemExtent: 64,
+                      itemCount: sleepSessions.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return sleepSessions[index];
+                      },
+                    ),
                   ),
-                ),
-                const DottedDivider(),
+                if (sleepSessions.isNotEmpty) const DottedDivider(),
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: Column(
@@ -289,13 +293,13 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   padding: const EdgeInsets.only(top: 16, bottom: 48),
                   child: InkWell(
                     onTap: () {},
-                    splashColor: Theme.of(context).colorScheme.secondary,
+                    splashColor: Theme.of(context).colorScheme.primary,
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: Text(
                         'Add Notes',
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary),
+                            color: Theme.of(context).colorScheme.primary),
                       ),
                     ),
                   ),

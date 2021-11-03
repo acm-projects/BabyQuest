@@ -56,37 +56,22 @@ class _HomePageState extends State<HomePage> {
     int unitCount = 0;
 
     if (_sleepDays > 0) {
-      if (_sleepDays == 1) {
-        sleepMessage += '1d';
-        unitCount++;
-      } else {
-        sleepMessage += '${_sleepDays}d';
-        unitCount++;
-      }
+      sleepMessage += '${_sleepDays}d';
+      unitCount++;
     }
     if (_sleepHours > 0) {
       if (sleepMessage.isNotEmpty) {
         sleepMessage += ' and ';
       }
-      if (_sleepHours == 1) {
-        sleepMessage += '1h';
-        unitCount++;
-      } else {
-        sleepMessage += '${_sleepHours}h';
-        unitCount++;
-      }
+      sleepMessage += '${_sleepHours}h';
+      unitCount++;
     }
-    if (_sleepMins > 0 && unitCount < 2) {
+    if (_sleepMins >= 0 && unitCount < 2) {
       if (sleepMessage.isNotEmpty) {
         sleepMessage += ' and ';
       }
-      if (_sleepMins == 1) {
-        sleepMessage += '1m';
-        unitCount++;
-      } else {
-        sleepMessage += '${_sleepMins}m';
-        unitCount++;
-      }
+      sleepMessage += '${_sleepMins}m';
+      unitCount++;
     }
     sleepMessage += ' of Sleep';
     return 'Recorded ' + sleepMessage;
@@ -181,29 +166,38 @@ class _HomePageState extends State<HomePage> {
                           ),
                         );
                       },
-                      child: Column(
-                        children: [
-                          Text(
-                            _qodMessage,
-                            style: Theme.of(context).textTheme.headline2,
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              '- ' + _qodAuthor,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline2!
-                                  .copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary),
-                            ),
-                          ),
-                        ],
+                      child: FutureBuilder(
+                        future: _setup(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Column(
+                              children: [
+                                Text(
+                                  _qodMessage,
+                                  style: Theme.of(context).textTheme.headline2,
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    '- ' + _qodAuthor,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary),
+                                  ),
+                                ),
+                              ],
+                            );
+                          } else {
+                            return const CircularProgressIndicator();
+                          }
+                        },
                       ),
                     ),
                   ),
@@ -274,5 +268,6 @@ class _HomePageState extends State<HomePage> {
       _qodMessage = qodData[1];
       _qodAuthor = qodData[2];
     });
+    return Future.value(qodData);
   }
 }
