@@ -35,7 +35,7 @@ class _ToDoPageState extends State<ToDoPage> {
           body: TabBarView(
             children: [
               TodoListWidget(),
-              CompletedList(),
+              CompletedListWidget(),
             ],
           ),
           floatingActionButton: Padding(

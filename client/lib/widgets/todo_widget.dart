@@ -21,8 +21,8 @@ class TodoWidget extends StatelessWidget {
         key: Key(todo.id),
         actions: [
           IconSlideAction(
-            color: Colors.green,
             onTap: () {},
+            color: Colors.green,
             caption: 'Edit',
             icon: Icons.edit,
           )

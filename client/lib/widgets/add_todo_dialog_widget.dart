@@ -4,7 +4,18 @@ import 'package:client/models/todo.dart';
 import 'package:client/models/app_user.dart';
 
 class AddTodoDialogWidget extends StatefulWidget {
-  const AddTodoDialogWidget({Key? key}) : super(key: key);
+  String title;
+  String descrip;
+  bool editing;
+  String currentId;
+
+  AddTodoDialogWidget({
+    this.title = '',
+    this.descrip = '',
+    this.editing = false,
+    this.currentId = '',
+    Key? key
+  }) : super(key: key);
 
   @override
   _AddTodoDialogWidgetState createState() => _AddTodoDialogWidgetState();
@@ -12,8 +23,6 @@ class AddTodoDialogWidget extends StatefulWidget {
 
 class _AddTodoDialogWidgetState extends State<AddTodoDialogWidget> {
   final _formKey = GlobalKey<FormState>();
-  String title = '';
-  String description = '';
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +41,9 @@ class _AddTodoDialogWidgetState extends State<AddTodoDialogWidget> {
               ),
             ),
             TodoFormWidget(
-              onChangedTitle: (title) => setState(() => this.title = title),
+              onChangedTitle: (title) => setState(() => widget.title = title),
               onChangedDescription: (description) =>
-                  setState(() => this.description = description),
+                  setState(() => widget.descrip = description),
               onSavedTodo: addTodo,
             ),
           ],
@@ -49,14 +58,20 @@ class _AddTodoDialogWidgetState extends State<AddTodoDialogWidget> {
     if (!isValid) {
       return;
     } else {
-      final todo = Todo(
-        id: DateTime.now().toString(),
-        title: title,
-        description: description,
-        createdTime: DateTime.now(),
-      );
+      final todo;
+      if (widget.editing) {
 
-      AppUser.currentUser!.addTodo(todo);
+      } else {
+        todo = Todo(
+          id: DateTime.now().toString(),
+          title: widget.title,
+          description: widget.descrip,
+          createdTime: DateTime.now(),
+        );
+        AppUser.currentUser!.addTodo(todo);
+      }
+
+
 
       Navigator.of(context).pop();
     }
