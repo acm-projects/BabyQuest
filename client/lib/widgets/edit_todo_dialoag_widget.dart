@@ -5,9 +5,11 @@ import 'package:client/models/app_user.dart';
 
 class EditTodoDialogWidget extends StatefulWidget {
   final Todo todo;
+  final Function onDeleteTodo;
 
   const EditTodoDialogWidget({
     required this.todo,
+    required this.onDeleteTodo,
     Key? key
   }) : super(key: key);
 
@@ -28,7 +30,7 @@ class _EditTodoDialogWidgetState extends State<EditTodoDialogWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Add Todo',
+              'Edit Todo',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 22,
@@ -41,6 +43,22 @@ class _EditTodoDialogWidgetState extends State<EditTodoDialogWidget> {
               onChangedDescription: (description) =>
                   setState(() => widget.todo.setDescrip = description),
               onSavedTodo: editTodo,
+            ),
+            MaterialButton(
+              onPressed: () {
+                widget.onDeleteTodo(context, widget.todo);
+                Navigator.of(context).pop();
+              },
+              shape: const StadiumBorder(),
+              color: Theme.of(context).colorScheme.primary,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.delete),
+                  SizedBox(width: 5),
+                  Text('Delete'),
+                ],
+              ),
             ),
           ],
         ),

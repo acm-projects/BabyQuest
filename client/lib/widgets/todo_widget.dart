@@ -25,7 +25,10 @@ class TodoWidget extends StatelessWidget {
               context: context,
               barrierDismissible: true,
               builder: (BuildContext context) {
-                return EditTodoDialogWidget(todo: todo);
+                return EditTodoDialogWidget(
+                    todo: todo,
+                    onDeleteTodo: deleteTodo,
+                );
               },
             ),
             color: Colors.green,

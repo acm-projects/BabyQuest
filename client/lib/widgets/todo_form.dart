@@ -68,7 +68,14 @@ class TodoFormWidget extends StatelessWidget {
         onPressed: onSavedTodo,
         shape: const StadiumBorder(),
         color: Colors.deepPurple.shade300,
-        child: const Text('Save'),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Icon(Icons.save_alt_rounded),
+            SizedBox(width: 5),
+            Text('Save Task'),
+          ],
+        ),
       ),
     );
   }

@@ -2,6 +2,8 @@ import 'package:client/models/baby_profile.dart';
 import 'package:client/models/todo.dart';
 import 'package:client/services/data_service.dart';
 
+import 'dart:async';
+
 class AppUser {
   static AppUser? _currentUser;
 
@@ -16,6 +18,10 @@ class AppUser {
 
   // static accessors
   static AppUser? get currentUser => _currentUser;
+
+  //AppUser update stream
+  static final _streamController = StreamController.broadcast();
+  static final updateStream = _streamController.stream;
 
   static set currentUser(AppUser? user) {
     if (user?.uid == currentUser?.uid) return;

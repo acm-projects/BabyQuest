@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:client/widgets/add_todo_dialog_widget.dart';
 import 'package:client/widgets/todo_list_widget.dart';
 import 'package:client/widgets/completed_list_widget.dart';
+import 'package:client/models/app_user.dart';
 
 class ToDoPage extends StatefulWidget {
   const ToDoPage({Key? key}) : super(key: key);
@@ -32,11 +33,16 @@ class _ToDoPageState extends State<ToDoPage> {
               ],
             ),
           ),
-          body: TabBarView(
-            children: [
-              TodoListWidget(),
-              CompletedListWidget(),
-            ],
+          body: StreamBuilder(
+            stream: AppUser.updateStream,
+            builder: (context, snapshot) {
+              return const TabBarView(
+                children: [
+                  TodoListWidget(),
+                  CompletedListWidget(),
+                ],
+              );
+            }
           ),
           floatingActionButton: Padding(
             padding: const EdgeInsets.only(bottom: 15),
