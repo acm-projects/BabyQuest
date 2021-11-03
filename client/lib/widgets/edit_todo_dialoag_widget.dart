@@ -3,17 +3,20 @@ import 'todo_form.dart';
 import 'package:client/models/todo.dart';
 import 'package:client/models/app_user.dart';
 
-class AddTodoDialogWidget extends StatefulWidget {
-  const AddTodoDialogWidget({Key? key}) : super(key: key);
+class EditTodoDialogWidget extends StatefulWidget {
+  final Todo todo;
+
+  const EditTodoDialogWidget({
+    required this.todo,
+    Key? key
+  }) : super(key: key);
 
   @override
-  _AddTodoDialogWidgetState createState() => _AddTodoDialogWidgetState();
+  _EditTodoDialogWidgetState createState() => _EditTodoDialogWidgetState();
 }
 
-class _AddTodoDialogWidgetState extends State<AddTodoDialogWidget> {
+class _EditTodoDialogWidgetState extends State<EditTodoDialogWidget> {
   final _formKey = GlobalKey<FormState>();
-  String title = '';
-  String description = '';
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +35,12 @@ class _AddTodoDialogWidgetState extends State<AddTodoDialogWidget> {
               ),
             ),
             TodoFormWidget(
-              onChangedTitle: (title) => setState(() => this.title = title),
+              title: widget.todo.title,
+              description: widget.todo.description,
+              onChangedTitle: (title) => setState(() => widget.todo.setTitle = (title)),
               onChangedDescription: (description) =>
-                  setState(() => this.description = description),
-              onSavedTodo: addTodo,
+                  setState(() => widget.todo.setDescrip = description),
+              onSavedTodo: editTodo,
             ),
           ],
         ),
@@ -43,20 +48,13 @@ class _AddTodoDialogWidgetState extends State<AddTodoDialogWidget> {
     );
   }
 
-  void addTodo() {
+  void editTodo () {
     final isValid = _formKey.currentState!.validate();
 
     if (!isValid) {
       return;
     } else {
-      final todo = Todo(
-        id: DateTime.now().toString(),
-        title: title,
-        description: description,
-        createdTime: DateTime.now(),
-      );
-
-      AppUser.currentUser!.updateTodo(todo);
+      AppUser.currentUser!.updateTodo(widget.todo);
 
       Navigator.of(context).pop();
     }

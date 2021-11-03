@@ -69,12 +69,13 @@ class AppUser {
     return tasks;
   }
 
-  void addTodo(Todo todo) {
+  void updateTodo(Todo todo) {
     _todoList ??= {};
     _todoList![todo.id] = todo.fields();
 
     DataService.updateUserData(uid, {'to_do_list': _todoList?.map((key, value) => MapEntry(key, value))});
-  } //creates empty map if null, else returns fields of object
+  } //creates empty map if null, else assigns fields of object
+    //used to create new todos or edit them
   void removeTodo(Todo todo) {
     todo.removing();
     _todoList![todo.id] = todo.fields();
@@ -87,13 +88,8 @@ class AppUser {
 
     DataService.updateUserData(uid, {'to_do_list': _todoList?.map((key, value) => MapEntry(key, value))});
 
-    return todo.gone;
+    return todo.isDone;
   }
-  void edit(Todo todo) {
-
-
-    DataService.updateUserData(uid, {'to_do_list': _todoList?.map((key, value) => MapEntry(key, value))});
-  } //only change title and description value
 
   AppUser(this.uid);
 

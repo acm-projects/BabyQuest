@@ -21,10 +21,7 @@ class Todo {
     this.removed = false,
   });
 
-  String get name => title;
-  String get descrip => description;
   String get time => createdTime.toString();
-  bool get gone => removed;
 
   //setter methods
   set setTitle(String newTitle) {

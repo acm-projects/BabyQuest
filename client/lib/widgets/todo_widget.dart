@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:client/models/todo.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:client/models/app_user.dart';
+import 'package:client/widgets/edit_todo_dialoag_widget.dart';
 
 class TodoWidget extends StatelessWidget {
   final Todo todo;
@@ -21,7 +21,13 @@ class TodoWidget extends StatelessWidget {
         key: Key(todo.id),
         actions: [
           IconSlideAction(
-            onTap: () {},
+            onTap: () => showDialog(
+              context: context,
+              barrierDismissible: true,
+              builder: (BuildContext context) {
+                return EditTodoDialogWidget(todo: todo);
+              },
+            ),
             color: Colors.green,
             caption: 'Edit',
             icon: Icons.edit,
