@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-/*class TodoList {
-
-}*/
-
 class Todo {
   String title;
   String id;

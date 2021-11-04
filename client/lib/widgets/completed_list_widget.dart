@@ -11,29 +11,33 @@ class CompletedListWidget extends StatefulWidget {
 }
 
 class _CompletedListWidgetState extends State<CompletedListWidget> {
-  List<Todo> todos = AppUser.currentUser?.todosCompleted ?? [];
-
   @override
   Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: AppUser.updateStream,
+      builder: (context, snapshot) {
+        List<Todo> todos = AppUser.currentUser?.todosCompleted ?? [];
+        return todos.isEmpty
+            ? const Center(
+          child: Text(
+            'No completed tasks',
+            style: TextStyle(fontSize: 20),
+          ),
+        )
+            : ListView.separated(
+          physics: BouncingScrollPhysics(),
+          padding: EdgeInsets.all(16),
+          separatorBuilder: (context, index) => Container(height: 8),
+          itemCount: todos.length,
+          itemBuilder: (context, index) {
+            final todo = todos[index];
 
-
-    return todos.isEmpty
-        ? const Center(
-      child: Text(
-        'No completed tasks',
-        style: TextStyle(fontSize: 20),
-      ),
-    )
-        : ListView.separated(
-      physics: BouncingScrollPhysics(),
-      padding: EdgeInsets.all(16),
-      separatorBuilder: (context, index) => Container(height: 8),
-      itemCount: todos.length,
-      itemBuilder: (context, index) {
-        final todo = todos[index];
-
-        return TodoWidget(todo: todo);
+            return TodoWidget(todo: todo);
+          },
+        );
       },
     );
+
+
   }
 }

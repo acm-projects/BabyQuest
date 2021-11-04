@@ -33,16 +33,11 @@ class _ToDoPageState extends State<ToDoPage> {
               ],
             ),
           ),
-          body: StreamBuilder(
-            stream: AppUser.updateStream,
-            builder: (context, snapshot) {
-              return const TabBarView(
-                children: [
-                  TodoListWidget(),
-                  CompletedListWidget(),
-                ],
-              );
-            }
+          body: const TabBarView(
+            children: [
+              TodoListWidget(),
+              CompletedListWidget(),
+            ],
           ),
           floatingActionButton: Padding(
             padding: const EdgeInsets.only(bottom: 15),

@@ -11,27 +11,33 @@ class TodoListWidget extends StatefulWidget {
 }
 
 class _TodoListWidgetState extends State<TodoListWidget> {
-  List<Todo> todos = AppUser.currentUser?.todosInProgress ?? [];
-
   @override
   Widget build(BuildContext context) {
-    return todos.isEmpty
-      ? const Center(
+    return StreamBuilder(
+      stream: AppUser.updateStream,
+      builder: (context, snapshot) {
+        List<Todo> todos = AppUser.currentUser?.todosInProgress ?? [];
+        return todos.isEmpty
+            ? const Center(
           child: Text(
             'No todos',
             style: TextStyle(fontSize: 20),
           ),
         )
-      : ListView.separated(
-      physics: BouncingScrollPhysics(),
-      padding: EdgeInsets.all(16),
-      separatorBuilder: (context, index) => Container(height: 8),
-      itemCount: todos.length,
-      itemBuilder: (context, index) {
-        final todo = todos[index];
+            : ListView.separated(
+          physics: BouncingScrollPhysics(),
+          padding: EdgeInsets.all(16),
+          separatorBuilder: (context, index) => Container(height: 8),
+          itemCount: todos.length,
+          itemBuilder: (context, index) {
+            final todo = todos[index];
 
-        return TodoWidget(todo: todo);
+            return TodoWidget(todo: todo);
+          },
+        );
       },
     );
+
+
   }
 }
