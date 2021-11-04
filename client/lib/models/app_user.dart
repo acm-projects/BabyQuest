@@ -16,12 +16,12 @@ class AppUser {
   // public properties
   final String uid;
 
-  // static accessors
-  static AppUser? get currentUser => _currentUser;
-
   //AppUser update stream
   static final _streamController = StreamController.broadcast();
   static final updateStream = _streamController.stream;
+
+  // static accessors
+  static AppUser? get currentUser => _currentUser;
 
   static set currentUser(AppUser? user) {
     if (user?.uid == currentUser?.uid) return;
@@ -122,6 +122,8 @@ class AppUser {
     }
 
     _isLoaded = true;
+
+    _streamController.add(currentUser);
   }
 
   // Switches the currently displayed BabyProfile based on the provided uid
