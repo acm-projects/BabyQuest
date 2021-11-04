@@ -53,8 +53,8 @@ class AppUser {
         .map((item) => item as String)
         .toList();
     _profileNames = await DataService.getProfileNames(ownedProfiles, sharedProfiles);
-    _toDoList =
-        (userData['to_do_list'] as List).map((item) => item as String).toList();
+    //_toDoList =
+    //    (userData['to_do_list'] as List).map((item) => item as String).toList();
 
     if (_lastProfile != null &&
         (ownedProfiles.contains(_lastProfile) ||

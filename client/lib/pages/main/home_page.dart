@@ -27,12 +27,6 @@ class _HomePageState extends State<HomePage> {
   int _sleepHours = 0;
   int _sleepMins = 0;
 
-  @override
-  void initState() {
-    _setup();
-    super.initState();
-  }
-
   SnackBar _getSnackBar({required String text, VoidCallback? onPressed}) {
     return SnackBar(
       padding: (onPressed != null)
@@ -263,11 +257,9 @@ class _HomePageState extends State<HomePage> {
 
   Future _setup() async {
     List<String> qodData = await DataService.getQOD();
+    _qodMessage = qodData[1];
+    _qodAuthor = qodData[2];
 
-    setState(() {
-      _qodMessage = qodData[1];
-      _qodAuthor = qodData[2];
-    });
     return Future.value(qodData);
   }
 }
