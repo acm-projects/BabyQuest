@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:client/models/baby_profile.dart';
 import 'package:client/models/day_stats.dart';
 import 'package:client/widgets/dotted_divider.dart';
 import 'package:client/widgets/round_button.dart';
-import 'package:flutter/material.dart';
 import 'package:client/services/data_service.dart';
-import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

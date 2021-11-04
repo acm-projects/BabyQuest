@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:client/models/baby_profile.dart';
+import 'package:client/models/todo.dart';
 import 'package:client/services/data_service.dart';
 
 class AppUser {
@@ -10,11 +13,15 @@ class AppUser {
   List<String>? _profiles;
   List<String>? _sharedProfiles;
   Map<String, String>? _profileNames;
-  List<String>? _toDoList;
+  Map<String, List<dynamic>>? _todoList;
 
   // public properties
   final String uid;
   final String email;
+
+  //AppUser update stream
+  static final _streamController = StreamController.broadcast();
+  static final updateStream = _streamController.stream;
 
   // static accessors
   static AppUser? get currentUser => _currentUser;
@@ -29,10 +36,76 @@ class AppUser {
 
   // public accessors
   bool get isLoaded => _isLoaded;
+
   List<String> get ownedProfiles => _profiles ?? [];
   List<String> get sharedProfiles => _sharedProfiles ?? [];
   Map<String, String> get profileNames => _profileNames ?? {};
-  List<String> get toDoList => _toDoList ?? [];
+
+  Map<String, List<dynamic>> get toDoList => _todoList ?? {};
+
+  //methods for todo
+  List<Todo> get todosInProgress {
+    List<Todo> tasks = [];
+    _todoList?.forEach((key, value) {
+      if (!value[4] && !value[5]) {
+        tasks.add(
+            Todo(
+              title: value[0],
+              description: value[1],
+              id: value[2],
+              createdTime: DateTime.parse(value[3]),
+              isDone: value[4],
+              removed: value[5],
+            ));
+      }
+    });
+
+    return tasks;
+  }
+
+  List<Todo> get todosCompleted {
+    List<Todo> tasks = [];
+    _todoList?.forEach((key, value) {
+      if (value[4] && !value[5]) {
+        tasks.add(
+            Todo(
+              title: value[0],
+              description: value[1],
+              id: value[2],
+              createdTime: DateTime.parse(value[3]),
+              isDone: value[4],
+              removed: value[5],
+            ));
+      }
+    });
+
+    return tasks;
+  }
+
+  void updateTodo(Todo todo) {
+    _todoList ??= {};
+    _todoList![todo.id] = todo.fields();
+
+    DataService.updateUserData(uid,
+        {'to_do_list': _todoList?.map((key, value) => MapEntry(key, value))});
+  } //creates empty map if null, else assigns fields of object
+  //used to create new todos or edit them
+  void removeTodo(Todo todo) {
+    todo.removing();
+    _todoList![todo.id] = todo.fields();
+
+    DataService.updateUserData(uid,
+        {'to_do_list': _todoList?.map((key, value) => MapEntry(key, value))});
+  } //call removing method - changes removed value to true
+  bool toggleTodoStatus(Todo todo) {
+    todo.toggleDone();
+    _todoList![todo.id] = todo.fields();
+
+    DataService.updateUserData(uid,
+        {'to_do_list': _todoList?.map((key, value) => MapEntry(key, value))});
+
+    return todo.isDone;
+  }
 
   AppUser(this.uid, this.email);
 
@@ -47,14 +120,17 @@ class AppUser {
 
   Future _updateData(Map<String, dynamic> userData) async {
     _lastProfile = userData['last_profile'] as String?;
+
     _profiles =
         (userData['profiles'] as List).map((item) => item as String).toList();
     _sharedProfiles = (userData['shared_profiles'] as List)
         .map((item) => item as String)
         .toList();
     _profileNames = await DataService.getProfileNames(ownedProfiles, sharedProfiles);
-    //_toDoList =
-    //    (userData['to_do_list'] as List).map((item) => item as String).toList();
+
+    _todoList = (userData['to_do_list'] as Map).map((key, value) {
+      return MapEntry(key, value as List);
+    });
 
     if (_lastProfile != null &&
         (ownedProfiles.contains(_lastProfile) ||
@@ -65,6 +141,7 @@ class AppUser {
     }
 
     _isLoaded = true;
+    _streamController.add(currentUser);
   }
 
   // Switches the currently displayed BabyProfile based on the provided uid

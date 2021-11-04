@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:client/models/app_user.dart';
 import 'package:client/pages/main/home_page.dart';
 import 'package:client/pages/main/profile_page.dart';
-import 'package:client/pages/main/shopping_page.dart';
+import 'package:client/pages/main/todo_page.dart';
 import 'package:client/pages/main/statistics_page.dart';
 import 'package:client/pages/main/create_profile_page.dart';
 
@@ -47,7 +47,7 @@ class _MainWrapperState extends State<MainWrapper> {
           ProfilePage(_creatingNewProfile, widget.refresh),
           const HomePage(),
           const StatisticsPage(),
-          const ShoppingPage(),
+          const ToDoPage(),
         ],
       ),
       bottomNavigationBar: ConvexAppBar(
@@ -59,7 +59,7 @@ class _MainWrapperState extends State<MainWrapper> {
           TabItem(icon: Icons.account_circle, title: 'Profile'),
           TabItem(icon: Icons.home, title: 'Home'),
           TabItem(icon: Icons.bar_chart, title: 'Statistics'),
-          TabItem(icon: Icons.shopping_cart, title: 'Shopping'),
+          TabItem(icon: Icons.view_list_rounded, title: 'Todos'),
         ],
         onTap: (index) => pageController.jumpToPage(index),
       ),

@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:client/models/day_stats.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 
+import 'package:client/models/day_stats.dart';
 import 'package:client/services/data_service.dart';
 
 class BabyProfile {
@@ -70,6 +69,7 @@ class BabyProfile {
         return "Other";
     }
   }
+
 
   double get heightIn => _height ?? 0;
   String get height {
@@ -139,8 +139,7 @@ class BabyProfile {
 
     _pediatrician = profileData['pediatrician'];
     _pediatricianPhone = profileData['pediatrician_phone'];
-    _formattedPedPhone = (await FlutterLibphonenumber()
-        .format(pediatricianPhone, 'US'))['formatted'];
+    _formattedPedPhone = (await FlutterLibphonenumber().format(pediatricianPhone, 'US'))['formatted'];
 
     _profilePic = profileData['profile_pic'] as String;
 
