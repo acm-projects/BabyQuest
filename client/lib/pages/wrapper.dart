@@ -38,9 +38,9 @@ class _WrapperState extends State<Wrapper> {
       return const Center(child: CircularProgressIndicator());
     } else if (snapshot.hasData && !userLoaded) {
       _waitForUserToLoad();
-      return const SplashPage("Welcome...", timed: false);
+      return const SplashPage('Welcome...', timed: false);
     } else if (snapshot.hasData && userLoaded) {
-      return const MainWrapper(); // main page
+      return MainWrapper(_refresh); // main page
     } else if (snapshot.hasError) {
       return const Center(child: Text('Something went wrong!'));
     } else {
@@ -56,5 +56,9 @@ class _WrapperState extends State<Wrapper> {
         _waitForUserToLoad();
       }
     });
+  }
+
+  void _refresh() {
+    setState(() {});
   }
 }

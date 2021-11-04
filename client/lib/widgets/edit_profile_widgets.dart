@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:client/models/baby_profile.dart';
+import 'package:client/services/data_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,13 +14,12 @@ class EditProfileWidgets {
         autofocus: autofocus,
         controller: nameController,
         validator: (value) {
-          return (value == null || value.isEmpty)
-              ? 'Enter Baby\'s Full Name'
-              : null;
+          return (value == null || value.isEmpty) ? '' : null;
         },
         decoration: const InputDecoration(
           icon: Icon(Icons.edit),
           labelText: 'Baby\'s Full Name',
+          errorStyle: TextStyle(height: 0),
         ),
       ),
     );
@@ -95,47 +95,38 @@ class EditProfileWidgets {
       BuildContext context, TextEditingController genderController) {
     var items = ['Male', 'Female', 'Other'];
 
-    return Row(
-      children: [
-        Icon(
-          BabyProfile.getGenderIcon(
-            int.tryParse(genderController.text) ?? 3,
+    return StatefulBuilder(builder: (context, setState) {
+      return SizedBox(
+        width: 120,
+        child: DropdownButtonFormField(
+          decoration: InputDecoration(
+            icon: Icon(BabyProfile.getGenderIcon(
+              int.tryParse(genderController.text) ?? 3,
+            )),
+            contentPadding: EdgeInsets.zero,
+            label: const Text('Gender'),
           ),
-          color: const Color(0xFF8C8161),
-          size: 17,
-        ),
-        const SizedBox(
-          width: 16,
-        ),
-        SizedBox(
-          width: 88,
-          child: DropdownButtonFormField(
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.zero,
-              label: Text('Gender'),
-            ),
-            value: (int.tryParse(genderController.text) != null)
-                ? items[int.parse(genderController.text)]
-                : null,
-            style: Theme.of(context).textTheme.subtitle1,
-            icon: const Icon(
-              Icons.keyboard_arrow_down,
-              color: Color(0xFF8C8161),
-            ),
-            items: items.map((String items) {
-              return DropdownMenuItem(value: items, child: Text(items));
-            }).toList(),
-            onChanged: (newValue) {
-              genderController.text =
-                  items.indexOf(newValue.toString()).toString();
-            },
-            validator: (value) {
-              return (value == null) ? 'Select Baby\'s Gender' : null;
-            },
+          value: (int.tryParse(genderController.text) != null)
+              ? items[int.parse(genderController.text)]
+              : null,
+          style: Theme.of(context).textTheme.subtitle1,
+          icon: const Icon(
+            Icons.keyboard_arrow_down,
+            color: Colors.black45,
           ),
+          items: items.map((String items) {
+            return DropdownMenuItem(value: items, child: Text(items));
+          }).toList(),
+          onChanged: (newValue) {
+            setState(() => genderController.text =
+                items.indexOf(newValue.toString()).toString());
+          },
+          validator: (value) {
+            return (value == null) ? 'Select Baby\'s Gender' : null;
+          },
         ),
-      ],
-    );
+      );
+    });
   }
 
   static Widget height(TextEditingController heightController) {
@@ -212,10 +203,8 @@ class EditProfileWidgets {
   }
 
   static Widget _allergyField(int index, List<String> allergyNames,
-      List<int> allergySeverities, Function setState) {
+      List<int> allergySeverities, List<int> remove, Function setState) {
     var items = ['Mild', 'Moderate', 'Severe'];
-
-    bool removed = false;
 
     return Padding(
       padding: const EdgeInsets.only(right: 48),
@@ -245,11 +234,7 @@ class EditProfileWidgets {
                 validator: (value) {
                   if ((value == null || value.isEmpty) &&
                       allergySeverities[index] == -1) {
-                    setState(() {
-                      allergyNames.removeAt(index);
-                      allergySeverities.removeAt(index);
-                      removed = true;
-                    });
+                    remove.add(index);
                     return null;
                   }
                   return (value == null || value.isEmpty)
@@ -259,13 +244,13 @@ class EditProfileWidgets {
           ),
           const SizedBox(width: 16),
           Padding(
-            padding: const EdgeInsets.only(top: 6),
+            padding: const EdgeInsets.only(top: 13),
             child: SizedBox(
               width: 88,
               child: DropdownButtonFormField(
                   hint: const Text('Severity'),
                   decoration: const InputDecoration(
-                      contentPadding: EdgeInsets.only(bottom: 8)),
+                      contentPadding: EdgeInsets.only(bottom: 2)),
                   value: (allergySeverities[index] != -1)
                       ? items[allergySeverities[index]]
                       : null,
@@ -278,10 +263,9 @@ class EditProfileWidgets {
                         items.indexOf(newValue.toString());
                   },
                   validator: (value) {
-                    if (removed) {
-                      return null;
-                    }
-                    return (value == null) ? 'Select Severity' : null;
+                    return (value != null || remove.contains(index))
+                        ? null
+                        : 'Select Severity';
                   }),
             ),
           ),
@@ -290,14 +274,14 @@ class EditProfileWidgets {
     );
   }
 
-  static Widget allergies(
-      List<String> allergyNames, List<int> allergySeverities) {
+  static Widget allergies(List<String> allergyNames,
+      List<int> allergySeverities, List<int> remove) {
     return StatefulBuilder(
       builder: (context, setState) {
         List<Widget> allergyFields =
             List.generate(allergyNames.length, (int index) {
           return _allergyField(
-              index, allergyNames, allergySeverities, setState);
+              index, allergyNames, allergySeverities, remove, setState);
         });
 
         allergyFields.add(
@@ -312,7 +296,7 @@ class EditProfileWidgets {
               },
               splashColor: Theme.of(context).colorScheme.secondary,
               child: Padding(
-                padding: const EdgeInsets.only(right: 48, top: 12),
+                padding: const EdgeInsets.only(right: 48, top: 16),
                 child: Text(
                   'Add Allergy',
                   style:
@@ -339,9 +323,7 @@ class EditProfileWidgets {
         autofocus: true,
         controller: pedController,
         validator: (value) {
-          return (value == null || value.isEmpty)
-              ? 'Enter Your Pediatrician\'s Name'
-              : null;
+          return (value == null || value.isEmpty) ? '' : null;
         },
         decoration: const InputDecoration(
             icon: Icon(Icons.medical_services_outlined),
@@ -358,9 +340,7 @@ class EditProfileWidgets {
         keyboardType: TextInputType.phone,
         controller: pedPhoneController,
         validator: (value) {
-          return (value == null || value.length != 12)
-              ? 'Enter a Valid Phone Number'
-              : null;
+          return (value == null || value.length != 12) ? '' : null;
         },
         decoration: const InputDecoration(
           icon: Icon(Icons.contacts_outlined),
@@ -421,5 +401,101 @@ class EditProfileWidgets {
         );
       },
     );
+  }
+
+  static Widget _sharedUser(
+      String uid,
+      String email,
+      Map<String, String> newUsers,
+      List<String> removedUsers,
+      Function setState) {
+    return Row(
+      children: [
+        IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () {
+            if (newUsers.containsKey(uid)) {
+              setState(() => newUsers.remove(uid));
+            } else {
+              setState(() => removedUsers.add(uid));
+            }
+          },
+        ),
+        Text(email),
+      ],
+    );
+  }
+
+  static List<Widget> _sharedUsers(
+      Map<String, String> currentUsers,
+      Map<String, String> newUsers,
+      List<String> removedUsers,
+      Function setState) {
+    List<Widget> sharedUserWidgets = [];
+
+    newUsers.forEach((uid, name) {
+      sharedUserWidgets
+          .add(_sharedUser(uid, name, newUsers, removedUsers, setState));
+    });
+
+    currentUsers.forEach((uid, name) {
+      if (!removedUsers.contains(uid)) {
+        sharedUserWidgets
+            .add(_sharedUser(uid, name, newUsers, removedUsers, setState));
+      }
+    });
+
+    return sharedUserWidgets;
+  }
+
+  static Future shareProfile(String profileId, String currentUserEmail, Map<String, String> newUsers,
+      List<String> removedUsers) async {
+    Map<String, String> currentUsers =
+        await DataService.getProfileSharedUsers(profileId);
+
+    final newUserEmail = TextEditingController();
+
+    return StatefulBuilder(builder: (context, setState) {
+      return Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Row(
+            children: [
+              SizedBox(
+                width: 150,
+                child: TextField(
+                  controller: newUserEmail,
+                ),
+              ),
+              TextButton(
+                child: const Text('Add User'),
+                onPressed: () async {
+                  if (currentUsers.containsValue(newUserEmail.text)) {
+                    debugPrint('Specified user is already added');
+                    return;
+                  } else if (newUserEmail.text == currentUserEmail) {
+                    debugPrint('You cannot add yourself');
+                    return;
+                  }
+
+                  final uid =
+                      await DataService.getUserFromEmail(newUserEmail.text);
+
+                  if (uid != null) {
+                    setState(() => newUsers[uid] = newUserEmail.text);
+                  } else {
+                    debugPrint('Specified user doesn\'t exist');
+                  }
+                },
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          ..._sharedUsers(currentUsers, newUsers, removedUsers, setState),
+        ],
+      );
+    });
   }
 }

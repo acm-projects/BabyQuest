@@ -1,3 +1,4 @@
+import 'package:client/models/app_user.dart';
 import 'package:client/models/baby_profile.dart';
 import 'package:client/services/auth_service.dart';
 import 'package:client/widgets/dotted_divider.dart';
@@ -9,7 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  final Function creatingNewProfile;
+  final Function refresh;
+
+  const ProfilePage(this.creatingNewProfile, this.refresh, {Key? key})
+      : super(key: key);
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -24,7 +29,17 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: _buildProfiles(),
+        ),
+      ),
       body: StreamBuilder(
         stream: BabyProfile.updateStream,
         builder: (context, snapshot) {
@@ -102,8 +117,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                         updateData: () {
                                           currentBby
                                               .updateData({'name': name.text});
-                                          currentBby
-                                              .updateProfileImage(image.text);
+                                          if (image.text !=
+                                              currentBby.profilePic) {
+                                            currentBby
+                                                .updateProfileImage(image.text);
+                                          }
                                         },
                                       );
                                     },
@@ -377,33 +395,90 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 16),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  RichText(
-                                    text: TextSpan(
-                                      text: 'Allergies',
-                                      style:
-                                          Theme.of(context).textTheme.headline2,
+                            if (_buildAllergies().isNotEmpty || editMode)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 16),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    RichText(
+                                      text: TextSpan(
+                                        text: 'Allergies',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline2,
+                                      ),
                                     ),
-                                  ),
-                                  const DottedDivider(),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 16),
-                                    child: Column(
-                                      children: [
-                                        ..._buildAllergies(),
-                                      ],
+                                    const DottedDivider(),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 16),
+                                      child: Column(
+                                        children: [
+                                          ..._buildAllergies(),
+                                          if (_buildAllergies().isEmpty)
+                                            Center(
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  List<String> allergyNames =
+                                                      currentBby.allergies.keys
+                                                          .toList();
+                                                  List<int> allergySeverities =
+                                                      currentBby
+                                                          .allergies.values
+                                                          .toList();
+                                                  List<int> remove = [];
+
+                                                  await _showEditDialog(
+                                                    context: context,
+                                                    label: 'Allergies',
+                                                    field: EditProfileWidgets
+                                                        .allergies(
+                                                            allergyNames,
+                                                            allergySeverities,
+                                                            remove),
+                                                    updateData: () {
+                                                      for (var index
+                                                          in remove.reversed) {
+                                                        allergyNames
+                                                            .removeAt(index);
+                                                        allergySeverities
+                                                            .removeAt(index);
+                                                      }
+
+                                                      currentBby.updateData({
+                                                        'allergies':
+                                                            Map.fromIterables(
+                                                                allergyNames,
+                                                                allergySeverities)
+                                                      });
+                                                    },
+                                                  );
+                                                },
+                                                splashColor: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(12),
+                                                  child: Text(
+                                                    'Add Allergies',
+                                                    style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .primary),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
                             const DottedDivider(),
                             Padding(
                               padding: const EdgeInsets.only(
@@ -453,12 +528,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       );
                                     }),
                                   ),
-                                  const Spacer(),
-                                  LabeledIconButton(
-                                    icon: const Icon(Icons.share),
-                                    label: 'Share Info',
-                                    onPressed: () {},
-                                  ),
+                                  ..._buildShareProfile(),
                                 ],
                               ),
                             ),
@@ -522,16 +592,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 backgroundColor: Colors.transparent,
               ),
               child: SizedBox(
-                width: 96,
+                width: 64,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Center(
                     child: Text(
                       'Cancel',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline2!
-                          .copyWith(fontWeight: FontWeight.w400),
+                      style: Theme.of(context).textTheme.headline3,
                     ),
                   ),
                 ),
@@ -540,14 +607,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.of(context).pop();
               },
             ),
+            const SizedBox(
+              width: 16,
+            ),
             OutlinedButton(
-              child: const SizedBox(
-                width: 96,
+              child: SizedBox(
+                width: 64,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Center(
                     child: Text(
                       'Save',
+                      style: Theme.of(context).textTheme.headline3,
                     ),
                   ),
                 ),
@@ -579,15 +650,24 @@ class _ProfilePageState extends State<ProfilePage> {
           onTap: () async {
             List<String> allergyNames = currentBby.allergies.keys.toList();
             List<int> allergySeverities = currentBby.allergies.values.toList();
+            List<int> remove = [];
 
             await _showEditDialog(
               context: context,
               label: 'Allergies',
-              field:
-                  EditProfileWidgets.allergies(allergyNames, allergySeverities),
-              updateData: () => currentBby.updateData({
-                'allergies': Map.fromIterables(allergyNames, allergySeverities)
-              }),
+              field: EditProfileWidgets.allergies(
+                  allergyNames, allergySeverities, remove),
+              updateData: () {
+                for (var index in remove.reversed) {
+                  allergyNames.removeAt(index);
+                  allergySeverities.removeAt(index);
+                }
+
+                currentBby.updateData({
+                  'allergies':
+                      Map.fromIterables(allergyNames, allergySeverities)
+                });
+              },
             );
           },
         ),
@@ -603,6 +683,71 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     return allergies;
+  }
+
+  List<Widget> _buildShareProfile() {
+    if (AppUser.currentUser != null &&
+        !AppUser.currentUser!.ownedProfiles.contains(currentBby.uid)) return [];
+
+    return [
+      const Spacer(),
+      LabeledIconButton(
+        icon: const Icon(Icons.share),
+        label: 'Share Info',
+        onPressed: () async {
+          Map<String, String> newUsers = {};
+          List<String> removedUsers = [];
+
+          await _showEditDialog(
+            context: context,
+            label: 'Share Settings',
+            field: await EditProfileWidgets.shareProfile(
+                currentBby.uid, AppUser.currentUser?.email ?? '', newUsers, removedUsers),
+            updateData: () {
+              currentBby.updatePermissions(newUsers, removedUsers);
+            },
+          );
+        },
+      ),
+    ];
+  }
+
+  Widget _buildProfileButton(String profileId, bool shared) {
+    String profileName = AppUser.currentUser!.profileNames[profileId] ?? '';
+
+    return ListTile(
+      title: Text(profileName),
+      subtitle: shared ? const Text('Shared with you') : null,
+      onTap: () async {
+        Navigator.pop(context);
+        AppUser.currentUser?.setCurrentProfile(profileId);
+        widget.refresh();
+      },
+    );
+  }
+
+  List<Widget> _buildProfiles() {
+    List<Widget> profiles = [];
+
+    if (AppUser.currentUser != null) {
+      for (var profileId in AppUser.currentUser!.ownedProfiles) {
+        profiles.add(_buildProfileButton(profileId, false));
+      }
+
+      for (var profileId in AppUser.currentUser!.sharedProfiles) {
+        profiles.add(_buildProfileButton(profileId, true));
+      }
+    }
+
+    profiles.add(ListTile(
+      title: const Text('Create New Profile'),
+      onTap: () async {
+        Navigator.pop(context);
+        widget.creatingNewProfile(finished: false);
+      },
+    ));
+
+    return profiles;
   }
 }
 

@@ -15,7 +15,7 @@ class AuthService extends ChangeNotifier {
 
   // create AppUser object from firebase user
   static AppUser? _appUserFromUser(User? user) {
-    AppUser.currentUser = user != null ? AppUser(user.uid) : null;
+    AppUser.currentUser = user != null ? AppUser(user.uid, user.email!) : null;
 
     if (AppUser.currentUser == null) {
       BabyProfile.currentProfile = null;
@@ -35,9 +35,28 @@ class AuthService extends ChangeNotifier {
   }
 
   // sign in with email and password
-  Future signInWithEmailAndPassword(String email, String password) async {
+  Future signInWithEmailAndPassword(String email, String password,
+      {Function? setError}) async {
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      await _auth
+          .signInWithEmailAndPassword(email: email, password: password)
+          .catchError((error) {
+        if (error != null) {
+          switch (error.code) {
+            case 'invalid-email':
+              setError!('Invalid email address.');
+              break;
+            case 'user-not-found':
+              setError!('That account doesn\'t exist.');
+              break;
+            case 'wrong-password':
+              setError!('Your password is incorrect.');
+              break;
+            default:
+              setError!('Something went wrong! Please try again.');
+          }
+        }
+      });
     } catch (error) {
       debugPrint(error.toString());
     }

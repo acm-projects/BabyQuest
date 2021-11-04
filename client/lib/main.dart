@@ -43,15 +43,16 @@ class _MyAppState extends State<MyApp> {
           textTheme: const TextTheme(
             headline1: TextStyle(fontWeight: FontWeight.w800, fontSize: 30),
             headline2: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
+            headline3: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
             subtitle1: TextStyle(fontWeight: FontWeight.w300, fontSize: 15),
           ),
           canvasColor: Colors.green.shade200,
-          scaffoldBackgroundColor: Colors.amber.shade100,
+          scaffoldBackgroundColor: const Color(0xFFFFF2CC),
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: createMaterialColor(Colors.deepPurple.shade300),
           ).copyWith(
             onPrimary: Colors.white,
-            background: Colors.amber.shade100,
+            background:  const Color(0xFFFFF2CC),
             onBackground: Colors.grey.shade700,
             onSurface: Colors.grey.shade700,
             secondary: Colors.green.shade200,
@@ -96,12 +97,13 @@ class _MyAppState extends State<MyApp> {
           inputDecorationTheme: const InputDecorationTheme(
             isDense: true,
             contentPadding: EdgeInsets.symmetric(vertical: 4),
+            errorStyle: TextStyle(height: 0),
           ),
         ),
         debugShowCheckedModeBanner: false,
         home: isLoaded
             ? const Wrapper()
-            : SplashPage("Waking up from a nap...",
+            : SplashPage("Waking Up From A Nap...",
                 completed: _completeLoading),
       ),
     );

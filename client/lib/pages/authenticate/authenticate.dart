@@ -22,7 +22,7 @@ class _AuthenticateState extends State<Authenticate> {
             children: [
               const SizedBox(height: 25.0),
               _buildTitle(),
-              const SizedBox(height: 50.0),
+              const SizedBox(height: 30.0),
               SignInForm(register),
               const SizedBox(height: 80.0),
               _buildToggle()

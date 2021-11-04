@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:client/models/todo.dart';
 
 class DataService {
   static final _database = FirebaseFirestore.instance;
@@ -24,19 +24,72 @@ class DataService {
     'to_do_list': {},
   };
 
+  static getProfileSharedUsers(String profileId) async {
+    Map<String, String> sharedUsers = {};
+
+    await _userCollection
+        .where('shared_profiles', arrayContains: profileId)
+        .get()
+        .then((query) {
+      for (var document in query.docs) {
+        final data = document.data();
+        sharedUsers[document.id] = data['email'] as String;
+      }
+    });
+
+    return sharedUsers;
+  }
+
+  static getUserFromEmail(String email) async {
+    String? uid;
+
+    await _userCollection.where('email', isEqualTo: email).get().then((query) {
+      if (query.docs.isNotEmpty) {
+        uid = query.docs[0].id;
+      }
+    });
+
+    return uid;
+  }
+
+  static updateUserPermissions(String uid,
+      {String? add, String? remove}) async {
+    DocumentReference userDocument = _userCollection.doc(uid);
+    List<String> sharedProfiles = [];
+
+    await userDocument.get().then((document) {
+      final data = document.data() as Map<String, dynamic>;
+      sharedProfiles = (data['shared_profiles'] as List)
+          .map((item) => item as String)
+          .toList();
+    });
+
+    if (add != null) {
+      sharedProfiles.add(add);
+    }
+
+    if (remove != null) {
+      sharedProfiles.remove(remove);
+    }
+
+    updateUserData(uid, {'shared_profiles': sharedProfiles});
+  }
+
   static updateUserData(String uid, Map<String, dynamic> fields) async {
     DocumentReference userDocument = _userCollection.doc(uid);
     await userDocument.update(fields);
   }
 
   // sets data sync for user data with database
-  static setUserDataSync(String uid, Function update) async {
+  static setUserDataSync(String uid, String email, Function update) async {
     DocumentReference userDocument = _userCollection.doc(uid);
 
     // If user data doesn't exist yet, create it
     await userDocument.get().then((document) {
       if (!document.exists) {
-        userDocument.set(_defaultUserData);
+        Map<String, dynamic> userData = Map.of(_defaultUserData);
+        userData['email'] = email;
+        userDocument.set(userData);
       }
     });
 
@@ -57,11 +110,16 @@ class DataService {
     _userListener = null;
   }
 
-  static Future uploadProfileImage(String uid, File imageFile, {String? currentImageUrl}) async {
+  static Future uploadProfileImage(String uid, File imageFile,
+      {String? currentImageUrl}) async {
     String imageUrl = '';
 
     if (currentImageUrl != null) {
-      await _profilePics.child(imageUrl).delete();
+      try {
+        await _profilePics.child(imageUrl).delete();
+      } catch (error) {
+        debugPrint(error.toString());
+      }
     }
 
     Reference imageRef = _profilePics.child(uid + '.' + imageFile.path.split('.').last);
@@ -88,6 +146,7 @@ class DataService {
     String documentId = '';
 
     await _profileCollection.add({
+      'created': DateTime.now().toString(),
       'name': name,
       'birth_date': birthDate.toString().split(' ').first,
       'gender': gender,
@@ -97,13 +156,17 @@ class DataService {
       'pediatrician': pediatrician,
       'pediatrician_phone': pediatricianPhone,
       'allergies': allergies,
+      'diaper_changes': {},
+      'feedings': {},
+      'sleep': {},
     }).then((document) async {
       documentId = document.id;
 
       File imageFile = File(imagePath);
       String imageUrl = await uploadProfileImage(documentId, imageFile);
 
-      await updateProfileData(documentId, {'profile_pic': imageUrl});
+      await updateProfileData(
+          documentId, {'profile_pic': imageUrl, 'uid': documentId});
     });
 
     return documentId;
@@ -112,6 +175,19 @@ class DataService {
   static updateProfileData(String uid, Map<String, dynamic> fields) async {
     DocumentReference profileDocument = _profileCollection.doc(uid);
     await profileDocument.update(fields);
+  }
+
+  static Future getProfileNames(
+      List<String> owned, List<String> shared) async {
+    Map<String, String> profileNames = {};
+    
+    await _profileCollection.where('uid', whereIn: [...owned, ...shared, '']).get().then((query) {
+      for (var document in query.docs) {
+        profileNames[document.id] = document.data()['name'] as String;
+      }
+    });
+
+    return profileNames;
   }
 
   // retrieves profile data from the database, or creates it if not yet created

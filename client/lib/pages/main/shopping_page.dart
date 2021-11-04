@@ -8,8 +8,6 @@ class ShoppingPage extends StatefulWidget {
 }
 
 class _ShoppingPageState extends State<ShoppingPage> {
-  static const Color accentColor = Color(0xFF008080);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

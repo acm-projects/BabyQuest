@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:client/models/todo.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+
+import 'package:client/models/todo.dart';
 import 'package:client/models/app_user.dart';
 import 'package:client/widgets/edit_todo_dialoag_widget.dart';
 
@@ -17,7 +18,7 @@ class TodoWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: Slidable(
-        actionPane: SlidableDrawerActionPane(),
+        actionPane: const SlidableDrawerActionPane(),
         key: Key(todo.id),
         actions: [
           IconSlideAction(
@@ -87,10 +88,10 @@ class TodoWidget extends StatelessWidget {
                 ),
                 if (todo.description.isNotEmpty)
                   Container(
-                    margin: EdgeInsets.only(top: 4),
+                    margin: const EdgeInsets.only(top: 4),
                     child: Text(
                       todo.description,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20,
                         height: 1.5,
                       ),
@@ -109,10 +110,10 @@ class TodoWidget extends StatelessWidget {
 
     ScaffoldMessenger.of(context).removeCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+        const SnackBar(
+          padding: EdgeInsets.symmetric(horizontal: 16),
           behavior: SnackBarBehavior.floating,
-          duration: const Duration(milliseconds: 2000),
+          duration: Duration(milliseconds: 2000),
           content: Text('Deleted the task'),
         )
     );
