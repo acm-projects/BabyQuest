@@ -104,6 +104,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
     setState(() {});
   }
 
+  int _getDateIndex(DateTime date) {
+    return date.difference(_startDate).inDays + 1;
+  }
+
   void _jumpToIndex(int index) {
     _selectedIndex = index;
     _setSelectedDateTime();
@@ -199,8 +203,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
                           Icons.calendar_today,
                           color: Theme.of(context).colorScheme.secondary,
                         ),
-                        onPressed: () {
-                          _animateToIndex(_currentDateIndex);
+                        onPressed: () async {
+                          DateTime targetDate = await _selectDate(context);
+                          int index = _getDateIndex(targetDate);
+                          _animateToIndex(index);
                         },
                       ),
                     ],
@@ -309,6 +315,15 @@ class _StatisticsPageState extends State<StatisticsPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Future _selectDate(BuildContext context) async {
+    return await showDatePicker(
+      context: context,
+      initialDate: _currentDate, // Refer step 1
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
     );
   }
 }

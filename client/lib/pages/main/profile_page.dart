@@ -702,7 +702,7 @@ class _ProfilePageState extends State<ProfilePage> {
             context: context,
             label: 'Share Settings',
             field: await EditProfileWidgets.shareProfile(
-                currentBby.uid, newUsers, removedUsers),
+                currentBby.uid, AppUser.currentUser?.email ?? '', newUsers, removedUsers),
             updateData: () {
               currentBby.updatePermissions(newUsers, removedUsers);
             },

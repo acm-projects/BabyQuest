@@ -448,7 +448,7 @@ class EditProfileWidgets {
     return sharedUserWidgets;
   }
 
-  static Future shareProfile(String profileId, Map<String, String> newUsers,
+  static Future shareProfile(String profileId, String currentUserEmail, Map<String, String> newUsers,
       List<String> removedUsers) async {
     Map<String, String> currentUsers =
         await DataService.getProfileSharedUsers(profileId);
@@ -471,12 +471,16 @@ class EditProfileWidgets {
                 child: const Text('Add User'),
                 onPressed: () async {
                   if (currentUsers.containsValue(newUserEmail.text)) {
-                    debugPrint('Specified user doesn\'t exist');
+                    debugPrint('Specified user is already added');
+                    return;
+                  } else if (newUserEmail.text == currentUserEmail) {
+                    debugPrint('You cannot add yourself');
                     return;
                   }
 
                   final uid =
                       await DataService.getUserFromEmail(newUserEmail.text);
+
                   if (uid != null) {
                     setState(() => newUsers[uid] = newUserEmail.text);
                   } else {
