@@ -195,6 +195,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.4"
+  flutter_slidable:
+    dependency: "direct main"
+    description:
+      name: flutter_slidable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.0"
   flutter_spinkit:
     dependency: "direct main"
     description:
@@ -232,7 +239,7 @@ packages:
       name: google_sign_in
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.2.0"
+    version: "5.2.1"
   google_sign_in_platform_interface:
     dependency: transitive
     description:

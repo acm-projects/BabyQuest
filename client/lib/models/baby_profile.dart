@@ -65,6 +65,7 @@ class BabyProfile {
     }
   }
 
+
   double get heightIn => _height ?? 0;
   String get height {
     return heightIn.toString() + '"';
@@ -127,7 +128,7 @@ class BabyProfile {
 
     _pediatrician = profileData['pediatrician'];
     _pediatricianPhone = profileData['pediatrician_phone'];
-   _formattedPedPhone = (await FlutterLibphonenumber().format(pediatricianPhone, 'US'))['formatted'];
+    _formattedPedPhone = (await FlutterLibphonenumber().format(pediatricianPhone, 'US'))['formatted'];
 
     _profilePic = profileData['profile_pic'] as String;
 

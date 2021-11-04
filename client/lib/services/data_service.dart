@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:client/models/todo.dart';
 
 class DataService {
   static final _database = FirebaseFirestore.instance;
@@ -20,7 +21,7 @@ class DataService {
   static const _defaultUserData = {
     'profiles': [],
     'shared_profiles': [],
-    'to_do_list': [],
+    'to_do_list': {},
   };
 
   static updateUserData(String uid, Map<String, dynamic> fields) async {
@@ -63,8 +64,7 @@ class DataService {
       await _profilePics.child(imageUrl).delete();
     }
 
-    Reference imageRef =
-        _profilePics.child(uid + '.' + imageFile.path.split('.').last);
+    Reference imageRef = _profilePics.child(uid + '.' + imageFile.path.split('.').last);
     UploadTask uploadTask = imageRef.putFile(imageFile);
     await uploadTask.whenComplete(() async {
       imageUrl = await uploadTask.snapshot.ref.getDownloadURL();
@@ -165,8 +165,7 @@ class DataService {
           .get(Uri.parse('http://quotes.rest/qod.json?category=inspire'));
 
       if (response.statusCode == 200) {
-        Map<String, dynamic> qodData =
-            jsonDecode(response.body)['contents']['quotes'][0];
+        Map<String, dynamic> qodData = jsonDecode(response.body)['contents']['quotes'][0];
         qod = [
           today,
           qodData['quote'],
