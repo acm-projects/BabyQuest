@@ -70,7 +70,6 @@ class BabyProfile {
     }
   }
 
-
   double get heightIn => _height ?? 0;
   String get height {
     return heightIn.toInt().toString() + '"';
@@ -91,13 +90,32 @@ class BabyProfile {
     int days = DateTime.now().difference(birthDate!).inDays;
 
     if (days < 7) {
-      return days.toString() + ' days';
+      if (days == 1) {
+        return days.toString() + ' day';
+      } else {
+        return days.toString() + ' days';
+      }
     } else if (days < 30.44) {
-      return (days / 7).floor().toString() + ' weeks';
+      int weeks = (days / 7).floor();
+      if (weeks == 1) {
+        return weeks.toString() + ' week';
+      } else {
+        return weeks.toString() + ' weeks';
+      }
     } else if (days < 365.25) {
-      return (days / 30.44).floor().toString() + ' months';
+      int months = (days / 30.44).floor();
+      if (months == 1) {
+        return months.toString() + ' month';
+      } else {
+        return months.toString() + ' months';
+      }
     } else {
-      return (days / 365.25).floor().toString() + ' years';
+      int years = (days / 365.25).floor();
+      if (years == 1) {
+        return years.toString() + ' year';
+      } else {
+        return years.toString() + ' years';
+      }
     }
   } //will calcuate age in days, weeks, months, or years and return as String
 
@@ -146,7 +164,8 @@ class BabyProfile {
 
     _pediatrician = profileData['pediatrician'];
     _pediatricianPhone = profileData['pediatrician_phone'];
-    _formattedPedPhone = (await FlutterLibphonenumber().format(pediatricianPhone, 'US'))['formatted'];
+    _formattedPedPhone = (await FlutterLibphonenumber()
+        .format(pediatricianPhone, 'US'))['formatted'];
 
     _profilePic = profileData['profile_pic'] as String;
 
