@@ -323,7 +323,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
       context: context,
       initialDate: _currentDate, // Refer step 1
       firstDate: _startDate,
-      lastDate: _startDate.add(Duration(days:_endDateIndex - 1)),
+      lastDate: _startDate.add(Duration(days: _endDateIndex - 1)),
     );
   }
 }

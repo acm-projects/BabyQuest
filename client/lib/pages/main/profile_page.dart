@@ -537,7 +537,7 @@ class _ProfilePageState extends State<ProfilePage> {
           backgroundColor: Theme.of(context).colorScheme.secondary,
           animatedIcon: AnimatedIcons.menu_close,
           overlayColor: Colors.black,
-          overlayOpacity: .3,
+          overlayOpacity: .2,
           spacing: 12,
           spaceBetweenChildren: 12,
           buttonSize: 64,
@@ -630,7 +630,6 @@ class _ProfilePageState extends State<ProfilePage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           titlePadding: const EdgeInsets.only(left: 16, top: 16, bottom: 8),
           contentPadding: const EdgeInsets.symmetric(horizontal: 16),
           actionsPadding:
