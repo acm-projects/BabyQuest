@@ -58,6 +58,9 @@ class _MyAppState extends State<MyApp> {
             secondary: Colors.green.shade200,
             onSecondary: Colors.green.shade200.darken(40).desaturate(25),
           ),
+          iconTheme: IconThemeData(
+            color: Colors.grey.shade700,
+          ),
           dialogBackgroundColor: const Color(0xFFFFF2CC),
           snackBarTheme: SnackBarThemeData(
             elevation: 0,

@@ -82,8 +82,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     end: Alignment.bottomCenter,
                                   ).createShader(bounds),
                                   child: CachedNetworkImage(
-                                    placeholder: (context, url) =>
-                                        const Center(child: CircularProgressIndicator()),
+                                    placeholder: (context, url) => const Center(
+                                        child: CircularProgressIndicator()),
                                     fit: BoxFit.cover,
                                     height: constraints.maxHeight,
                                     alignment: Alignment.topCenter,

@@ -146,8 +146,8 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                             Theme(
                               data: Theme.of(context)
                                   .copyWith(canvasColor: Colors.green.shade200),
-                              child: EditProfileWidgets.allergies(
-                                  allergyNames, allergySeverities, removeAllergyFields),
+                              child: EditProfileWidgets.allergies(allergyNames,
+                                  allergySeverities, removeAllergyFields),
                             ),
                           ],
                         ),
