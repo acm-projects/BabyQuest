@@ -4,12 +4,13 @@ import 'package:client/services/auth_service.dart';
 import 'package:client/widgets/dotted_divider.dart';
 import 'package:client/widgets/edit_profile_widgets.dart';
 import 'package:client/widgets/icon_information.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
   final Function creatingNewProfile;
@@ -64,87 +65,94 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       AspectRatio(
                         aspectRatio: 39 / 30,
-                        child: Stack(
-                          children: [
-                            ShaderMask(
-                              blendMode: BlendMode.darken,
-                              shaderCallback: (Rect bounds) =>
-                                  const LinearGradient(
-                                colors: [Colors.transparent, Colors.black45],
-                                begin: Alignment.center,
-                                end: Alignment.bottomCenter,
-                              ).createShader(bounds),
-                              child: Container(
-                                child: null,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    alignment: Alignment.topCenter,
-                                    image: NetworkImage(currentBby.profilePic),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
+                        child: LayoutBuilder(
+                          builder: (BuildContext context,
+                              BoxConstraints constraints) {
+                            return Stack(
                               children: [
-                                Align(
-                                  alignment: Alignment.bottomLeft,
-                                  child: Container(
-                                    padding: const EdgeInsets.only(left: 16),
-                                    child: Text(
-                                      currentBby.name,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 40,
-                                          color: Colors.white),
-                                    ),
+                                ShaderMask(
+                                  blendMode: BlendMode.darken,
+                                  shaderCallback: (Rect bounds) =>
+                                      const LinearGradient(
+                                    colors: [
+                                      Colors.transparent,
+                                      Colors.black45
+                                    ],
+                                    begin: Alignment.center,
+                                    end: Alignment.bottomCenter,
+                                  ).createShader(bounds),
+                                  child: CachedNetworkImage(
+                                    placeholder: (context, url) =>
+                                        const Center(child: CircularProgressIndicator()),
+                                    fit: BoxFit.cover,
+                                    height: constraints.maxHeight,
+                                    alignment: Alignment.topCenter,
+                                    imageUrl: currentBby.profilePic,
                                   ),
                                 ),
-                                const Spacer(),
-                                if (editMode)
-                                  Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: IconButton(
-                                      onPressed: () async {
-                                        final name = TextEditingController(
-                                            text: currentBby.name);
-                                        final image = TextEditingController(
-                                            text: currentBby.profilePic);
-
-                                        await _showEditDialog(
-                                          context: context,
-                                          label: 'Baby Name',
-                                          field: Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              EditProfileWidgets.name(
-                                                  name, false),
-                                              const SizedBox(
-                                                height: 16,
-                                              ),
-                                              EditProfileWidgets.profilePicture(
-                                                  image),
-                                            ],
-                                          ),
-                                          updateData: () {
-                                            currentBby.updateData(
-                                                {'name': name.text});
-                                            if (image.text !=
-                                                currentBby.profilePic) {
-                                              currentBby.updateProfileImage(
-                                                  image.text);
-                                            }
-                                          },
-                                        );
-                                      },
-                                      color: Colors.white,
-                                      icon: const Icon(Icons.edit),
+                                Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: Container(
+                                        padding:
+                                            const EdgeInsets.only(left: 16),
+                                        child: Text(
+                                          currentBby.name,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 40,
+                                              color: Colors.white),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    const Spacer(),
+                                    if (editMode)
+                                      Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: IconButton(
+                                          onPressed: () async {
+                                            final name = TextEditingController(
+                                                text: currentBby.name);
+                                            final image = TextEditingController(
+                                                text: currentBby.profilePic);
+
+                                            await _showEditDialog(
+                                              context: context,
+                                              label: 'Baby Name',
+                                              field: Column(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  EditProfileWidgets.name(
+                                                      name, false),
+                                                  const SizedBox(
+                                                    height: 16,
+                                                  ),
+                                                  EditProfileWidgets
+                                                      .profilePicture(image),
+                                                ],
+                                              ),
+                                              updateData: () {
+                                                currentBby.updateData(
+                                                    {'name': name.text});
+                                                if (image.text !=
+                                                    currentBby.profilePic) {
+                                                  currentBby.updateProfileImage(
+                                                      image.text);
+                                                }
+                                              },
+                                            );
+                                          },
+                                          color: Colors.white,
+                                          icon: const Icon(Icons.edit),
+                                        ),
+                                      ),
+                                  ],
+                                )
                               ],
-                            )
-                          ],
+                            );
+                          },
                         ),
                       ),
                       Container(

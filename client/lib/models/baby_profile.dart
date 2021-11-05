@@ -126,19 +126,12 @@ class BabyProfile {
 
   Future _setData(Map<String, dynamic> profileData) async {
     _created = DateTime.parse(profileData['created'] as String);
-    print('created: $_created');
     _name = profileData['name'] as String;
-    print('name: $_name');
     _gender = profileData['gender'] as int;
-    print('gender: $_gender');
     _height = profileData['height'] as double;
-    print('height: $_height');
     _weightLb = profileData['weightLb'] as double;
-    print('weightLb: $_weightLb');
     _weightOz = profileData['weightOz'] as double;
-    print('weightOz: $_weightOz');
     _birthDate = DateTime.parse(profileData['birth_date'] as String);
-    print('birthDate: $_birthDate');
     _allergies =
         (profileData['allergies'] as Map<String, dynamic>).map((key, value) {
       return MapEntry(key, value as int);

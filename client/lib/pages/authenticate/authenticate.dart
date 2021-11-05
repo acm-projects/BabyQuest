@@ -34,7 +34,7 @@ class _AuthenticateState extends State<Authenticate> {
   }
 
   Widget _buildTitle() {
-    String title = register ? 'Create a new account' : 'Welcome to New Parent';
+    String title = register ? 'Create a new account' : 'Welcome to BabyQuest';
     String subtitle =
         register ? 'Sign up to get started:' : 'Sign in to continue:';
 
