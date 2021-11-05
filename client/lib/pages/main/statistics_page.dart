@@ -322,8 +322,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
     return await showDatePicker(
       context: context,
       initialDate: _currentDate, // Refer step 1
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
+      firstDate: _startDate,
+      lastDate: _startDate.add(Duration(days: _endDateIndex - 1)),
     );
   }
 }

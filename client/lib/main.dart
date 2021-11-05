@@ -52,12 +52,13 @@ class _MyAppState extends State<MyApp> {
             primarySwatch: createMaterialColor(Colors.deepPurple.shade300),
           ).copyWith(
             onPrimary: Colors.white,
-            background:  const Color(0xFFFFF2CC),
+            background: const Color(0xFFFFF2CC),
             onBackground: Colors.grey.shade700,
             onSurface: Colors.grey.shade700,
             secondary: Colors.green.shade200,
             onSecondary: Colors.green.shade200.darken(40).desaturate(25),
           ),
+          dialogBackgroundColor: const Color(0xFFFFF2CC),
           snackBarTheme: SnackBarThemeData(
             elevation: 0,
             backgroundColor: Colors.green.shade200,
