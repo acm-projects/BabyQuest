@@ -765,54 +765,23 @@ class _ProfilePageState extends State<ProfilePage> {
     return allergies;
   }
 
-  List<Widget> _buildShareProfile() {
-    if (AppUser.currentUser != null &&
-        !AppUser.currentUser!.ownedProfiles.contains(currentBby.uid)) return [];
-
-    return [
-      const Spacer(),
-      LabeledIconButton(
-        icon: const Icon(Icons.share),
-        label: 'Share Info',
-        onPressed: () async {
-          Map<String, String> newUsers = {};
-          List<String> removedUsers = [];
-
-          await _showEditDialog(
-            context: context,
-            label: 'Share Settings',
-            field: await EditProfileWidgets.shareProfile(currentBby.uid,
-                AppUser.currentUser?.email ?? '', newUsers, removedUsers),
-            updateData: () {
-              currentBby.updatePermissions(newUsers, removedUsers);
-            },
-          );
-        },
-      ),
-    ];
-  }
-
   Widget _buildProfileButton(String profileId, bool shared) {
     String profileName = AppUser.currentUser!.profileNames[profileId] ?? '';
 
-    return ListTile(
-      leading: const FaIcon(FontAwesomeIcons.baby),
-      dense: true,
-      title: Text(
-        profileName,
-        style: Theme.of(context).textTheme.headline3,
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: 8.0,
       ),
-      subtitle: shared
-          ? Text(
-              'Shared with you',
-              style: Theme.of(context).textTheme.subtitle1,
-            )
-          : null,
-      onTap: () async {
-        Navigator.pop(context);
-        AppUser.currentUser?.setCurrentProfile(profileId);
-        widget.refresh();
-      },
+      child: IconInformation(
+        topText: profileName,
+        bottomText: shared ? 'Shared with you' : null,
+        enabled: true,
+        onTap: () async {
+          Navigator.pop(context);
+          AppUser.currentUser?.setCurrentProfile(profileId);
+          widget.refresh();
+        },
+      ),
     );
   }
 

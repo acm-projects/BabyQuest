@@ -73,23 +73,53 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   onStepCancel: cancel,
                   controlsBuilder: (context, {onStepContinue, onStepCancel}) {
                     return Container(
-                      margin: const EdgeInsets.only(top: 64),
-                      child: Row(
+                      margin: const EdgeInsets.only(
+                        top: 64,
+                      ),
+                      child: Column(
                         children: [
-                          if (_currentStep != 0)
-                            Expanded(
-                              child: ElevatedButton(
-                                child: const Text('Back'),
-                                onPressed: onStepCancel,
+                          Row(
+                            children: [
+                              OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  backgroundColor: Colors.transparent,
+                                ),
+                                child: SizedBox(
+                                  width: 64,
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    child: Center(
+                                      child: Text(
+                                        'Cancel',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline3,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  cancel();
+                                },
                               ),
-                            ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: ElevatedButton(
-                              child: Text(
-                                  _currentStep == 2 ? 'Submit' : 'Continue'),
-                              onPressed: onStepContinue,
-                            ),
+                              if (_currentStep != 0)
+                                Expanded(
+                                  child: ElevatedButton(
+                                    child: const Text('Back'),
+                                    onPressed: onStepCancel,
+                                  ),
+                                ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: ElevatedButton(
+                                  child: Text(_currentStep == 2
+                                      ? 'Submit'
+                                      : 'Continue'),
+                                  onPressed: onStepContinue,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
