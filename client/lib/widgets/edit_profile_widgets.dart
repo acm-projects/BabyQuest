@@ -448,8 +448,8 @@ class EditProfileWidgets {
     return sharedUserWidgets;
   }
 
-  static Future shareProfile(String profileId, String currentUserEmail, Map<String, String> newUsers,
-      List<String> removedUsers) async {
+  static Future shareProfile(String profileId, String currentUserEmail,
+      Map<String, String> newUsers, List<String> removedUsers) async {
     Map<String, String> currentUsers =
         await DataService.getProfileSharedUsers(profileId);
 
@@ -465,6 +465,10 @@ class EditProfileWidgets {
                 width: 150,
                 child: TextField(
                   controller: newUserEmail,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.person),
+                    labelText: 'User Email',
+                  ),
                 ),
               ),
               TextButton(
