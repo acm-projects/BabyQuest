@@ -46,13 +46,8 @@ class _ProfilePageState extends State<ProfilePage> {
         extendBodyBehindAppBar: true,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          elevation: 0.0,
+          elevation: 0,
           backgroundColor: Colors.transparent,
-        ),
-        drawer: Drawer(
-          child: ListView(
-            children: _buildProfiles(),
-          ),
         ),
         body: StreamBuilder(
           stream: BabyProfile.updateStream,
@@ -544,28 +539,27 @@ class _ProfilePageState extends State<ProfilePage> {
           childrenButtonSize: 64,
           openCloseDial: isDialOpen,
           animationSpeed: 0,
+          elevation: 0,
           children: [
             SpeedDialChild(
-              child: const Icon(Icons.logout),
-              label: 'Sign Out',
+              elevation: 0,
+              child: const FaIcon(FontAwesomeIcons.baby),
+              label: 'Switch Baby',
               foregroundColor: Theme.of(context).colorScheme.onSecondary,
               backgroundColor: Theme.of(context).colorScheme.secondary,
-              onTap: () {
-                final provider =
-                    Provider.of<AuthService>(context, listen: false);
-                provider.signOut();
+              onTap: () async {
+                await _showEditDialog(
+                  context: context,
+                  label: 'Switch Baby',
+                  field: Column(
+                    children: _buildProfiles(),
+                  ),
+                  updateData: () {},
+                );
               },
             ),
             SpeedDialChild(
-              child: const Icon(Icons.phone),
-              label: 'Pediatrician',
-              foregroundColor: Theme.of(context).colorScheme.onSecondary,
-              backgroundColor: Theme.of(context).colorScheme.secondary,
-              onTap: () {
-                launch('tel://' + currentBby.pediatricianPhone);
-              },
-            ),
-            SpeedDialChild(
+              elevation: 0,
               child: const Icon(Icons.edit),
               label: 'Edit Info',
               foregroundColor: Theme.of(context).colorScheme.onSecondary,
@@ -585,6 +579,17 @@ class _ProfilePageState extends State<ProfilePage> {
               }),
             ),
             SpeedDialChild(
+              elevation: 0,
+              child: const Icon(Icons.phone),
+              label: 'Pediatrician',
+              foregroundColor: Theme.of(context).colorScheme.onSecondary,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              onTap: () {
+                launch('tel://' + currentBby.pediatricianPhone);
+              },
+            ),
+            SpeedDialChild(
+              elevation: 0,
               child: const Icon(Icons.share),
               label: 'Share',
               foregroundColor: Theme.of(context).colorScheme.onSecondary,
@@ -605,11 +610,16 @@ class _ProfilePageState extends State<ProfilePage> {
               },
             ),
             SpeedDialChild(
-              child: const FaIcon(FontAwesomeIcons.baby),
-              label: 'Switch Baby',
+              elevation: 0,
+              child: const Icon(Icons.logout),
+              label: 'Sign Out',
               foregroundColor: Theme.of(context).colorScheme.onSecondary,
               backgroundColor: Theme.of(context).colorScheme.secondary,
-              onTap: () async {},
+              onTap: () {
+                final provider =
+                    Provider.of<AuthService>(context, listen: false);
+                provider.signOut();
+              },
             ),
           ],
         ),
@@ -635,7 +645,7 @@ class _ProfilePageState extends State<ProfilePage> {
           actionsPadding:
               const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           title: Text(
-            'Editing ' + label,
+            label,
             style: Theme.of(context).textTheme.headline2,
           ),
           content: SingleChildScrollView(
@@ -786,8 +796,18 @@ class _ProfilePageState extends State<ProfilePage> {
     String profileName = AppUser.currentUser!.profileNames[profileId] ?? '';
 
     return ListTile(
-      title: Text(profileName),
-      subtitle: shared ? const Text('Shared with you') : null,
+      leading: const FaIcon(FontAwesomeIcons.baby),
+      dense: true,
+      title: Text(
+        profileName,
+        style: Theme.of(context).textTheme.headline3,
+      ),
+      subtitle: shared
+          ? Text(
+              'Shared with you',
+              style: Theme.of(context).textTheme.subtitle1,
+            )
+          : null,
       onTap: () async {
         Navigator.pop(context);
         AppUser.currentUser?.setCurrentProfile(profileId);
@@ -810,7 +830,14 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     profiles.add(ListTile(
-      title: const Text('Create New Profile'),
+      title: Text(
+        'Create New Profile',
+        textAlign: TextAlign.right,
+        style: Theme.of(context)
+            .textTheme
+            .subtitle1!
+            .copyWith(color: Theme.of(context).colorScheme.primary),
+      ),
       onTap: () async {
         Navigator.pop(context);
         widget.creatingNewProfile(finished: false);
