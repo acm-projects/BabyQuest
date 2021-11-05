@@ -105,7 +105,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   int _getDateIndex(DateTime date) {
-    return date.difference(_startDate).inDays + 1;
+    return date.difference(_startDate).inDays;
   }
 
   void _jumpToIndex(int index) {
@@ -350,16 +350,16 @@ class MainDayCircle extends StatelessWidget {
           width: 150,
           padding: const EdgeInsets.all(16),
           child: TweenAnimationBuilder<double>(
-            tween: Tween<double>(begin: 0, end: sleepMins / 1020), // 17 hours
+            tween: Tween<double>(begin: 0, end: sleepMins / 960), // 16 hours
             duration: const Duration(milliseconds: 500),
             curve: Curves.decelerate,
             builder: (BuildContext context, double progress, Widget? child) {
               return FractionCircle(
                 backgroundCircleColor: Colors.black12,
-                fraction: progress / 10,
+                fraction: progress.clamp(0, 1),
                 strokeWidth: 13,
                 child: Text(
-                  '${(progress * 10).round()}%',
+                  '${(progress * 100).round().clamp(0, 100)}%',
                   style: TextStyle(
                       fontSize: 40,
                       fontWeight: FontWeight.w900,
