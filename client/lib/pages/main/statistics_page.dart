@@ -80,7 +80,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
   void _setSelectedDateTime() {
     _currentDate = _startDate.add(Duration(days: _selectedIndex));
     DayStats stats = currentBby.getDayStats(_currentDate);
-    bool isFirst = true;
 
     _feedingCount = stats.feedings.length;
     _diaperCount = stats.diaperChanges.length;
@@ -95,11 +94,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
           startDate: startTime,
           startTime: _getFormattedTime(startTime),
           endTime: _getFormattedTime(endTime),
-          isFirst: isFirst,
         ),
       );
-
-      isFirst = false;
     });
 
     sleepSessions.sort((left, right) {
