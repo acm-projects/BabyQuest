@@ -64,6 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           builder: (BuildContext context,
                               BoxConstraints constraints) {
                             return Stack(
+                              fit: StackFit.expand,
                               children: [
                                 ShaderMask(
                                   blendMode: BlendMode.darken,
@@ -588,27 +589,33 @@ class _ProfilePageState extends State<ProfilePage> {
                 launch('tel://' + currentBby.pediatricianPhone);
               },
             ),
-            SpeedDialChild(
-              elevation: 0,
-              child: const Icon(Icons.share),
-              label: 'Share',
-              foregroundColor: Theme.of(context).colorScheme.onSecondary,
-              backgroundColor: Theme.of(context).colorScheme.secondary,
-              onTap: () async {
-                Map<String, String> newUsers = {};
-                List<String> removedUsers = [];
+            if (AppUser.currentUser != null &&
+                AppUser.currentUser!.ownedProfiles
+                    .contains(currentBby.uid)) //Only Show If They're The Owner
+              SpeedDialChild(
+                elevation: 0,
+                child: const Icon(Icons.share),
+                label: 'Share',
+                foregroundColor: Theme.of(context).colorScheme.onSecondary,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                onTap: () async {
+                  Map<String, String> newUsers = {};
+                  List<String> removedUsers = [];
 
-                await _showEditDialog(
-                  context: context,
-                  label: 'Share Settings',
-                  field: await EditProfileWidgets.shareProfile(currentBby.uid,
-                      AppUser.currentUser?.email ?? '', newUsers, removedUsers),
-                  updateData: () {
-                    currentBby.updatePermissions(newUsers, removedUsers);
-                  },
-                );
-              },
-            ),
+                  await _showEditDialog(
+                    context: context,
+                    label: 'Share Settings',
+                    field: await EditProfileWidgets.shareProfile(
+                        currentBby.uid,
+                        AppUser.currentUser?.email ?? '',
+                        newUsers,
+                        removedUsers),
+                    updateData: () {
+                      currentBby.updatePermissions(newUsers, removedUsers);
+                    },
+                  );
+                },
+              ),
             SpeedDialChild(
               elevation: 0,
               child: const Icon(Icons.logout),

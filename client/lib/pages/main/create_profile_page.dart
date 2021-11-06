@@ -80,29 +80,31 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                         children: [
                           Row(
                             children: [
-                              OutlinedButton(
-                                style: OutlinedButton.styleFrom(
-                                  backgroundColor: Colors.transparent,
-                                ),
-                                child: SizedBox(
-                                  width: 64,
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 8),
-                                    child: Center(
-                                      child: Text(
-                                        'Cancel',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline3,
+                              if (AppUser.currentUser!.ownedProfiles
+                                  .isNotEmpty) //Only Show If User Already Has A Profile
+                                OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    backgroundColor: Colors.transparent,
+                                  ),
+                                  child: SizedBox(
+                                    width: 64,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8),
+                                      child: Center(
+                                        child: Text(
+                                          'Cancel',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline3,
+                                        ),
                                       ),
                                     ),
                                   ),
+                                  onPressed: () {
+                                    cancel();
+                                  },
                                 ),
-                                onPressed: () {
-                                  cancel();
-                                },
-                              ),
                               if (_currentStep != 0)
                                 Expanded(
                                   child: ElevatedButton(
@@ -246,6 +248,6 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
   }
 
   cancel() {
-    _currentStep > 0 ? setState(() => _currentStep -= 1) : null;
+    _currentStep > 0 ? setState(() => _currentStep -= 1) : widget.completed();
   }
 }
