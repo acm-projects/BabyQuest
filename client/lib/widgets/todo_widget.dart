@@ -62,7 +62,7 @@ class TodoWidget extends StatelessWidget {
 
   Widget buildTodo(BuildContext context) {
     return Container(
-      color: Colors.white30,
+      color: Colors.white38,
       padding: const EdgeInsets.only(top: 16, bottom: 16, right: 16),
       child: Row(
         children: [

@@ -25,12 +25,12 @@ class _ToDoPageState extends State<ToDoPage> {
       body: SingleChildScrollView(
         child: Container(
           decoration: const BoxDecoration(
-              image: DecorationImage(
-                  colorFilter:
-                      ColorFilter.mode(Color(0x15FFFFFF), BlendMode.dstATop),
-                  image: AssetImage('assets/images/undraw_mother.png'),
-                  fit: BoxFit.cover),
-              ),
+            image: DecorationImage(
+                colorFilter:
+                    ColorFilter.mode(Color(0x20FFFFFF), BlendMode.dstATop),
+                image: AssetImage('assets/images/undraw_mother.png'),
+                fit: BoxFit.cover),
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
