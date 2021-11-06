@@ -1,8 +1,10 @@
-import 'package:client/widgets/edit_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:client/widgets/add_todo_dialog_widget.dart';
+import 'package:client/models/app_user.dart';
+import 'package:client/models/todo.dart';
+import 'package:client/widgets/edit_dialog.dart';
+import 'package:client/widgets/todo_form.dart';
 import 'package:client/widgets/todo_list_widget.dart';
 import 'package:client/widgets/completed_list_widget.dart';
 
@@ -50,11 +52,23 @@ class _ToDoPageState extends State<ToDoPage> {
             child: FloatingActionButton(
               elevation: 0,
               onPressed: () async {
+                final title = TextEditingController();
+                final description = TextEditingController();
+
                 await showEditDialog(
                     context: context,
                     label: "Add Todo",
-                    field: const AddTodoDialogWidget(),
-                    updateData: () {},
+                    field: TodoFormWidget(title, description),
+                    updateData: () {
+                      final todo = Todo(
+                        id: DateTime.now().toString(),
+                        title: title.text,
+                        description: description.text,
+                        createdTime: DateTime.now(),
+                      );
+
+                      AppUser.currentUser?.updateTodo(todo);
+                    },
                     formKey: _formKey);
               },
               backgroundColor: Theme.of(context).colorScheme.secondary,
