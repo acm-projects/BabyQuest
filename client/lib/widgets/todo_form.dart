@@ -4,7 +4,8 @@ class TodoFormWidget extends StatelessWidget {
   final TextEditingController title;
   final TextEditingController description;
 
-  const TodoFormWidget(this.title, this.description, {Key? key}) : super(key: key);
+  const TodoFormWidget(this.title, this.description, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,10 @@ class TodoFormWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          buildTitle(),
+          Padding(
+            padding: const EdgeInsets.only(right: 128.0),
+            child: buildTitle(),
+          ),
           const SizedBox(height: 8),
           buildDescription(),
         ],
