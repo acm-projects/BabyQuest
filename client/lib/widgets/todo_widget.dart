@@ -77,7 +77,6 @@ class TodoWidget extends StatelessWidget {
               );
             },
           ),
-          const SizedBox(height: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
