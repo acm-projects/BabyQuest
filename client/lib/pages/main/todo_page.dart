@@ -16,32 +16,36 @@ class _ToDoPageState extends State<ToDoPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('To Do List'),
-            bottom: const TabBar(
-              tabs: [
-                Tab(
-                  icon: FaIcon(FontAwesomeIcons.listAlt),
-                  text: 'Todos',
-                ),
-                Tab(
-                  icon: FaIcon(FontAwesomeIcons.check),
-                  text: 'Completed',
-                ),
-              ],
-            ),
-          ),
-          body: const TabBarView(
-            children: [
-              TodoListWidget(),
-              CompletedListWidget(),
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('To Do List'),
+          bottom: const TabBar(
+            tabs: [
+              Tab(
+                icon: FaIcon(FontAwesomeIcons.listAlt),
+                text: 'Todos',
+              ),
+              Tab(
+                icon: FaIcon(FontAwesomeIcons.check),
+                text: 'Completed',
+              ),
             ],
           ),
-          floatingActionButton: Padding(
-            padding: const EdgeInsets.only(bottom: 15),
+        ),
+        body: const TabBarView(
+          children: [
+            TodoListWidget(),
+            CompletedListWidget(),
+          ],
+        ),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 24),
+          child: SizedBox(
+            width: 64,
+            height: 64,
             child: FloatingActionButton(
+              elevation: 0,
               onPressed: () => showDialog(
                 context: context,
                 barrierDismissible: true,
@@ -49,18 +53,15 @@ class _ToDoPageState extends State<ToDoPage> {
                   return const AddTodoDialogWidget();
                 },
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              child: Icon(
+                Icons.add,
+                color: Theme.of(context).colorScheme.onSecondary,
               ),
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              child: const Icon(Icons.add, color: Colors.black,),
             ),
           ),
-
         ),
+      ),
     );
   }
 }
-
-
-

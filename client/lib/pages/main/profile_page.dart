@@ -2,6 +2,7 @@ import 'package:client/models/app_user.dart';
 import 'package:client/models/baby_profile.dart';
 import 'package:client/services/auth_service.dart';
 import 'package:client/widgets/dotted_divider.dart';
+import 'package:client/widgets/edit_dialog.dart';
 import 'package:client/widgets/edit_profile_widgets.dart';
 import 'package:client/widgets/icon_information.dart';
 
@@ -114,7 +115,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             final image = TextEditingController(
                                                 text: currentBby.profilePic);
 
-                                            await _showEditDialog(
+                                            await showEditDialog(
                                               context: context,
                                               label: 'Baby Name',
                                               field: Column(
@@ -138,6 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       image.text);
                                                 }
                                               },
+                                              formKey: _formKey,
                                             );
                                           },
                                           color: Colors.white,
@@ -206,7 +208,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                 .genderRaw
                                                                 .toString());
 
-                                                    await _showEditDialog(
+                                                    await showEditDialog(
                                                       context: context,
                                                       label: 'Gender',
                                                       field: EditProfileWidgets
@@ -218,6 +220,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                         'gender': int.parse(
                                                             gender.text)
                                                       }),
+                                                      formKey: _formKey,
                                                     );
                                                   },
                                                 ),
@@ -242,7 +245,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                 .weightOz
                                                                 .toString());
 
-                                                    await _showEditDialog(
+                                                    await showEditDialog(
                                                         context: context,
                                                         label: 'Weight',
                                                         field:
@@ -261,7 +264,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                   double.parse(
                                                                       weightOz
                                                                           .text)
-                                                            }));
+                                                            }),
+                                                        formKey: _formKey);
                                                   },
                                                 ),
                                               ],
@@ -286,14 +290,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                 .birthDate
                                                                 .toString());
 
-                                                    await _showEditDialog(
+                                                    await showEditDialog(
                                                         context: context,
                                                         label: 'Date of Birth',
-                                                        field:
-                                                            EditProfileWidgets
-                                                                .birthDate(
-                                                                    context,
-                                                                    birthDate),
+                                                        field: EditProfileWidgets
+                                                            .birthDate(context,
+                                                                birthDate),
                                                         updateData: () =>
                                                             currentBby
                                                                 .updateData({
@@ -302,7 +304,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                       .split(
                                                                           ' ')
                                                                       .first
-                                                            }));
+                                                            }),
+                                                        formKey: _formKey);
                                                   },
                                                 ),
                                                 const SizedBox(
@@ -320,7 +323,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                 .heightIn
                                                                 .toString());
 
-                                                    await _showEditDialog(
+                                                    await showEditDialog(
                                                         context: context,
                                                         label: 'Height',
                                                         field:
@@ -333,7 +336,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                   double.parse(
                                                                       height
                                                                           .text)
-                                                            }));
+                                                            }),
+                                                        formKey: _formKey);
                                                   },
                                                 )
                                               ],
@@ -375,7 +379,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   TextEditingController(
                                                       text: currentBby
                                                           .pediatrician);
-                                              await _showEditDialog(
+                                              await showEditDialog(
                                                 context: context,
                                                 label: 'Pediatrician Name',
                                                 field: EditProfileWidgets
@@ -385,6 +389,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   'pediatrician':
                                                       pediatrician.text
                                                 }),
+                                                formKey: _formKey,
                                               );
                                             },
                                           ),
@@ -405,7 +410,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                           .replaceAll('(', '')
                                                           .replaceAll(
                                                               ') ', '-'));
-                                              await _showEditDialog(
+                                              await showEditDialog(
                                                   context: context,
                                                   label: 'Pediatrician Phone',
                                                   field: EditProfileWidgets
@@ -417,7 +422,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             pedPhone.text
                                                                 .replaceAll(
                                                                     '-', '')
-                                                      }));
+                                                      }),
+                                                  formKey: _formKey);
                                             },
                                           ),
                                         ],
@@ -465,7 +471,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             .toList();
                                                     List<int> remove = [];
 
-                                                    await _showEditDialog(
+                                                    await showEditDialog(
                                                       context: context,
                                                       label: 'Allergies',
                                                       field: EditProfileWidgets
@@ -489,6 +495,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                   allergySeverities)
                                                         });
                                                       },
+                                                      formKey: _formKey,
                                                     );
                                                   },
                                                   splashColor: Theme.of(context)
@@ -549,13 +556,14 @@ class _ProfilePageState extends State<ProfilePage> {
               foregroundColor: Theme.of(context).colorScheme.onSecondary,
               backgroundColor: Theme.of(context).colorScheme.secondary,
               onTap: () async {
-                await _showEditDialog(
+                await showEditDialog(
                   context: context,
                   label: 'Switch Baby',
                   field: Column(
                     children: _buildProfiles(),
                   ),
                   updateData: () {},
+                  formKey: _formKey,
                 );
               },
             ),
@@ -602,7 +610,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Map<String, String> newUsers = {};
                   List<String> removedUsers = [];
 
-                  await _showEditDialog(
+                  await showEditDialog(
                     context: context,
                     label: 'Share Settings',
                     field: await EditProfileWidgets.shareProfile(
@@ -613,6 +621,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     updateData: () {
                       currentBby.updatePermissions(newUsers, removedUsers);
                     },
+                    formKey: _formKey,
                   );
                 },
               ),
@@ -634,95 +643,6 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Future<void> _showEditDialog({
-    required BuildContext context,
-    required String label,
-    required Widget field,
-    required Function updateData,
-  }) async {
-    return await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          titlePadding: const EdgeInsets.only(left: 16, top: 16, bottom: 8),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-          actionsPadding:
-              const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-          title: Text(
-            label,
-            style: Theme.of(context).textTheme.headline2,
-          ),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const DottedDivider(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Form(
-                      key: _formKey,
-                      child: field,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                backgroundColor: Colors.transparent,
-              ),
-              child: SizedBox(
-                width: 64,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Center(
-                    child: Text(
-                      'Cancel',
-                      style: Theme.of(context).textTheme.headline3,
-                    ),
-                  ),
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            const SizedBox(
-              width: 16,
-            ),
-            OutlinedButton(
-              child: SizedBox(
-                width: 64,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Center(
-                    child: Text(
-                      'Save',
-                      style: Theme.of(context).textTheme.headline3,
-                    ),
-                  ),
-                ),
-              ),
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  updateData();
-                  Navigator.of(context).pop();
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   List<Widget> _buildAllergies() {
     List<String> severities = ['Mild', 'Moderate', 'Severe'];
     List<Widget> allergies = [];
@@ -739,7 +659,7 @@ class _ProfilePageState extends State<ProfilePage> {
             List<int> allergySeverities = currentBby.allergies.values.toList();
             List<int> remove = [];
 
-            await _showEditDialog(
+            await showEditDialog(
               context: context,
               label: 'Allergies',
               field: EditProfileWidgets.allergies(
@@ -755,6 +675,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Map.fromIterables(allergyNames, allergySeverities)
                 });
               },
+              formKey: _formKey,
             );
           },
         ),
