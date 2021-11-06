@@ -92,6 +92,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
       sleepSessions.add(
         SleepInformation(
+          startDate: startTime,
           startTime: _getFormattedTime(startTime),
           endTime: _getFormattedTime(endTime),
           isFirst: isFirst,
@@ -100,6 +101,14 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
       isFirst = false;
     });
+
+    sleepSessions.sort((left, right) {
+      return left.startDate.millisecondsSinceEpoch.compareTo(right.startDate.millisecondsSinceEpoch);
+    });
+
+    if (sleepSessions.isNotEmpty) {
+      sleepSessions.first.isFirst = true;
+    }
 
     setState(() {});
   }
@@ -402,16 +411,18 @@ class MainDayCircle extends StatelessWidget {
 }
 
 class SleepInformation extends StatelessWidget {
-  const SleepInformation({
+  final DateTime startDate;
+  final String startTime;
+  final String endTime;
+  bool isFirst;
+
+  SleepInformation({
     Key? key,
+    required this.startDate,
     required this.startTime,
     required this.endTime,
     this.isFirst = false,
   }) : super(key: key);
-
-  final String startTime;
-  final String endTime;
-  final bool isFirst;
 
   @override
   Widget build(BuildContext context) {

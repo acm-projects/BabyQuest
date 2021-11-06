@@ -1,6 +1,5 @@
 import 'package:client/widgets/dotted_divider.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:client/models/app_user.dart';
 import 'package:client/models/todo.dart';
