@@ -39,7 +39,7 @@ class EditProfileWidgets {
       context: context,
       initialDate: initialDate, // Refer step 1
       firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
+      lastDate: DateTime.now(),
     );
 
     if (selectedDate != null &&
