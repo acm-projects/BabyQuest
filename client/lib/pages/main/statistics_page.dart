@@ -99,7 +99,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
     });
 
     sleepSessions.sort((left, right) {
-      return left.startDate.millisecondsSinceEpoch.compareTo(right.startDate.millisecondsSinceEpoch);
+      return left.startDate.millisecondsSinceEpoch
+          .compareTo(right.startDate.millisecondsSinceEpoch);
     });
 
     if (sleepSessions.isNotEmpty) {
@@ -235,7 +236,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                 return DayCircle(
                                   fraction:
                                       _getDaySleepMins(index * 7 + listIndex) /
-                                          1020,
+                                          960,
                                   date:
                                       '${_startDate.add(Duration(days: index * 7 + listIndex)).day}',
                                   day: days[_startDate
