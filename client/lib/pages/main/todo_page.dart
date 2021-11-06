@@ -37,21 +37,9 @@ class _ToDoPageState extends State<ToDoPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 48),
-                RichText(
-                  text: TextSpan(
-                      text: 'To Do',
-                      style: Theme.of(context).textTheme.headline1),
-                ),
-                const DottedDivider(),
-                const TodoListWidget(),
+                _todoDivider(),
                 const SizedBox(height: 16),
-                RichText(
-                  text: TextSpan(
-                      text: 'Completed',
-                      style: Theme.of(context).textTheme.headline1),
-                ),
-                const DottedDivider(),
-                const CompletedListWidget(),
+                _completedDivider(),
                 const SizedBox(height: 128),
               ],
             ),
@@ -92,6 +80,50 @@ class _ToDoPageState extends State<ToDoPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _todoDivider() {
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        initiallyExpanded: true,
+        tilePadding: EdgeInsets.zero,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RichText(
+              text: TextSpan(
+                  text: 'To Do', style: Theme.of(context).textTheme.headline1),
+            ),
+            const DottedDivider(),
+          ],
+        ),
+        childrenPadding: EdgeInsets.zero,
+        children: const [TodoListWidget()],
+      ),
+    );
+  }
+
+  Widget _completedDivider() {
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        tilePadding: EdgeInsets.zero,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RichText(
+              text: TextSpan(
+                  text: 'Completed',
+                  style: Theme.of(context).textTheme.headline1),
+            ),
+            const DottedDivider(),
+          ],
+        ),
+        childrenPadding: EdgeInsets.zero,
+        children: const [CompletedListWidget()],
       ),
     );
   }

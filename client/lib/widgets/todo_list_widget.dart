@@ -19,10 +19,13 @@ class _TodoListWidgetState extends State<TodoListWidget> {
       builder: (context, snapshot) {
         List<Todo> todos = AppUser.currentUser?.todosInProgress ?? [];
         return todos.isEmpty
-            ? const Center(
-                child: Text(
-                  'No todos',
-                  style: TextStyle(fontSize: 20),
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 128.0),
+                  child: Text(
+                    'No Todos',
+                    style: Theme.of(context).textTheme.headline2,
+                  ),
                 ),
               )
             : ListView.separated(

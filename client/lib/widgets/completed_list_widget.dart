@@ -19,10 +19,13 @@ class _CompletedListWidgetState extends State<CompletedListWidget> {
       builder: (context, snapshot) {
         List<Todo> completed = AppUser.currentUser?.todosCompleted ?? [];
         return completed.isEmpty
-            ? const Center(
-                child: Text(
-                  'No completed tasks',
-                  style: TextStyle(fontSize: 20),
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 128.0),
+                  child: Text(
+                    'No Completed Tasks',
+                    style: Theme.of(context).textTheme.headline2,
+                  ),
                 ),
               )
             : ListView.separated(
