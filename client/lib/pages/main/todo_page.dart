@@ -22,46 +22,41 @@ class _ToDoPageState extends State<ToDoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder(
-        stream: AppUser.updateStream,
-        builder: (context, snapshot) {
-          return SingleChildScrollView(
-            child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                    colorFilter:
-                        ColorFilter.mode(Color(0x15FFFFFF), BlendMode.dstATop),
-                    image: AssetImage('assets/images/undraw_mother.png'),
-                    fit: BoxFit.cover),
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  colorFilter:
+                      ColorFilter.mode(Color(0x15FFFFFF), BlendMode.dstATop),
+                  image: AssetImage('assets/images/undraw_mother.png'),
+                  fit: BoxFit.cover),
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 48),
-                    RichText(
-                      text: TextSpan(
-                          text: 'To Do',
-                          style: Theme.of(context).textTheme.headline1),
-                    ),
-                    const DottedDivider(),
-                    const TodoListWidget(),
-                    const SizedBox(height: 16),
-                    RichText(
-                      text: TextSpan(
-                          text: 'Completed',
-                          style: Theme.of(context).textTheme.headline1),
-                    ),
-                    const DottedDivider(),
-                    const CompletedListWidget(),
-                    const SizedBox(height: 128),
-                  ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 48),
+                RichText(
+                  text: TextSpan(
+                      text: 'To Do',
+                      style: Theme.of(context).textTheme.headline1),
                 ),
-              ),
+                const DottedDivider(),
+                const TodoListWidget(),
+                const SizedBox(height: 16),
+                RichText(
+                  text: TextSpan(
+                      text: 'Completed',
+                      style: Theme.of(context).textTheme.headline1),
+                ),
+                const DottedDivider(),
+                const CompletedListWidget(),
+                const SizedBox(height: 128),
+              ],
             ),
-          );
-        },
+          ),
+        ),
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 24),
