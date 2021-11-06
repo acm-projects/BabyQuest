@@ -17,28 +17,13 @@ class _AddTodoDialogWidgetState extends State<AddTodoDialogWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      content: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Add Todo',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 22,
-              ),
-            ),
-            TodoFormWidget(
-              onChangedTitle: (title) => setState(() => this.title = title),
-              onChangedDescription: (description) =>
-                  setState(() => this.description = description),
-              onSavedTodo: addTodo,
-            ),
-          ],
-        ),
+    return Form(
+      key: _formKey,
+      child: TodoFormWidget(
+        onChangedTitle: (title) => setState(() => this.title = title),
+        onChangedDescription: (description) =>
+            setState(() => this.description = description),
+        onSavedTodo: addTodo,
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:client/widgets/edit_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -13,6 +14,8 @@ class ToDoPage extends StatefulWidget {
 }
 
 class _ToDoPageState extends State<ToDoPage> {
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -46,13 +49,14 @@ class _ToDoPageState extends State<ToDoPage> {
             height: 64,
             child: FloatingActionButton(
               elevation: 0,
-              onPressed: () => showDialog(
-                context: context,
-                barrierDismissible: true,
-                builder: (BuildContext context) {
-                  return const AddTodoDialogWidget();
-                },
-              ),
+              onPressed: () async {
+                await showEditDialog(
+                    context: context,
+                    label: "Add Todo",
+                    field: const AddTodoDialogWidget(),
+                    updateData: () {},
+                    formKey: _formKey);
+              },
               backgroundColor: Theme.of(context).colorScheme.secondary,
               child: Icon(
                 Icons.add,
