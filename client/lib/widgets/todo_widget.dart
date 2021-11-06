@@ -1,14 +1,16 @@
+import 'package:client/widgets/edit_dialog.dart';
+import 'package:client/widgets/todo_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:client/models/todo.dart';
 import 'package:client/models/app_user.dart';
-import 'package:client/widgets/edit_todo_dialoag_widget.dart';
 
 class TodoWidget extends StatelessWidget {
   final Todo todo;
+  final _formKey = GlobalKey<FormState>();
 
-  const TodoWidget({
+  TodoWidget({
     required this.todo,
     Key? key,
   }) : super(key: key);
@@ -22,16 +24,22 @@ class TodoWidget extends StatelessWidget {
         key: Key(todo.id),
         actions: [
           IconSlideAction(
-            onTap: () => showDialog(
-              context: context,
-              barrierDismissible: true,
-              builder: (BuildContext context) {
-                return EditTodoDialogWidget(
-                  todo: todo,
-                  onDeleteTodo: deleteTodo,
-                );
-              },
-            ),
+            onTap: () async {
+              final title = TextEditingController(text: todo.title);
+              final description = TextEditingController(text: todo.description);
+
+              await showEditDialog(
+                  context: context,
+                  label: "Edit Todo",
+                  field: TodoFormWidget(title, description),
+                  updateData: () {
+                    todo.title = title.text;
+                    todo.description = description.text;
+
+                    AppUser.currentUser?.updateTodo(todo);
+                  },
+                  formKey: _formKey);
+            },
             color: Theme.of(context).colorScheme.secondary,
             foregroundColor: Theme.of(context).colorScheme.onSecondary,
             caption: 'Edit',
