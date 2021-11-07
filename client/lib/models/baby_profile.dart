@@ -54,7 +54,9 @@ class BabyProfile {
   // public accessors
   bool get exists => uid.isNotEmpty;
 
-  DateTime get created => _created ?? DateTime.now();
+  DateTime get created =>
+      _created ??
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
   String get name => _name ?? '';
 
   int get genderRaw => _gender ?? 0;
