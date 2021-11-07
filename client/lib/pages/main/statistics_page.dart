@@ -134,8 +134,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
     _startDate = DateTime(registrationDate.year, registrationDate.month,
         registrationDate.day - registrationDate.weekday % 7);
     _currentDateIndex = now.difference(_startDate).inDays;
-    _endDateIndex = _currentDateIndex + 7 - now.weekday;
-
+    _endDateIndex =
+        _currentDateIndex + 8 - now.weekday;
+        
     _pageIndex = _currentDateIndex ~/ 7;
     _selectedIndex = _currentDateIndex;
     pageController = PageController(
@@ -210,9 +211,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
                           color: Theme.of(context).colorScheme.secondary,
                         ),
                         onPressed: () async {
-                          DateTime targetDate = await _selectDate(context);
-                          int index = _getDateIndex(targetDate);
-                          _animateToIndex(index);
+                          final targetDate = await _selectDate(context);
+                          if (targetDate != null) {
+                            int index = _getDateIndex(targetDate);
+                            _animateToIndex(index);
+                          }
                         },
                       ),
                     ],
@@ -222,7 +225,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 SizedBox(
                   height: 130,
                   child: PageView.builder(
-                    itemCount: _endDateIndex ~/ 7,
+                    itemCount: (_endDateIndex / 7).ceil(),
                     controller: pageController,
                     onPageChanged: (int index) => _pageIndex = index,
                     itemBuilder: (context, index) {
