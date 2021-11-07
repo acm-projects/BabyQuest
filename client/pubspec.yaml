@@ -54,6 +54,7 @@ dependencies:
   url_launcher: ^6.0.12
   convex_bottom_bar: ^3.0.0
   flutter_speed_dial: ^4.6.6
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

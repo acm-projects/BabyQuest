@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -145,59 +146,65 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   const DottedDivider(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 16),
-                    child: InkWell(
-                      splashColor: Theme.of(context).colorScheme.primary,
-                      onTap: () {},
-                      onLongPress: () {
-                        Clipboard.setData(
-                          ClipboardData(text: '$_qodMessage - $_qodAuthor'),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          _getSnackBar(
-                            text: 'Quote Copied To Clipboard',
-                          ),
-                        );
-                      },
-                      child: FutureBuilder(
-                        future: _setup(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return Column(
-                              children: [
-                                Text(
-                                  _qodMessage,
-                                  style: Theme.of(context).textTheme.headline2,
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    '- ' + _qodAuthor,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline2!
-                                        .copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary),
-                                  ),
-                                ),
-                              ],
-                            );
-                          } else {
-                            return const CircularProgressIndicator();
-                          }
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 16),
+                      child: InkWell(
+                        splashColor: Theme.of(context).colorScheme.primary,
+                        onTap: () {},
+                        onLongPress: () {
+                          Clipboard.setData(
+                            ClipboardData(text: '$_qodMessage - $_qodAuthor'),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            _getSnackBar(
+                              text: 'Quote Copied To Clipboard',
+                            ),
+                          );
                         },
+                        child: FutureBuilder(
+                          future: _setup(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Flexible(
+                                    child: AutoSizeText(
+                                      _qodMessage,
+                                      style:
+                                          Theme.of(context).textTheme.headline2,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                      '- ' + _qodAuthor,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline2!
+                                          .copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return const CircularProgressIndicator();
+                            }
+                          },
+                        ),
                       ),
                     ),
                   ),
                   const DottedDivider(),
-                  const Spacer(),
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 32, right: 32, bottom: 48, top: 16),
