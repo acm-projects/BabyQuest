@@ -112,6 +112,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var quoteGroup = AutoSizeGroup();
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: StreamBuilder(
@@ -136,79 +138,96 @@ class _HomePageState extends State<HomePage> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 48, bottom: 16),
-                    child: Text(
-                      'Welcome Back Parent!',
-                      style: Theme.of(context).textTheme.headline1!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
-                    ),
-                  ),
-                  const DottedDivider(),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 16),
-                      child: InkWell(
-                        splashColor: Theme.of(context).colorScheme.primary,
-                        onTap: () {},
-                        onLongPress: () {
-                          Clipboard.setData(
-                            ClipboardData(text: '$_qodMessage - $_qodAuthor'),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            _getSnackBar(
-                              text: 'Quote Copied To Clipboard',
-                            ),
-                          );
-                        },
-                        child: FutureBuilder(
-                          future: _setup(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Flexible(
-                                    child: AutoSizeText(
-                                      _qodMessage,
-                                      style:
-                                          Theme.of(context).textTheme.headline2,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
-                                      '- ' + _qodAuthor,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline2!
-                                          .copyWith(
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            } else {
-                              return const CircularProgressIndicator();
-                            }
-                          },
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 48, bottom: 16),
+                          child: Text(
+                            'Welcome Back Parent!',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline1!
+                                .copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                          ),
                         ),
-                      ),
+                        const DottedDivider(),
+                        Flexible(
+                          fit: FlexFit.loose,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 16),
+                            child: InkWell(
+                              splashColor:
+                                  Theme.of(context).colorScheme.primary,
+                              onTap: () {},
+                              onLongPress: () {
+                                Clipboard.setData(
+                                  ClipboardData(
+                                      text: '$_qodMessage - $_qodAuthor'),
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  _getSnackBar(
+                                    text: 'Quote Copied To Clipboard',
+                                  ),
+                                );
+                              },
+                              child: FutureBuilder(
+                                future: _setup(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Flexible(
+                                          child: AutoSizeText(
+                                            _qodMessage,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline2,
+                                            group: quoteGroup,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 8,
+                                        ),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: AutoSizeText(
+                                            '- ' + _qodAuthor,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline2!
+                                                .copyWith(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primary),
+                                            group: quoteGroup,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  } else {
+                                    return const CircularProgressIndicator();
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        const DottedDivider(),
+                      ],
                     ),
                   ),
-                  const DottedDivider(),
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 32, right: 32, bottom: 48, top: 16),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         RoundButton(
                           backgroundColor: _isSleeping
