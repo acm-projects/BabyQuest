@@ -67,25 +67,34 @@ class _ProfilePageState extends State<ProfilePage> {
                             return Stack(
                               fit: StackFit.expand,
                               children: [
-                                ShaderMask(
-                                  blendMode: BlendMode.darken,
-                                  shaderCallback: (Rect bounds) =>
-                                      const LinearGradient(
-                                    colors: [
-                                      Colors.transparent,
-                                      Colors.black45
-                                    ],
-                                    begin: Alignment.center,
-                                    end: Alignment.bottomCenter,
-                                  ).createShader(bounds),
-                                  child: CachedNetworkImage(
-                                    placeholder: (context, url) => const Center(
-                                        child: CircularProgressIndicator()),
-                                    fit: BoxFit.cover,
-                                    height: constraints.maxHeight,
-                                    alignment: Alignment.topCenter,
-                                    imageUrl: currentBby.profilePic,
+                                CachedNetworkImage(
+                                  placeholder: (context, url) => const Center(
+                                      child: CircularProgressIndicator()),
+                                  imageBuilder: (context, imageProvider) =>
+                                      ShaderMask(
+                                    blendMode: BlendMode.darken,
+                                    shaderCallback: (Rect bounds) =>
+                                        const LinearGradient(
+                                      colors: [
+                                        Colors.transparent,
+                                        Colors.black45
+                                      ],
+                                      begin: Alignment.center,
+                                      end: Alignment.bottomCenter,
+                                    ).createShader(bounds),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
                                   ),
+                                  fit: BoxFit.cover,
+                                  height: constraints.maxHeight,
+                                  alignment: Alignment.topCenter,
+                                  imageUrl: currentBby.profilePic,
                                 ),
                                 Row(
                                   mainAxisSize: MainAxisSize.max,
