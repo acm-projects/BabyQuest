@@ -1,3 +1,4 @@
+import 'package:client/widgets/edit_dialog.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/models/baby_profile.dart';
@@ -310,10 +311,15 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     splashColor: Theme.of(context).colorScheme.primary,
                     child: Padding(
                       padding: const EdgeInsets.all(12),
-                      child: Text(
-                        'Add Notes',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary),
+                      child: TextButton(
+                        onPressed: () async {
+                          
+                        },
+                        child: Text(
+                          'Add Notes',
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary),
+                        ),
                       ),
                     ),
                   ),
