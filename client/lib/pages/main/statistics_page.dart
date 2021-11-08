@@ -1,3 +1,4 @@
+import 'package:client/widgets/edit_dialog.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/models/baby_profile.dart';
@@ -148,6 +149,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
   Widget build(BuildContext context) {
     _setSelectedDateTime();
 
+    final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -156,6 +159,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
             fit: BoxFit.cover),
       ),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
           child: Padding(
@@ -306,7 +310,17 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 16, bottom: 48),
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () async {
+                      final note = TextEditingController(text: "Placeholder");
+                      await showEditDialog(
+                        context: context,
+                        updateData: () {},
+                        label:
+                            'Note for ${_currentDate.month}/${_currentDate.day}/${_currentDate.year}',
+                        field: addNote(note),
+                        formKey: _formKey,
+                      );
+                    },
                     splashColor: Theme.of(context).colorScheme.primary,
                     child: Padding(
                       padding: const EdgeInsets.all(12),
@@ -322,6 +336,19 @@ class _StatisticsPageState extends State<StatisticsPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget addNote(TextEditingController noteController) {
+    return TextFormField(
+      controller: noteController,
+      autofocus: true,
+      maxLines: 3,
+      decoration: const InputDecoration(
+        labelText: 'Note',
+        icon: Icon(Icons.sticky_note_2),
+        errorStyle: TextStyle(height: 0),
       ),
     );
   }
