@@ -146,6 +146,7 @@ class BabyProfile {
 
   Future _setData(Map<String, dynamic> profileData) async {
     _created = DateTime.parse(profileData['created'] as String);
+
     _name = profileData['name'] as String;
     _gender = profileData['gender'] as int;
     _height = profileData['height'] as double;

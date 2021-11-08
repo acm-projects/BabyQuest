@@ -228,7 +228,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
         }
 
         await AppUser.currentUser!.createNewProfile(
-          name: name.text,
+          babyName: name.text,
           birthDate: DateTime.parse(birthDate.text),
           gender: int.parse(gender.text),
           height: double.parse(heightIn.text),

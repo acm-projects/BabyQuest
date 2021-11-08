@@ -13,7 +13,7 @@ class AppUser {
   String? _lastProfile;
   List<String>? _profiles;
   List<String>? _sharedProfiles;
-  Map<String, String>? _profileNames;
+  Map<String, List<String?>>? _profileNames;
   Map<String, List<dynamic>>? _todoList;
 
   // public properties
@@ -41,7 +41,7 @@ class AppUser {
 
   List<String> get ownedProfiles => _profiles ?? [];
   List<String> get sharedProfiles => _sharedProfiles ?? [];
-  Map<String, String> get profileNames => _profileNames ?? {};
+  Map<String, List<String?>> get profileNames => _profileNames ?? {};
 
   Map<String, List<dynamic>> get toDoList => _todoList ?? {};
 
@@ -133,7 +133,7 @@ class AppUser {
   }
 
   Future createNewProfile({
-    required String name,
+    required String babyName,
     required DateTime birthDate,
     required int gender,
     required double height,
@@ -145,7 +145,8 @@ class AppUser {
     required String imagePath,
   }) async {
     String profileId = await DataService.createProfile(
-      name: name,
+      owner: name,
+      name: babyName,
       birthDate: birthDate,
       gender: gender,
       height: height,

@@ -703,7 +703,9 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildProfileButton(String profileId, bool shared) {
-    String profileName = AppUser.currentUser!.profileNames[profileId] ?? '';
+    final profileData = AppUser.currentUser!.profileNames[profileId];
+    String profileName = profileData?[0] ?? '';
+    String sharedUserName = profileData?[1] ?? 'Unknown User';
 
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -711,7 +713,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       child: IconInformation(
         topText: profileName,
-        bottomText: shared ? 'Shared with you' : null,
+        bottomText: shared ? 'Shared by $sharedUserName' : null,
         enabled: true,
         onTap: () async {
           Navigator.pop(context);

@@ -81,7 +81,8 @@ class DataService {
   }
 
   // sets data sync for user data with database
-  static setUserDataSync(String uid, String name, String email, Function update) async {
+  static setUserDataSync(
+      String uid, String name, String email, Function update) async {
     DocumentReference userDocument = _userCollection.doc(uid);
 
     // If user data doesn't exist yet, create it
@@ -134,6 +135,7 @@ class DataService {
   }
 
   static createProfile({
+    required String owner,
     required String name,
     required DateTime birthDate,
     required int gender,
@@ -148,6 +150,7 @@ class DataService {
     String documentId = '';
 
     await _profileCollection.add({
+      'owner': owner,
       'created': DateTime.now().toString(),
       'name': name,
       'birth_date': birthDate.toString().split(' ').first,
@@ -180,14 +183,18 @@ class DataService {
   }
 
   static Future getProfileNames(List<String> owned, List<String> shared) async {
-    Map<String, String> profileNames = {};
+    Map<String, List<String?>> profileNames = {};
 
     await _profileCollection
         .where('uid', whereIn: [...owned, ...shared, ''])
         .get()
         .then((query) {
           for (var document in query.docs) {
-            profileNames[document.id] = document.data()['name'] as String;
+            final data = document.data();
+            profileNames[document.id] = [
+              data['name'] as String,
+              data['owner'] as String?,
+            ];
           }
         });
 
