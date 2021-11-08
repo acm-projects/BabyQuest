@@ -21,7 +21,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
   late DateTime _startDate;
   late final int _currentDateIndex;
   late final int _endDateIndex;
-  DateTime _currentDate = DateTime.now();
+  late int _pageIndex;
+  late int _selectedIndex;
+  late PageController pageController;
+
+  DateTime _currentDate = DateTime.now().toUtc();
 
   int _feedingCount = 0;
   int _diaperCount = 0;
@@ -53,10 +57,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
   ];
 
   List<SleepInformation> sleepSessions = [];
-
-  late int _pageIndex;
-  late int _selectedIndex;
-  late PageController pageController;
 
   String _getFormattedTime(DateTime time) {
     int hour = (time.hour % 12 == 0) ? 12 : time.hour % 12;
@@ -129,13 +129,13 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   _StatisticsPageState() {
-    //Always Starts On A Sunday
     final registrationDate = currentBby.created;
-    final now = DateTime.now();
-    _startDate = DateTime(registrationDate.year, registrationDate.month,
-        registrationDate.day - registrationDate.weekday % 7);
-    _currentDateIndex = now.difference(_startDate).inDays;
-    _endDateIndex = _currentDateIndex + 8 - now.weekday;
+    _startDate = DateTime(
+            registrationDate.year, registrationDate.month, registrationDate.day)
+        .subtract(Duration(days: registrationDate.weekday))
+        .toUtc();
+    _currentDateIndex = _currentDate.difference(_startDate).inDays;
+    _endDateIndex = _currentDateIndex + 6 - _currentDate.weekday + 1;
 
     _pageIndex = _currentDateIndex ~/ 7;
     _selectedIndex = _currentDateIndex;
@@ -225,7 +225,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 SizedBox(
                   height: 130,
                   child: PageView.builder(
-                    itemCount: (_endDateIndex / 7).ceil(),
+                    itemCount: (_endDateIndex ~/ 7),
                     controller: pageController,
                     onPageChanged: (int index) => _pageIndex = index,
                     itemBuilder: (context, index) {
