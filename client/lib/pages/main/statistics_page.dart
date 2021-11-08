@@ -134,9 +134,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
     _startDate = DateTime(registrationDate.year, registrationDate.month,
         registrationDate.day - registrationDate.weekday % 7);
     _currentDateIndex = now.difference(_startDate).inDays;
-    _endDateIndex =
-        _currentDateIndex + 8 - now.weekday;
-        
+    _endDateIndex = _currentDateIndex + 8 - now.weekday;
+
     _pageIndex = _currentDateIndex ~/ 7;
     _selectedIndex = _currentDateIndex;
     pageController = PageController(
@@ -149,16 +148,16 @@ class _StatisticsPageState extends State<StatisticsPage> {
   Widget build(BuildContext context) {
     _setSelectedDateTime();
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-                colorFilter:
-                    ColorFilter.mode(Color(0x15FFFFFF), BlendMode.dstATop),
-                image: AssetImage('assets/images/undraw_play.png'),
-                fit: BoxFit.cover),
-          ),
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+            colorFilter: ColorFilter.mode(Color(0x15FFFFFF), BlendMode.dstATop),
+            image: AssetImage('assets/images/undraw_play.png'),
+            fit: BoxFit.cover),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
