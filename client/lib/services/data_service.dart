@@ -22,6 +22,7 @@ class DataService {
     'profiles': [],
     'shared_profiles': [],
     'to_do_list': {},
+    'notes': {},
   };
 
   static getProfileSharedUsers(String profileId) async {
@@ -148,10 +149,11 @@ class DataService {
     required String imagePath,
   }) async {
     String documentId = '';
+    DateTime now = DateTime.now();
 
     await _profileCollection.add({
       'owner': owner,
-      'created': DateTime.now().toString(),
+      'created': DateTime(now.year, now.month, now.day).toString(),
       'name': name,
       'birth_date': birthDate.toString().split(' ').first,
       'gender': gender,

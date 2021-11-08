@@ -1,4 +1,5 @@
 import 'package:client/widgets/edit_dialog.dart';
+import 'package:client/widgets/edit_profile_widgets.dart';
 import 'package:flutter/material.dart';
 
 import 'package:client/models/baby_profile.dart';
@@ -15,6 +16,8 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   BabyProfile currentBby = BabyProfile.currentProfile;
 
   //Date the user registers for the app
@@ -30,6 +33,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
   int _feedingCount = 0;
   int _diaperCount = 0;
   int _sleepMins = 0;
+  String _notes = '';
 
   final List<String> days = [
     'Monday',
@@ -85,6 +89,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
     _feedingCount = stats.feedings.length;
     _diaperCount = stats.diaperChanges.length;
     _sleepMins = 0;
+    _notes = stats.notes;
     sleepSessions = [];
 
     stats.sleep.forEach((startTime, endTime) {
@@ -313,13 +318,26 @@ class _StatisticsPageState extends State<StatisticsPage> {
                       padding: const EdgeInsets.all(12),
                       child: TextButton(
                         onPressed: () async {
-                          
+                          final notes = TextEditingController(text: _notes);
+
+                          await showEditDialog(
+                              context: context,
+                              label: 'Notes',
+                              field: EditProfileWidgets.dayNotes(notes),
+                              updateData: () {
+                                currentBby.updateDayNotes(
+                                    _currentDate, notes.text);
+                              },
+                              formKey: _formKey);
                         },
-                        child: Text(
-                          'Add Notes',
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary),
-                        ),
+                        child: (_notes == '')
+                            ? Text(
+                                'Add Notes',
+                                style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                              )
+                            : Text(_notes),
                       ),
                     ),
                   ),

@@ -32,6 +32,7 @@ class BabyProfile {
   Map<DateTime, List<DateTime>>? _diaperChanges;
   Map<DateTime, List<DateTime>>? _feedings;
   Map<DateTime, Map<DateTime, DateTime>>? _sleep;
+  Map<DateTime, String>? _notes;
 
   // public properties
   final String uid;
@@ -54,9 +55,7 @@ class BabyProfile {
   // public accessors
   bool get exists => uid.isNotEmpty;
 
-  DateTime get created =>
-      _created ??
-      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime get created => _created ?? DateTime.now();
   String get name => _name ?? '';
 
   int get genderRaw => _gender ?? 0;
@@ -119,7 +118,7 @@ class BabyProfile {
         return years.toString() + ' years';
       }
     }
-  } //will calcuate age in days, weeks, months, or years and return as String
+  } // will calcuate age in days, weeks, months, or years and return as String
 
   Map<String, int> get allergies => _allergies ?? {};
 
@@ -177,6 +176,7 @@ class BabyProfile {
               .map((item) => DateTime.parse(item as String))
               .toList());
     });
+
     _feedings =
         (profileData['feedings'] as Map<String, dynamic>).map((key, value) {
       return MapEntry(
@@ -185,6 +185,7 @@ class BabyProfile {
               .map((item) => DateTime.parse(item as String))
               .toList());
     });
+
     _sleep = (profileData['sleep'] as Map<String, dynamic>).map((key, value) {
       return MapEntry(
           DateTime.parse(key),
@@ -192,6 +193,10 @@ class BabyProfile {
             return MapEntry(
                 DateTime.parse(key), DateTime.parse(value as String));
           }));
+    });
+
+    _notes = (profileData['notes'] as Map<String, dynamic>).map((key, value) {
+      return MapEntry(DateTime.parse(key), value as String);
     });
 
     _streamController.add(currentProfile);
@@ -215,6 +220,7 @@ class BabyProfile {
       diaperChanges: _diaperChanges?[date] ?? [],
       feedings: _feedings?[date] ?? [],
       sleep: _sleep?[date] ?? {},
+      notes: _notes?[date] ?? '',
     );
   }
 
@@ -329,5 +335,16 @@ class BabyProfile {
     for (var userId in removedUsers) {
       DataService.updateUserPermissions(userId, remove: uid);
     }
+  }
+
+  void updateDayNotes(DateTime day, String notes) {
+    _notes ??= {};
+    _notes![day] = notes;
+
+    final newNotes = _notes!.map((key, value) {
+      return MapEntry(key.toString(), value);
+    });
+
+    updateData({'notes': newNotes});
   }
 }

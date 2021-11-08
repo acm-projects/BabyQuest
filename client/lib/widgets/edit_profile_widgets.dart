@@ -518,4 +518,18 @@ class EditProfileWidgets {
       );
     });
   }
+
+  static Widget dayNotes(TextEditingController notes) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 48),
+      child: TextFormField(
+        autofocus: true,
+        maxLines: 3,
+        controller: notes,
+        decoration: const InputDecoration(
+          border: UnderlineInputBorder(),
+        ),
+      ),
+    );
+  }
 }
