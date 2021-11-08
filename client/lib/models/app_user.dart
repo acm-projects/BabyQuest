@@ -9,6 +9,7 @@ class AppUser {
 
   // private properties
   bool _isLoaded = false;
+  String? _name;
   String? _lastProfile;
   List<String>? _profiles;
   List<String>? _sharedProfiles;
@@ -36,6 +37,7 @@ class AppUser {
 
   // public accessors
   bool get isLoaded => _isLoaded;
+  String get name => _name ?? '';
 
   List<String> get ownedProfiles => _profiles ?? [];
   List<String> get sharedProfiles => _sharedProfiles ?? [];
@@ -47,16 +49,14 @@ class AppUser {
   List<Todo> get todosInProgress {
     List<Todo> tasks = [];
     _todoList?.forEach((key, value) {
-      if (!value[4] && !value[5]) {
-        tasks.add(
-            Todo(
-              title: value[0],
-              description: value[1],
-              id: value[2],
-              createdTime: DateTime.parse(value[3]),
-              isDone: value[4],
-              removed: value[5],
-            ));
+      if (!value[4]) {
+        tasks.add(Todo(
+          title: value[0],
+          description: value[1],
+          id: value[2],
+          createdTime: DateTime.parse(value[3]),
+          isDone: value[4],
+        ));
       }
     });
 
@@ -66,52 +66,27 @@ class AppUser {
   List<Todo> get todosCompleted {
     List<Todo> tasks = [];
     _todoList?.forEach((key, value) {
-      if (value[4] && !value[5]) {
-        tasks.add(
-            Todo(
-              title: value[0],
-              description: value[1],
-              id: value[2],
-              createdTime: DateTime.parse(value[3]),
-              isDone: value[4],
-              removed: value[5],
-            ));
+      if (value[4]) {
+        tasks.add(Todo(
+          title: value[0],
+          description: value[1],
+          id: value[2],
+          createdTime: DateTime.parse(value[3]),
+          isDone: value[4],
+        ));
       }
     });
 
     return tasks;
   }
 
-  void updateTodo(Todo todo) {
-    _todoList ??= {};
-    _todoList![todo.id] = todo.fields();
-
-    DataService.updateUserData(uid,
-        {'to_do_list': _todoList?.map((key, value) => MapEntry(key, value))});
-  } //creates empty map if null, else assigns fields of object
-  //used to create new todos or edit them
-  void removeTodo(Todo todo) {
-    todo.removing();
-    _todoList![todo.id] = todo.fields();
-
-    DataService.updateUserData(uid,
-        {'to_do_list': _todoList?.map((key, value) => MapEntry(key, value))});
-  } //call removing method - changes removed value to true
-  bool toggleTodoStatus(Todo todo) {
-    todo.toggleDone();
-    _todoList![todo.id] = todo.fields();
-
-    DataService.updateUserData(uid,
-        {'to_do_list': _todoList?.map((key, value) => MapEntry(key, value))});
-
-    return todo.isDone;
+  AppUser(this.uid, String? name, this.email) {
+    _name = name;
   }
-
-  AppUser(this.uid, this.email);
 
   // private methods
   void _setDataSync() async {
-    DataService.setUserDataSync(uid, email, _updateData);
+    DataService.setUserDataSync(uid, _name ?? '', email, _updateData);
   }
 
   void _removeDataSync() async {
@@ -119,6 +94,7 @@ class AppUser {
   }
 
   Future _updateData(Map<String, dynamic> userData) async {
+    _name = userData['name'] as String;
     _lastProfile = userData['last_profile'] as String?;
 
     _profiles =
@@ -126,7 +102,8 @@ class AppUser {
     _sharedProfiles = (userData['shared_profiles'] as List)
         .map((item) => item as String)
         .toList();
-    _profileNames = await DataService.getProfileNames(ownedProfiles, sharedProfiles);
+    _profileNames =
+        await DataService.getProfileNames(ownedProfiles, sharedProfiles);
 
     _todoList = (userData['to_do_list'] as Map).map((key, value) {
       return MapEntry(key, value as List);
@@ -185,5 +162,30 @@ class AppUser {
     await DataService.updateUserData(uid, {'profiles': newProfiles});
 
     setCurrentProfile(profileId);
+  }
+
+  void updateTodo(Todo todo) {
+    _todoList ??= {};
+    _todoList![todo.id] = todo.fields();
+
+    DataService.updateUserData(uid, {'to_do_list': _todoList!});
+  }
+
+  void removeTodo(Todo todo) {
+    _todoList ??= {};
+    _todoList!.remove(todo.id);
+
+    DataService.updateUserData(uid, {'to_do_list': _todoList!});
+  }
+
+  bool toggleTodoStatus(Todo todo) {
+    todo.toggleDone();
+
+    _todoList ??= {};
+    _todoList![todo.id] = todo.fields();
+
+    DataService.updateUserData(uid, {'to_do_list': _todoList!});
+
+    return todo.isDone;
   }
 }

@@ -18,9 +18,9 @@ class _SignInFormState extends State<SignInForm> {
   final _formKey = GlobalKey<FormState>();
 
   // Field values
-  String name = '';
-  String email = '';
-  String password = '';
+  final name = TextEditingController();
+  final email = TextEditingController();
+  final password = TextEditingController();
   String error = '';
 
   @override
@@ -30,6 +30,7 @@ class _SignInFormState extends State<SignInForm> {
       child: Column(
         children: [
           ..._buildErrorField(),
+          ..._buildNameField(),
           _buildEmailAddressField(),
           const SizedBox(height: 20.0),
           _buildPasswordField(),
@@ -77,8 +78,34 @@ class _SignInFormState extends State<SignInForm> {
     ];
   }
 
+  List<Widget> _buildNameField() {
+    if (widget.register) {
+      return [
+        TextFormField(
+          controller: name,
+          keyboardType: TextInputType.name,
+          decoration: InputDecoration(
+            fillColor: Theme.of(context).scaffoldBackgroundColor,
+            filled: true,
+            labelText: 'Full Name',
+            border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(100))),
+            prefixIcon: const Icon(Icons.person),
+          ),
+          validator: (value) {
+            return (value == null || value.isEmpty) ? '' : null;
+          },
+        ),
+        const SizedBox(height: 20.0),
+      ];
+    } else {
+      return [];
+    }
+  }
+
   Widget _buildEmailAddressField() {
     return TextFormField(
+      controller: email,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         fillColor: Theme.of(context).scaffoldBackgroundColor,
@@ -91,12 +118,12 @@ class _SignInFormState extends State<SignInForm> {
       validator: (value) {
         return (value == null || value.isEmpty) ? '' : null;
       },
-      onChanged: (value) => setState(() => email = value),
     );
   }
 
   Widget _buildPasswordField() {
     return TextFormField(
+      controller: password,
       keyboardType: TextInputType.visiblePassword,
       obscureText: true,
       decoration: InputDecoration(
@@ -110,7 +137,6 @@ class _SignInFormState extends State<SignInForm> {
       validator: (value) {
         return (value == null || value.length < 6) ? '' : null;
       },
-      onChanged: (value) => setState(() => password = value),
     );
   }
 
@@ -124,9 +150,11 @@ class _SignInFormState extends State<SignInForm> {
           final provider = Provider.of<AuthService>(context, listen: false);
 
           if (widget.register) {
-            provider.registerWithEmailAndPassword(email, password);
+            provider.registerWithEmailAndPassword(
+                name.text, email.text, password.text,
+                setError: _setError);
           } else {
-            provider.signInWithEmailAndPassword(email, password,
+            provider.signInWithEmailAndPassword(email.text, password.text,
                 setError: _setError);
           }
         }

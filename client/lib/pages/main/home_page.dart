@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:client/models/app_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -146,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                         Padding(
                           padding: const EdgeInsets.only(top: 48, bottom: 16),
                           child: Text(
-                            'Welcome Back Parent!',
+                            'Welcome Back ${AppUser.currentUser?.name ?? 'Parent'}!',
                             style: Theme.of(context)
                                 .textTheme
                                 .headline1!
