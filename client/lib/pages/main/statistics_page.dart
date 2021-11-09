@@ -134,11 +134,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   _StatisticsPageState() {
-    final registrationDate = currentBby.created;
-    _startDate = DateTime(
-            registrationDate.year, registrationDate.month, registrationDate.day)
-        .subtract(Duration(days: registrationDate.weekday))
+    _startDate = currentBby.created
+        .subtract(Duration(days: currentBby.created.weekday))
         .toUtc();
+    _currentDate = DateTime(_currentDate.year, _currentDate.month, _currentDate.day);
     _currentDateIndex = _currentDate.difference(_startDate).inDays;
     _endDateIndex = _currentDateIndex + 6 - _currentDate.weekday + 1;
 
@@ -162,6 +161,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
             fit: BoxFit.cover),
       ),
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
           child: Padding(
@@ -312,33 +312,30 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 16, bottom: 48),
                   child: InkWell(
-                    onTap: () {},
+                    onTap: () async {
+                      final notes = TextEditingController(text: _notes);
+
+                      await showEditDialog(
+                        context: context,
+                        label:
+                            'Notes for ${_currentDate.month}/${_currentDate.day}/${_currentDate.year}',
+                        field: EditProfileWidgets.editNotes(notes),
+                        updateData: () {
+                          currentBby.updateNotes(_currentDate, notes.text);
+                        },
+                        formKey: _formKey,
+                      );
+                    },
                     splashColor: Theme.of(context).colorScheme.primary,
                     child: Padding(
                       padding: const EdgeInsets.all(12),
-                      child: TextButton(
-                        onPressed: () async {
-                          final notes = TextEditingController(text: _notes);
-
-                          await showEditDialog(
-                              context: context,
-                              label: 'Notes',
-                              field: EditProfileWidgets.dayNotes(notes),
-                              updateData: () {
-                                currentBby.updateDayNotes(
-                                    _currentDate, notes.text);
-                              },
-                              formKey: _formKey);
-                        },
-                        child: (_notes == '')
-                            ? Text(
-                                'Add Notes',
-                                style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
-                              )
-                            : Text(_notes),
-                      ),
+                      child: (_notes == '')
+                          ? Text(
+                              'Add Notes',
+                              style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary),
+                            )
+                          : Text(_notes),
                     ),
                   ),
                 ),

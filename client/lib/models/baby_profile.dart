@@ -337,9 +337,9 @@ class BabyProfile {
     }
   }
 
-  void updateDayNotes(DateTime day, String notes) {
+  void updateNotes(DateTime day, String notes) {
     _notes ??= {};
-    _notes![day] = notes;
+    _notes![DateTime(day.year, day.month, day.day)] = notes;
 
     final newNotes = _notes!.map((key, value) {
       return MapEntry(key.toString(), value);
