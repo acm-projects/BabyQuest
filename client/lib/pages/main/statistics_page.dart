@@ -325,6 +325,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         field: EditProfileWidgets.editNotes(notes),
                         updateData: () {
                           currentBby.updateNotes(_currentDate, notes.text);
+                          setState(() {});
                         },
                         formKey: _formKey,
                       );

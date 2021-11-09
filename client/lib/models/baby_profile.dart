@@ -118,7 +118,7 @@ class BabyProfile {
         return years.toString() + ' years';
       }
     }
-  } // will calcuate age in days, weeks, months, or years and return as String
+  } // will calculate age in days, weeks, months, or years and return as String
 
   Map<String, int> get allergies => _allergies ?? {};
 
