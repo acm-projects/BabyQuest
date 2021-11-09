@@ -288,6 +288,6 @@ class _HomePageState extends State<HomePage> {
     _qodMessage = qodData[1];
     _qodAuthor = qodData[2];
 
-    return Future.value(qodData);
+    return qodData;
   }
 }

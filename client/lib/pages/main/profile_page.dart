@@ -36,20 +36,12 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (isDialOpen.value) {
-          isDialOpen.value = false;
-          return false;
-        } else {
-          return true;
-        }
+        bool value = !isDialOpen.value;
+        isDialOpen.value = false;
+        return value;
       },
       child: Scaffold(
-        extendBodyBehindAppBar: true,
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-        ),
         body: StreamBuilder(
           stream: BabyProfile.updateStream,
           builder: (context, snapshot) {

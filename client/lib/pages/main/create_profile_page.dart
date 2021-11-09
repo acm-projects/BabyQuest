@@ -16,7 +16,7 @@ class CreateProfilePage extends StatefulWidget {
 }
 
 class _CreateProfilePageState extends State<CreateProfilePage> {
-  final List<GlobalKey<FormState>> _formKeys = [
+  final _formKeys = [
     GlobalKey<FormState>(),
     GlobalKey<FormState>(),
     GlobalKey<FormState>()
@@ -213,9 +213,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
     );
   }
 
-  tapped(int step) {
-    setState(() => _currentStep = step);
-  }
+  tapped(int step) => setState(() => _currentStep = step);
 
   continued() async {
     if (!_formKeys[_currentStep].currentState!.validate()) return;

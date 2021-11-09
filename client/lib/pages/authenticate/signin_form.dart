@@ -205,7 +205,6 @@ class _SignInFormState extends State<SignInForm> {
     }
   }
 
-  void _setError(String? errorMessage) {
-    setState(() => error = errorMessage ?? '');
-  }
+  void _setError(String? errorMessage) =>
+      setState(() => error = errorMessage ?? '');
 }

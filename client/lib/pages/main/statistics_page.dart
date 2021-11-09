@@ -140,8 +140,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
   _StatisticsPageState() {
     _startDate = DateTime(currentBby.created.year, currentBby.created.month,
         currentBby.created.day - currentBby.created.weekday);
-    _currentDate =
-        DateTime(_currentDate.year, _currentDate.month, _currentDate.day);
     _currentDateIndex = _currentDate.difference(_startDate).inDays;
     _endDateIndex = _currentDateIndex + 6 - _currentDate.weekday + 1;
 
@@ -257,7 +255,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                               1]
                                       .substring(0, 1),
                                   onTap: () {
-                                    print(_getDateTimeAdd(500));
                                     _jumpToIndex(index * 7 + listIndex);
                                   },
                                 );

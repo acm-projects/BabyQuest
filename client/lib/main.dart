@@ -113,9 +113,7 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  void _completeLoading() {
-    setState(() => isLoaded = true);
-  }
+  void _completeLoading() => setState(() => isLoaded = true);
 }
 
 MaterialColor createMaterialColor(Color color) {

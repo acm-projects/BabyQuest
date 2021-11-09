@@ -91,32 +91,16 @@ class BabyProfile {
     int days = DateTime.now().difference(birthDate!).inDays;
 
     if (days < 7) {
-      if (days == 1) {
-        return days.toString() + ' day';
-      } else {
-        return days.toString() + ' days';
-      }
+      return days.toString() + (days == 1 ? ' day' : ' days');
     } else if (days < 30.44) {
-      int weeks = (days / 7).floor();
-      if (weeks == 1) {
-        return weeks.toString() + ' week';
-      } else {
-        return weeks.toString() + ' weeks';
-      }
+      int weeks = (days ~/ 7);
+      return weeks.toString() + (weeks == 1 ? ' week' : ' weeks');
     } else if (days < 365.25) {
-      int months = (days / 30.44).floor();
-      if (months == 1) {
-        return months.toString() + ' month';
-      } else {
-        return months.toString() + ' months';
-      }
+      int months = (days ~/ 30.44);
+      return months.toString() + (months == 1 ? ' month' : ' months');
     } else {
-      int years = (days / 365.25).floor();
-      if (years == 1) {
-        return years.toString() + ' year';
-      } else {
-        return years.toString() + ' years';
-      }
+      int years = (days ~/ 365.25);
+      return years.toString() + (years == 1 ? ' year' : ' years');
     }
   } // will calcuate age in days, weeks, months, or years and return as String
 
