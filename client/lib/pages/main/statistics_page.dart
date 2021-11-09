@@ -257,7 +257,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                               1]
                                       .substring(0, 1),
                                   onTap: () {
-                                    print(_getDateTimeAdd(500));
                                     _jumpToIndex(index * 7 + listIndex);
                                   },
                                 );
