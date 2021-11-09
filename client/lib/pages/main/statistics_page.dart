@@ -243,24 +243,24 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: List.generate(7, (int listIndex) {
-                                return DayCircle(
-                                  fraction:
-                                      _getDaySleepMins(index * 7 + listIndex) /
-                                          960,
-                                  date:
-                                      '${_getDateTimeAdd(index * 7 + listIndex).day}',
-                                  day: days[
-                                          _getDateTimeAdd(index * 7 + listIndex)
-                                                  .weekday -
-                                              1]
-                                      .substring(0, 1),
-                                  onTap: () {
-                                    _jumpToIndex(index * 7 + listIndex);
-                                  },
-                                );
-                              })),
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: List.generate(7, (int listIndex) {
+                              return DayCircle(
+                                fraction:
+                                    _getDaySleepMins(index * 7 + listIndex) /
+                                        960,
+                                date:
+                                    '${_getDateTimeAdd(index * 7 + listIndex).day}',
+                                day: days[_getDateTimeAdd(index * 7 + listIndex)
+                                            .weekday -
+                                        1]
+                                    .substring(0, 1),
+                                onTap: () {
+                                  _jumpToIndex(index * 7 + listIndex);
+                                },
+                              );
+                            }),
+                          ),
                         ),
                       );
                     },
@@ -313,7 +313,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 ),
                 const DottedDivider(),
                 Padding(
-                  padding: const EdgeInsets.only(top: 16, bottom: 48),
+                  padding: const EdgeInsets.only(top: 16, bottom: 64),
                   child: InkWell(
                     onTap: () async {
                       final notes = TextEditingController(text: _notes);
@@ -321,7 +321,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                       await showEditDialog(
                         context: context,
                         label:
-                            'Notes for ${_currentDate.month}/${_currentDate.day}/${_currentDate.year}',
+                            '${_currentDate.month}/${_currentDate.day}/${_currentDate.year}',
                         field: EditProfileWidgets.editNotes(notes),
                         updateData: () {
                           currentBby.updateNotes(_currentDate, notes.text);
@@ -338,7 +338,16 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               style: TextStyle(
                                   color: Theme.of(context).colorScheme.primary),
                             )
-                          : Text(_notes),
+                          : Text(
+                              _notes,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
+                            ),
                     ),
                   ),
                 ),
