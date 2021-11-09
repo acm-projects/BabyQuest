@@ -525,7 +525,7 @@ class EditProfileWidgets {
       maxLines: 3,
       controller: notes,
       decoration: const InputDecoration(
-        labelText: 'Note',
+        labelText: 'Notes',
         icon: Icon(Icons.sticky_note_2),
         errorStyle: TextStyle(height: 0),
       ),

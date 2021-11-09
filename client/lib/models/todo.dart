@@ -15,22 +15,7 @@ class Todo {
 
   String get time => createdTime.toString();
 
-  //setter methods
-  set setTitle(String newTitle) {
-    title = newTitle;
-  }
-
-  set setDescrip(String newDescription) {
-    description = newDescription;
-  }
-
-  void toggleDone() {
-    isDone = !isDone;
-  }
-
-  //returns all object fields - passed to map key
-  List<dynamic> fields() {
-    List<dynamic> fields = [title, description, id, time, isDone];
-    return fields;
-  }
+  void toggleDone() => isDone = !isDone;
+  
+  List<dynamic> fields() => [title, description, id, time, isDone];
 }

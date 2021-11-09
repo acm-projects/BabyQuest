@@ -69,9 +69,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
     return '$hour:$minute ${am ? 'AM' : 'PM'}';
   }
 
-  int _getDaySleepMins(int dayIndex) {
-    DateTime _date = _getDateTimeAdd(dayIndex);
-    DayStats stats = currentBby.getDayStats(_date);
+  int _getDaySleepMins(DateTime date) {
+    DayStats stats = currentBby.getDayStats(date);
 
     int sleepMins = 0;
 
@@ -241,24 +240,19 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: List.generate(7, (int listIndex) {
-                                return DayCircle(
-                                  fraction:
-                                      _getDaySleepMins(index * 7 + listIndex) /
-                                          960,
-                                  date:
-                                      '${_getDateTimeAdd(index * 7 + listIndex).day}',
-                                  day: days[
-                                          _getDateTimeAdd(index * 7 + listIndex)
-                                                  .weekday -
-                                              1]
-                                      .substring(0, 1),
-                                  onTap: () {
-                                    _jumpToIndex(index * 7 + listIndex);
-                                  },
-                                );
-                              })),
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: List.generate(7, (int listIndex) {
+                              int dayIndex = (index * 7 + listIndex);
+                              DateTime date = _getDateTimeAdd(dayIndex);
+
+                              return DayCircle(
+                                fraction: _getDaySleepMins(date) / 960,
+                                date: '${date.day}',
+                                day: days[date.weekday - 1].substring(0, 1),
+                                onTap: () => _jumpToIndex(dayIndex),
+                              );
+                            }),
+                          ),
                         ),
                       );
                     },
@@ -298,9 +292,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         topText: '$_feedingCount',
                         bottomText: 'Feedings',
                       ),
-                      const SizedBox(
-                        height: 32,
-                      ),
+                      const SizedBox(height: 32),
                       IconInformation(
                         iconData: Icons.delete,
                         topText: '$_diaperCount',
@@ -311,7 +303,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 ),
                 const DottedDivider(),
                 Padding(
-                  padding: const EdgeInsets.only(top: 16, bottom: 48),
+                  padding: const EdgeInsets.only(top: 16, bottom: 64),
                   child: InkWell(
                     onTap: () async {
                       final notes = TextEditingController(text: _notes);
@@ -319,10 +311,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
                       await showEditDialog(
                         context: context,
                         label:
-                            'Notes for ${_currentDate.month}/${_currentDate.day}/${_currentDate.year}',
+                            '${_currentDate.month}/${_currentDate.day}/${_currentDate.year}',
                         field: EditProfileWidgets.editNotes(notes),
                         updateData: () {
                           currentBby.updateNotes(_currentDate, notes.text);
+                          setState(() {});
                         },
                         formKey: _formKey,
                       );
@@ -336,7 +329,16 @@ class _StatisticsPageState extends State<StatisticsPage> {
                               style: TextStyle(
                                   color: Theme.of(context).colorScheme.primary),
                             )
-                          : Text(_notes),
+                          : Text(
+                              _notes,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
+                            ),
                     ),
                   ),
                 ),
@@ -463,12 +465,8 @@ class SleepInformation extends StatelessWidget {
                   ],
                 ),
               )
-            : const SizedBox(
-                width: 45,
-              ),
-        const SizedBox(
-          width: 8,
-        ),
+            : const SizedBox(width: 45),
+        const SizedBox(width: 8),
         RichText(
           text: TextSpan(
             children: [
@@ -510,9 +508,7 @@ class SleepInformation extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(
-          width: 12,
-        ),
+        const SizedBox(width: 12),
         (isFirst)
             ? RichText(
                 text: TextSpan(
@@ -527,12 +523,8 @@ class SleepInformation extends StatelessWidget {
                   ],
                 ),
               )
-            : const SizedBox(
-                width: 45,
-              ),
-        const SizedBox(
-          width: 8,
-        ),
+            : const SizedBox(width: 45),
+        const SizedBox(width: 8),
       ],
     );
   }

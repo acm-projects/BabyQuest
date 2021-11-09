@@ -72,18 +72,12 @@ class BabyProfile {
   }
 
   double get heightIn => _height ?? 0;
-  String get height {
-    return heightIn.toInt().toString() + '"';
-  }
+  String get height => '${heightIn.toInt().toString()}"';
 
   double get weightLb => _weightLb ?? 0;
   double get weightOz => _weightOz ?? 0;
-  String get weight {
-    return weightLb.toInt().toString() +
-        'lbs ' +
-        weightOz.toInt().toString() +
-        'oz';
-  }
+  String get weight =>
+      '${weightLb.toInt().toString()}lbs ${weightOz.toInt().toString()}oz';
 
   DateTime? get birthDate => _birthDate;
   String get age {
@@ -102,7 +96,7 @@ class BabyProfile {
       int years = (days ~/ 365.25);
       return years.toString() + (years == 1 ? ' year' : ' years');
     }
-  } // will calcuate age in days, weeks, months, or years and return as String
+  }
 
   Map<String, int> get allergies => _allergies ?? {};
 
@@ -113,19 +107,13 @@ class BabyProfile {
   }
 
   String get profilePic => _profilePic ?? '';
-
   DateTime? get startedSleep => _startedSleep;
 
   BabyProfile(this.uid);
 
   // private methods
-  void _setDataSync() async {
-    DataService.setProfileDataSync(uid, _setData);
-  }
-
-  void _removeDataSync() async {
-    DataService.removeProfileDataSync(uid);
-  }
+  void _setDataSync() async => DataService.setProfileDataSync(uid, _setData);
+  void _removeDataSync() async => DataService.removeProfileDataSync(uid);
 
   Future _setData(Map<String, dynamic> profileData) async {
     _created = DateTime.parse(profileData['created'] as String);
@@ -233,9 +221,7 @@ class BabyProfile {
     _diaperChanges ??= {};
     _diaperChanges![day] ??= [];
 
-    if (_diaperChanges![day]!.isNotEmpty) {
-      _diaperChanges![day]!.removeLast();
-    }
+    if (_diaperChanges![day]!.isNotEmpty) _diaperChanges![day]!.removeLast();
 
     final databaseMap = _diaperChanges!.map((key, value) {
       return MapEntry(
@@ -267,9 +253,7 @@ class BabyProfile {
     _feedings ??= {};
     _feedings![day] ??= [];
 
-    if (_feedings![day]!.isNotEmpty) {
-      _feedings![day]!.removeLast();
-    }
+    if (_feedings![day]!.isNotEmpty) _feedings![day]!.removeLast();
 
     final databaseMap = _feedings!.map((key, value) {
       return MapEntry(
@@ -303,8 +287,7 @@ class BabyProfile {
   }
 
   void updateProfileImage(String imagePath) async {
-    File imageFile = File(imagePath);
-    String imageUrl = await DataService.uploadProfileImage(uid, imageFile,
+    String imageUrl = await DataService.uploadProfileImage(uid, File(imagePath),
         currentImageUrl: _profilePic);
     updateData({'profile_pic': imageUrl});
   }

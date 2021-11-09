@@ -79,28 +79,26 @@ class _SignInFormState extends State<SignInForm> {
   }
 
   List<Widget> _buildNameField() {
-    if (widget.register) {
-      return [
-        TextFormField(
-          controller: name,
-          keyboardType: TextInputType.name,
-          decoration: InputDecoration(
-            fillColor: Theme.of(context).scaffoldBackgroundColor,
-            filled: true,
-            labelText: 'Full Name',
-            border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(100))),
-            prefixIcon: const Icon(Icons.person),
-          ),
-          validator: (value) {
-            return (value == null || value.isEmpty) ? '' : null;
-          },
-        ),
-        const SizedBox(height: 20.0),
-      ];
-    } else {
-      return [];
-    }
+    return (widget.register)
+        ? [
+            TextFormField(
+              controller: name,
+              keyboardType: TextInputType.name,
+              decoration: InputDecoration(
+                fillColor: Theme.of(context).scaffoldBackgroundColor,
+                filled: true,
+                labelText: 'Full Name',
+                border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(100))),
+                prefixIcon: const Icon(Icons.person),
+              ),
+              validator: (value) {
+                return (value == null || value.isEmpty) ? '' : null;
+              },
+            ),
+            const SizedBox(height: 20.0),
+          ]
+        : [];
   }
 
   Widget _buildEmailAddressField() {
@@ -164,45 +162,44 @@ class _SignInFormState extends State<SignInForm> {
   }
 
   Widget _buildGoogleSignInButton() {
-    if (widget.register) {
-      return const SizedBox(height: 125.0);
-    } else {
-      return Column(
-        children: [
-          const SizedBox(height: 25.0),
-          Row(children: [
-            Expanded(child: Divider(color: Colors.black.withOpacity(0.5))),
-            Text('   or   ',
-                style: TextStyle(color: Colors.black.withOpacity(0.5))),
-            Expanded(child: Divider(color: Colors.black.withOpacity(0.5))),
-          ]),
-          const SizedBox(height: 25.0),
-          RoundButton(
-            onPressed: () {
-              final provider = Provider.of<AuthService>(context, listen: false);
-              provider.signInWithGoogle();
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                FaIcon(
-                  FontAwesomeIcons.google,
-                  color: Theme.of(context).colorScheme.primary,
+    return (widget.register)
+        ? const SizedBox(height: 125.0)
+        : Column(
+            children: [
+              const SizedBox(height: 25.0),
+              Row(children: [
+                Expanded(child: Divider(color: Colors.black.withOpacity(0.5))),
+                Text('   or   ',
+                    style: TextStyle(color: Colors.black.withOpacity(0.5))),
+                Expanded(child: Divider(color: Colors.black.withOpacity(0.5))),
+              ]),
+              const SizedBox(height: 25.0),
+              RoundButton(
+                onPressed: () {
+                  final provider =
+                      Provider.of<AuthService>(context, listen: false);
+                  provider.signInWithGoogle();
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FaIcon(
+                      FontAwesomeIcons.google,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      'Login with Google',
+                      style: Theme.of(context).textTheme.headline2!.copyWith(
+                          color: Theme.of(context).colorScheme.onSecondary),
+                    ),
+                  ],
                 ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Text(
-                  'Login with Google',
-                  style: Theme.of(context).textTheme.headline2!.copyWith(
-                      color: Theme.of(context).colorScheme.onSecondary),
-                ),
-              ],
-            ),
-          )
-        ],
-      );
-    }
+              )
+            ],
+          );
   }
 
   void _setError(String? errorMessage) =>
