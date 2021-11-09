@@ -28,7 +28,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
   late int _selectedIndex;
   late PageController pageController;
 
-  DateTime _currentDate = DateTime.now().toUtc();
+  DateTime _currentDate = DateTime.now();
 
   int _feedingCount = 0;
   int _diaperCount = 0;
@@ -70,7 +70,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   int _getDaySleepMins(int dayIndex) {
-    DateTime _date = _startDate.add(Duration(days: dayIndex));
+    DateTime _date = _getDateTimeAdd(dayIndex);
     DayStats stats = currentBby.getDayStats(_date);
 
     int sleepMins = 0;
@@ -83,7 +83,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   void _setSelectedDateTime() {
-    _currentDate = _startDate.add(Duration(days: _selectedIndex));
+    _currentDate = _getDateTimeAdd(_selectedIndex);
     DayStats stats = currentBby.getDayStats(_currentDate);
 
     _feedingCount = stats.feedings.length;
@@ -120,6 +120,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
     return date.difference(_startDate).inDays;
   }
 
+  DateTime _getDateTimeAdd(int index) {
+    return DateTime(_startDate.year, _startDate.month, _startDate.day + index);
+  }
+
   void _jumpToIndex(int index) {
     _selectedIndex = index;
     _setSelectedDateTime();
@@ -134,10 +138,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   _StatisticsPageState() {
-    _startDate = currentBby.created
-        .subtract(Duration(days: currentBby.created.weekday))
-        .toUtc();
-    _currentDate = DateTime(_currentDate.year, _currentDate.month, _currentDate.day);
+    _startDate = DateTime(currentBby.created.year, currentBby.created.month,
+        currentBby.created.day - currentBby.created.weekday);
+    _currentDate =
+        DateTime(_currentDate.year, _currentDate.month, _currentDate.day);
     _currentDateIndex = _currentDate.difference(_startDate).inDays;
     _endDateIndex = _currentDateIndex + 6 - _currentDate.weekday + 1;
 
@@ -246,14 +250,14 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                       _getDaySleepMins(index * 7 + listIndex) /
                                           960,
                                   date:
-                                      '${_startDate.add(Duration(days: index * 7 + listIndex)).day}',
-                                  day: days[_startDate
-                                              .add(Duration(
-                                                  days: index * 7 + listIndex))
-                                              .weekday -
-                                          1]
+                                      '${_getDateTimeAdd(index * 7 + listIndex).day}',
+                                  day: days[
+                                          _getDateTimeAdd(index * 7 + listIndex)
+                                                  .weekday -
+                                              1]
                                       .substring(0, 1),
                                   onTap: () {
+                                    print(_getDateTimeAdd(500));
                                     _jumpToIndex(index * 7 + listIndex);
                                   },
                                 );
@@ -352,7 +356,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
       context: context,
       initialDate: _currentDate, // Refer step 1
       firstDate: _startDate,
-      lastDate: _startDate.add(Duration(days: _endDateIndex - 1)),
+      lastDate: _getDateTimeAdd(_endDateIndex - 1),
     );
   }
 }

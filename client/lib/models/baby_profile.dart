@@ -213,8 +213,7 @@ class BabyProfile {
     }
   }
 
-  DayStats getDayStats(DateTime dateUTC) {
-    DateTime date = dateUTC.toLocal();
+  DayStats getDayStats(DateTime date) {
     return DayStats(
       date: date,
       diaperChanges: _diaperChanges?[date] ?? [],
