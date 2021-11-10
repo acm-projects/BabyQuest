@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
 
   String _qodMessage = '';
   String _qodAuthor = '';
+  bool _demoQOD = false;
 
   bool _isSleeping = false;
   int _feedingCount = 0;
@@ -284,10 +285,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future _setup() async {
+    if (_demoQOD) {
+      _qodMessage = 'Behind every young child who believes in himself is a parent who believed first.';
+      _qodAuthor = 'Matthew Jacobsen';
+
+      return true;
+    }
     List<String> qodData = await DataService.getQOD();
     _qodMessage = qodData[1];
     _qodAuthor = qodData[2];
 
-    return qodData;
+    return true;
   }
 }
