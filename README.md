@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <h1 align="center"><strong>New Parent</strong></h1>
+  <h1 align="center"><strong>Baby Quest</strong></h1>
 
   <p align="center">
   <strong><em>The ultimate baby monitor! </em></strong>This mobile app helps new parents keep track of all their newborn baby's needs, milestones, and reminders in one place!
